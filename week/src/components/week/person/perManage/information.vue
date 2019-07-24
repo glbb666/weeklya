@@ -4,9 +4,18 @@
       <div id="ptop">
         <label for="">
         上传头像
-        <div id="personImg">
+        <!-- <div id="personImg">
             <input type="file" id="personFile" accept='image/*' @change="upload">
-        </div>        
+        </div>  -->
+        <el-upload
+  class="avatar-uploader"
+  action="https://jsonplaceholder.typicode.com/posts/"
+  :show-file-list="false"
+  :on-success="handleAvatarSuccess"
+  :before-upload="beforeAvatarUpload">
+        <img v-if="imageUrl" :src="imageUrl" class="avatar">
+  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+        </el-upload>       
       </label>
       </div>
       <div id="pbottom">

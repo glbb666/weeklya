@@ -63,7 +63,7 @@
     display: flex;
     flex-wrap: nowrap;
     color: #6e6e74;
-    background-color: rgba(255,215,0,.2);
+    background-color: rgba(51,133,255,.1);
     margin-left: 33px;
     border-radius: 7px;
     width: 100%;
@@ -97,7 +97,7 @@ button{
     width: 40px;
     color: #fff;
     border-radius: 0 7px 7px 0;
-    background: #fcaf17;
+    background: #3385ff;
 }
 .adBtn{
   bottom: 50px;

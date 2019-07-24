@@ -115,6 +115,6 @@ import {showPopRight} from '../../../../../static/pop.js'
     color: #686fbf;
   }
   #week a:last-child.router-link-active{
-    color: #fcaf17;
+    color: #3385ff;
   }
 </style>

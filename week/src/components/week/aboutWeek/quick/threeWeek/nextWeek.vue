@@ -63,11 +63,11 @@
     border-radius: 50%;
     height: 35px;
     width: 35px;
-    border: #fcaf17 2px solid;
+    border: #3385ff 2px solid;
     line-height: 35px;
     text-align: center;
     font-size: 23px;
-    color: #fcaf17;
+    color: #3385ff;
     display:inline-block;
     cursor: default;
   }

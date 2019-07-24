@@ -150,11 +150,11 @@ import {showPopRight} from '../../../../../../../static/pop.js'
     border-radius: 50%;
     height: 35px;
     width: 35px;
-    border: #fcaf17 2px solid;
+    border: #3385ff 2px solid;
     line-height: 35px;
     text-align: center;
     font-size: 23px;
-    color: #fcaf17;
+    color: #3385ff;
     display:inline-block;
     cursor: default;
   }
@@ -181,14 +181,14 @@ button{
     width: 40px;
     color: #fff;
     border-radius: 0 7px 7px 0;
-    background: #fdb933;
+    background: #3385ff;
   }
   .task{
     position: relative;
     margin-left: 50px;
     padding-top: 18px;
     padding-bottom: 18px;
-    border-left: 2px solid #fdb933;
+    border-left: 2px solid #3385ff;
     width: 100%;
   }
   .detail:last-child .task{
