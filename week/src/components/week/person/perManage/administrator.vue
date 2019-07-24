@@ -17,12 +17,10 @@
           <tbody>
           <tr v-for="(item,i) in list" :key="item.user_id">
             <td>
-              <input type="email" v-model="item.user_email">
+              {{item.user_email}}
             </td>
             <td>
-              <select v-model="item.user_learningDirection">
-                <option :value="item" v-for="(item,index) in directionList" :key="index">{{item}}</option>
-              </select>
+              {{item.user_learningDirection}}
             </td>
             <td v-if="big_administor">
               <select v-model="item.user_status">
@@ -41,7 +39,7 @@
               inactive-color="#e5e5e6"
               active-text="已重置"
               inactive-text="未重置"
-              @change="reset(i)"
+              @change="reset(i,item.user_id)"
               >
               </el-switch>
             </td>
@@ -49,7 +47,7 @@
               <a @click.prevent="deleteUser(item.user_id)" class="del">删除</a>
             </td>
             <td>
-              <a @click.prevent="modifyUser(item.user_id,item.user_email,item.user_learningDirection,item.user_state,item.user_reset,item.user_status)" class="reserve">保存</a>
+              <a @click.prevent="modifyUser(item.user_id,item.user_state,item.user_status)" class="reserve">保存</a>
             </td>
           </tr>  
           </tbody>
@@ -67,12 +65,9 @@ import {showPopRight} from '../../../../../static/pop.js'
     data () {
       return {
         big_administor:window.localStorage.getItem('userStatus')==='big_administor' ,
-        keywords:'',
         list:[],
-        addList:[],
         administorList:[{value:"administor",text:"管理员"},{value:null,text:"非管理员"}],
-        stateList:["在校","不在校"],
-        directionList:['前端','后台','产品','视觉','IOS','Android']
+        stateList:["在校","不在校"]
       }
     },
     methods:{
@@ -90,12 +85,8 @@ import {showPopRight} from '../../../../../static/pop.js'
           }
         });
       },
-      modifyUser(id, email,learningDirection,state,reset,status=null){
-        console.log(email)
-        console.log(state)
-        console.log(reset)
-        console.log(status)
-        this.$axios.get("weekly_war/user/updateUserSim.do?email="+email+'&learningDirection='+learningDirection+'&state='+state+'&reset='+reset+'&status='+status+"&id="+id).then(res=>{
+      modifyUser(id,state,status='none'){
+        this.$axios.get('weekly_war/user/updateUserSim.do?state='+state+'&status='+status+"&id="+id).then(res=>{
            res = res.data;
           if(res.success){
             showPopRight('修改成功',this);
@@ -105,9 +96,21 @@ import {showPopRight} from '../../../../../static/pop.js'
           }
         });
       },
-      reset(i){
+      reset(i,id){
+        if(this.list[i].user_reset===false){
+          this.list[i].user_reset = !this.list[i].user_reset
+          showPopError('您已重置过密码',this);
+          return;
+        }
         if(confirm('您确定要重置密码嘛？')){
-            
+            this.$axios.get('weekly_war/user/resetPassword.do?id='+id).then(result=>{
+              result = result.data;
+              if(result.success){
+                showPopRight('重置成功',this);
+              }else{
+                showPopError('重置失败',this);
+              }
+            })
         }else{
             this.list[i].user_reset = !this.list[i].user_reset
         }
@@ -124,27 +127,6 @@ import {showPopRight} from '../../../../../static/pop.js'
                 showPopError(res.msg,this)
           });
         }
-      },
-      addUser(){
-        this.addList.push({email:'',state:'',status:'',password:''})
-      },
-      addUserSim(email,status,state,password){
-        console.log(email)
-        console.log(status)
-        console.log(state)
-        console.log(password)
-        this.$axios.get("weekly_war/user/updateUserSim.do?email="+email+"&state="+state+"&status="+status+"&password="+password).then(res=>{
-          console.log(res)
-          res = res.data
-          if(res.success){
-            showPopRight('添加成功',this)
-            //重新获取一次用户的数据
-            this.getInfo();
-          }else{
-            showPopError(res.msg,this)
-          }
-        });
-
       },
       initial(list){
         for(let item of list){

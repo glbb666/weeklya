@@ -54,8 +54,7 @@ import {showPopRight} from '../../../static/pop.js'
     },
     mounted(){
       this.name = window.localStorage.getItem('username');
-      if(window.localStorage.getItem('pic')){
-        console.log('dsasd');
+      if(window.localStorage.getItem('pic')&&window.localStorage.getItem('pic').length){
         document.getElementById('photo').style = "background:"+ 'url(\''+window.localStorage.getItem('pic')+'\') no-repeat'+ ';background-position:center;background-size:auto 100%;background-color: white;'
       }
     }

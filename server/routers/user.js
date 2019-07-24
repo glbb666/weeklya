@@ -396,51 +396,48 @@ router.use('/logout.do',function(req,res){
 })
 //获取个人信息
 router.use('/getUser.do',function(req,res){
-    let path = './static/pic/'+req.session.user.path;
-    let searchSql = myselfSql.select('user','*','user_id='+req.session['user'].id);
-    let promise = poolP.poolPromise(pool,searchSql);
-    promise.then(result=>{
-        
-        fs.readFile(path,function(err,cont){
-            console.log(cont);
-            let user={
-                id:result[0].user_id,
-                email:result[0].user_email,
-                phone:result[0].user_phone,
-                state:result[0].user_state,
-                professionalClass:result[0].user_professionalClass,
-                learningDirection:result[0].user_learningDirection,
-                address:result[0].user_address,
-                status:result[0].user_status,
-                userName:result[0].user_name,
-                path:result[0].user_path
-            }
+    console.log('获取个人信息');
+    console.log(req.session['user']);
+    let user = req.session['user'];
+    delete user.password;
+    let path = './static/pic/'+req.session['user'].path;
+    if(req.session['user'].path.length){
+            fs.readFile(path,function(err,cont){
+                if(err){
+                    data = {
+                        msg:"读取头像错误",
+                        success:true,
+                        user:user
+                    }
+                    return;
+                }
+                data = {
+                    msg:"获取成功",
+                    success:true,
+                    user:user,
+                    pic:'data:image/png;base64,'+cont.toString('base64')
+                }
+                res.send(JSON.stringify(data));
+                return;
+            });
+        }else{
             data = {
                 msg:"获取成功",
                 success:true,
-                user:user,
-                pic:'data:image/png;base64,'+cont.toString('base64')
+                user:user
             }
             res.send(JSON.stringify(data));
-        });
-    }).catch(err=>{
-        console.log(err);
-            data = {
-                msg:"获取失败",
-                success:false
-            }
-            res.send(JSON.stringify(data));
-            return;
-    })
+        }
 })
 //修改个人信息
 router.use('/updateUser.do',function(req,res){
     console.log(req.query);
-    let user = req.query;
-    let updateSql = myselfSql.update('user',['user_email','user_phone','user_state','user_professionalClass','user_learningDirection','user_address','user_name'],[user.email,user.tel,user.state,user.professionalClass,user.learningDirection,user.address,user.userName],'user_id='+req.session['user'].id);
+    let {userName,professionalClass,phone,address,learningDirection,state,email} = req.query;
+    let updateSql = myselfSql.update('user',['user_email','user_phone','user_state','user_professionalClass','user_learningDirection','user_address','user_name'],[email,phone,state,professionalClass,learningDirection,address,userName],'user_id='+req.session['user'].id);
     let promise = poolP.poolPromise(pool,updateSql);
     let data;
     promise.then(result=>{
+        req.session['user'] = {...req.session['user'],...req.query};
         data = {
             success:true,
             msg:'插入成功'
@@ -466,10 +463,12 @@ router.use('/photo.do',upload.single('file'),function(req,res){
                 let updateSql = 'UPDATE `user` SET `user_path` = \''+ npath +'\' WHERE `user_id` = '+ id;
                 let promise = poolP.poolPromise(pool,updateSql);
                 promise.then(result=>{
+                    req.session['user'].path = npath;
+                    console.log(req.session['user']);
                     res.send({
                         'success':true,
                         'msg':'上传成功'
-                    })
+                    }) 
                 }).catch(err=>{
                     res.send({
                         'success':false,
@@ -531,7 +530,7 @@ router.use('/getAllUser.do',function(req,res){
     }else if(req.session['user'].status === 'administor'){
         keys = ['user_id','user_email','user_state','user_learningDirection'];
         console.log('管理员');
-        where = 'user_status is null and user_learningDirection=\''+req.session['user'].learningDirection+'\'';
+        where = 'user_status=\'none\'and user_learningDirection=\''+req.session['user'].learningDirection+'\'';
     }else{
         data={
             success:false,
@@ -572,7 +571,7 @@ router.use('/resetPassword.do',function(req,res){
         })
     }).catch(err=>{
         res.send({
-            'msg':'重置密码成功',
+            'msg':'重置密码失败',
             'success':false            
         })
     })
@@ -586,31 +585,21 @@ router.use('/updateUserSim.do',function(req,res){
     let values;
     if(req.session['user'].status==='big_administor'){
         //大管理员可以设置管理员
-        keys = ['user_email','user_learningDirection','user_status','user_state'];
-        values = [user.email,user.learningDirection,user.status,user.state];
+        keys = ['user_status','user_state'];
+        values = [user.status,user.state];
     }else if(req.session['user'].status==='administor'){
-        keys = ['user_email','user_learningDirection','user_state'];
-        values = [user.email,user.learningDirection,user.state];
+        keys = ['user_state'];
+        values = [user.state];
     }else{
         //非管理员身份无法调用接口
-        res = res.data;
-        if(res.code==='2000'){
-          console.log('获取成功');
-          this.list = res.user;
-          this.initial(this.list);
-        }else if(res.code === '1002'){
-          alert('非管理员');
-        }else if(res.code === '5000'){
-          alert('服务器错误');
+        data= {
+            'msg':'非管理员',
+            'success':false
         }
         res.send(JSON.stringify(data));
         return;
     }
-    if(user.reset==='false'){
-        //重设密码
-        keys.pop();
-        values.pop();
-    }
+
     let updateSql = myselfSql.update('user',keys,values,'user_id='+user.id)
     let promise = poolP.poolPromise(pool,updateSql);
     promise.then(result=>{

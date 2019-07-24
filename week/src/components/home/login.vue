@@ -231,13 +231,17 @@ label{
   margin-bottom: 15px;
 }
 label input{
-    border-bottom: 1px solid #535353;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
     font-size: 21px;
     line-height:42px;
     padding: 10px;
     width: 90%;
     padding-left: 50px;
     letter-spacing: 2px;
+    transition-duration: 0.2s;
+}
+label input:hover,label input:focus{
+    border-bottom: 1px #686fBF solid;
 }
 #code{
   display: flex;
@@ -302,4 +306,5 @@ p#fp{
     color:#686fbf;
     border: 2px solid #686fbf;
 }
+
 </style>

@@ -124,6 +124,7 @@ export default {
     height:50px;
     padding-left: 80px;
     width:320px;
+    transition-duration:.2s;
   }
   #passwordModify img{
     display: inline-block;
@@ -136,12 +137,8 @@ export default {
   #passwordModify button{
     margin-top: 20px;
   }
-  #passwordModify input:hover{
-    transition-duration:.2s;
+  #passwordModify input:hover,#passwordModify input:focus{
     border-bottom: 1px #686fBF solid;
-  }
-  #passwordModify input:focus{
-        border-bottom: 1px #686fBF solid;
   }
   .btn{
     font-size: 17px;

@@ -19,19 +19,9 @@
         </label>
       <label for="">
         <div>学习方向</div>
-        <!-- <div class="personBorder"> -->
-          <!-- <div> -->
-            <!--select元素不能直接绑定v-model-->
-            <!--<select v-model="selValue">-->
-            <!--<option :value="list.text" v-for="(list,index) in selList" :key="index">{{list.text}}</option>-->
-            <!--</select>-->
-            
             <select v-model="learningDirection">
               <option :value="item.text" v-for="(item,index) in directionList" :key="index">{{item.text}}</option>
             </select>
-          <!-- </div> -->
-        <!-- </div> -->
-       
       </label>
       <label for="">
         家庭住址 <input type="text" id="personAdress" v-model="address" placeholder="xx省xx市">
@@ -98,8 +88,12 @@ import {showPopRight} from '../../../../../static/pop.js'
               let pic = result.pic;
               let user = result.user;
               if(result.success){
-                document.getElementById('personImg').style = "background:"+ 'url(\''+pic+'\') no-repeat'+ ';background-position:center;background-size:auto 100%;background-color: white;'
-                window.localStorage.setItem('pic',pic);
+                if(pic&&pic.length){
+                  document.getElementById('personImg').style = "background:"+ 'url(\''+pic+'\') no-repeat'+ ';background-position:center;background-size:auto 100%;background-color: white;'
+                  window.localStorage.setItem('pic',pic);
+                }else{
+                  window.localStorage.removeItem('pic');
+                }
                 this.username = user.userName;
                 this.email = user.email;
                 this.learningDirection = user.learningDirection;
@@ -113,7 +107,7 @@ import {showPopRight} from '../../../../../static/pop.js'
             });
           },
           modifyInfo(){
-            this.$axios.get('weekly_war/user/updateUser.do?userName='+this.username+'&professionalClass='+this.professionalClass+'&tel='+this.tel+'&address='+this.address+'&learningDirection='+this.learningDirection+'&state='+this.state+'&email='+this.email).then(res => {
+            this.$axios.get('weekly_war/user/updateUser.do?userName='+this.username+'&professionalClass='+this.professionalClass+'&phone='+this.tel+'&address='+this.address+'&learningDirection='+this.learningDirection+'&state='+this.state+'&email='+this.email).then(res => {
               console.log(res)
               res = res.data;
               if(res.success){
@@ -163,8 +157,8 @@ import {showPopRight} from '../../../../../static/pop.js'
               formData.append("file",blob);
               _this.$axios.post('weekly_war/user/photo.do', formData, {emulateJSON : true, withCredentials : true}).then(function(res) {
                   if(res.data.success) {
-                    showPopRight(res.data.msg,_this);
-                   window.localStorage.setItem('pic',base64code);
+                   showPopRight(res.data.msg,_this);
+                   window.localStorage.setItem('pic',base64Code);
                   }else {
                     showPopError(res.data.msg,_this);
                   }

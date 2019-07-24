@@ -16,7 +16,7 @@ router.use('/getTasks.do',function(req,res){
     }else{
         userId = req.query.id;
     }
-    console.log(req.session);
+    console.log(req.session.user);
     let data = {};
     // console.log(Object.entries(req.session))
     // if(req.session['id']){

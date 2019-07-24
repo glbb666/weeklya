@@ -147,14 +147,18 @@ label{
   margin-bottom: 15px;
 }
 label input{
-    border-bottom: 1px solid #535353;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
     font-size: 21px;
     line-height:42px;
     padding: 10px;
     width: 90%;
     padding-left: 50px;
     letter-spacing: 2px;
+    transition-duration: 0.2s;
   }
+  label input:hover,label input:focus{
+    border-bottom: 1px #686fBF solid;
+}
 #code{
   display: flex;
 }
@@ -163,16 +167,20 @@ label input{
   margin-right: 10%;
 }
 #code div{
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 40%;
-  border:2px solid #535353;
-  margin-bottom: 10px;
+  border:2px solid rgba(0, 0, 0, 0.12);
+  margin-bottom: 5px;
   font-size: 18px;
   color: #535353;
   letter-spacing: 2px;
   cursor: pointer;
   font-size: 20px;
-  text-align: center;
   padding: 10px;
+  font-weight: bold;
+  border-radius: 7px;
 }
 .buttonRange{
   width: 100%;
