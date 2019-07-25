@@ -12,7 +12,8 @@
         </label>
         <div class="buttonRange">
           <p @click="change('c')" id="fp">忘 记 密 码 ？</p>
-          <input type="button" value="登录" class="btn" @click="postInfo('weekly_war/user/login.do')">
+          <input type="button" value="登录" class="btn" @click="postInfo($event,'weekly_war/user/login.do')">
+
           <p>Don't have an account？</p>
           <router-link to="register" class="btn" id="rbtn">注册</router-link>
         </div> 
@@ -27,13 +28,12 @@
           <img src="../../../static/1/false.png" alt="" class="false" @click="del('email',$event)">
         </label>
         <label id="code">
-          <!-- <img src="../../../static/1/pswd.png" alt="" class="font"> -->
           <input type="text" v-model="code" maxlength='8'  placeholder="verCode">
           <div @click="getCode()" v-show="!get">获取验证码</div>
           <div v-show="get" v-model="num">{{num}}</div>
         </label>
         <div class="buttonRange">
-          <input type="button" value="开始验证" class="btn" @click="postfcode('weekly_war/user/fcode.do')">
+          <input type="button" value="开始验证" class="btn" @click="postfcode($event,'weekly_war/user/fcode.do')">
           <p>remind your password?</p>
           <input @click="change('l')" class="btn" id="rbtn" value="回去登录">
         </div> 
@@ -48,7 +48,7 @@
           <img src="../../../static/1/false.png" alt="" class="false" @click="del('cpassword',$event)">
         </label>
         <div class="buttonRange">
-          <input type="button" value="修改密码" class="btn" @click="changePas('weekly_war/user/fpass.do')">
+          <input type="button" value="修改密码" class="btn" @click="changePas($event,'weekly_war/user/fpass.do')">
           <p>Don't want to change password?</p>
           <input @click="change('l')" class="btn" id="rbtn" value="回去登录">
         </div> 
@@ -56,9 +56,9 @@
       </div>
 </template>
 <script>
-import {isMail} from '../../../static/common.js'
-import {isLegal} from '../../../static/common.js'
-import {isRange} from '../../../static/common.js'
+import {isMail} from '../../assets/common.js'
+import {isLegal} from '../../assets/common.js'
+import {isRange} from '../../assets/common.js'
 import {showPopError} from '../../../static/pop.js'
 import {showPopRight} from '../../../static/pop.js'
 
@@ -75,7 +75,7 @@ export default {
     }
   },
   methods:{
-    postInfo(url){
+    postInfo(e,url){
       console.log(url)
       var data = {}
       data.userName = this.user;
@@ -85,7 +85,12 @@ export default {
       }else if(!isRange(this.password,-1,18)){
         showPopError('密码为6-18位',this);
       }else{
+      let loading = e.toElement;
+      loading.value = "";
+      loading.classList.add('loading');
       this.$axios.post(url,this.$qs.stringify(data)).then(result => {
+        loading.classList.remove('loading');
+        loading.value = "登录";
         console.log(result.data)
         var result = result.data;
         if (result.success) {
@@ -107,7 +112,8 @@ export default {
       });
       }
     },
-    postfcode(url){
+    postfcode(e,url){
+     
       console.log(url)
       var data = {}
       data.name = this.user;
@@ -118,7 +124,12 @@ export default {
       }else if(!isMail(this.email)){
         showPopError('email不合法',this);
       }else{
+      let loading = e.toElement;
+      loading.value = "";
+      loading.classList.add('loading');
       this.$axios.post(url,this.$qs.stringify(data)).then(result => {
+        loading.classList.remove('loading');
+        loading.value = "登录";
         console.log(result.data)
         var result = result.data;
         if (!result.error) {
@@ -132,7 +143,7 @@ export default {
       })
       }
     },
-    changePas(url){
+    changePas(e,url){
       console.log(url)
       if(!isRange(this.password,5,18)){
         showPopError('密码6-18',this);
@@ -144,7 +155,12 @@ export default {
       }
       var data = {}
       data.password = this.password;
+      let loading = e.toElement;
+      loading.value = "";
+      loading.classList.add('loading');
       this.$axios.post(url,this.$qs.stringify(data)).then(result => {
+        loading.classList.remove('loading');
+        loading.value = "登录";
         console.log(result.data)
         var result = result.data;
         if (!result.error) {
@@ -251,16 +267,20 @@ label input:hover,label input:focus{
   margin-right: 10%;
 }
 #code div{
+   display: flex;
+  justify-content: center;
+  align-items: center;
   width: 40%;
-  border:2px solid #535353;
-  margin-bottom: 10px;
+  border:2px solid rgba(0, 0, 0, 0.12);
+  margin-bottom: 5px;
   font-size: 18px;
   color: #535353;
   letter-spacing: 2px;
   cursor: pointer;
   font-size: 20px;
-  text-align: center;
   padding: 10px;
+  font-weight: bold;
+  border-radius: 7px;
 }
 .buttonRange{
   width: 100%;
@@ -306,5 +326,7 @@ p#fp{
     color:#686fbf;
     border: 2px solid #686fbf;
 }
-
+.loading{
+  background: url('../../../static/2/loading.gif') center no-repeat #686fbf;
+}
 </style>

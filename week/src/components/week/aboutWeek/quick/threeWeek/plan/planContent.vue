@@ -63,7 +63,7 @@
     display: flex;
     flex-wrap: nowrap;
     color: #6e6e74;
-    background-color: rgba(51,133,255,.1);
+    background-color: rgba(51,133,255,.05);
     margin-left: 33px;
     border-radius: 7px;
     width: 100%;

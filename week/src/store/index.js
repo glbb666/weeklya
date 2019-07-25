@@ -9,11 +9,7 @@ const store = new Vuex.Store({
             words:'',
             type:0
         },
-        user:{
-            username:null,
-            userId:null,
-            userStatus:null
-        }
+        pageList:[]
     },
     getters:{//等于vue的computed
         
@@ -22,11 +18,17 @@ const store = new Vuex.Store({
         //    Vue 建议我们mutation 类型用大写常量表示，修改一下，把mutation 类型改为大写
         SHOWPOP(state,newpop){
             state.pop = newpop;
+        },
+        GETPAGE(state,newPageList){
+            state.pageList = newPageList;
         }
     },
     actions:{
         showpop(context,newpop){
             context.commit('SHOWPOP',newpop);
+        },
+        getPage(context,newPageList){
+            context.commit('GETPAGE',newPageList);
         }
     }
 }) 

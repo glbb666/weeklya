@@ -3,7 +3,8 @@
    <div class="time">
           <div class="number">{{pi+1}}</div>
           <div class="quantum">
-            <span @click="writeAble">修改</span>           
+            <span @click="writeAble"><i class="el-icon-edit"></i>
+</span>           
             <img @click="deleteTask(pitem.weekly_id,$event)" v-if="flag" src="../../../../../../../static/1/close.png" alt="">
           </div>
     </div>
@@ -15,9 +16,10 @@
   </div>
 </template>
 <script>
+  import {formatDateTime} from '../../../../../../assets/common'
   import planContent from './planContent'
   import {showPopError} from '../../../../../../../static/pop.js'
-import {showPopRight} from '../../../../../../../static/pop.js'
+  import {showPopRight} from '../../../../../../../static/pop.js'
   export default {
     name: "planmBorder",
     props:['plist','pi','pitem','flag'],
@@ -66,20 +68,7 @@ import {showPopRight} from '../../../../../../../static/pop.js'
         }
       },
       formatDateTime(timeStamp) {
-        console.log(timeStamp);
-        var date = new Date();
-        if (timeStamp){
-          date.setTime(timeStamp);
-        } else {
-          date.setDate(date.getDate()+7);
-          date.setTime(date)
-        }
-        var y = date.getFullYear();
-        var m = date.getMonth() + 1;
-        m = m < 10 ? ('0' + m) : m;
-        var d = date.getDate();
-        d = d < 10 ? ('0' + d) : d;
-        return y + '-' + m + '-' + d;
+       return formatDateTime(timeStamp)
       },
       postTask(e){
           // 当没有值的时候,这里用空字符串不行，只能用长度判断
@@ -194,5 +183,11 @@ button{
   .detail:last-child .task{
     border-left: none;
     /*margin-bottom: 200px;*/
+  }
+  .el-icon-edit{
+    color: #3385ff;
+    font-weight: bold;
+    font-size: 23px;
+    cursor: pointer;
   }
 </style>

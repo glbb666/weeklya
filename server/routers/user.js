@@ -401,7 +401,7 @@ router.use('/getUser.do',function(req,res){
     let user = req.session['user'];
     delete user.password;
     let path = './static/pic/'+req.session['user'].path;
-    if(req.session['user'].path.length){
+    if(req.session['user'].path&&req.session['user'].path.length){
             fs.readFile(path,function(err,cont){
                 if(err){
                     data = {

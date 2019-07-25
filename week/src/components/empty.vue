@@ -25,5 +25,6 @@ h2{
     letter-spacing: 2px;
     margin-left: 2%;
     margin-top: 1%;
+    color: #6e6e74;
 }
 </style>

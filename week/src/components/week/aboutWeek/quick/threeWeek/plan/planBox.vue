@@ -14,7 +14,7 @@
     </div>
 </template>
 <script>
-  import empty from '../../../../../empty'
+import empty from '../../../../../empty'
 
 export default {
     name:'planBox',

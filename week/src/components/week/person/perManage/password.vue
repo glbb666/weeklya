@@ -22,7 +22,7 @@
       </div>
 </template>
 <script>
-import { isRange } from '../../../../../static/common';
+import { isRange } from '../../../../assets/common';
 import {showPopError} from '../../../../../static/pop.js'
 import {showPopRight} from '../../../../../static/pop.js'
 export default {

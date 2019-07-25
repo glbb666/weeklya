@@ -52,12 +52,17 @@
           </tr>  
           </tbody>
         </table>
+        <dpage
+          url='weekly_war/user/getAllUser.do'
+          pageSize=7
+        ></dpage> 
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import dpage from '../../../dpage'
 import {showPopError} from '../../../../../static/pop.js'
 import {showPopRight} from '../../../../../static/pop.js'
   export default {
@@ -66,20 +71,19 @@ import {showPopRight} from '../../../../../static/pop.js'
       return {
         big_administor:window.localStorage.getItem('userStatus')==='big_administor' ,
         list:[],
-        administorList:[{value:"administor",text:"管理员"},{value:null,text:"非管理员"}],
+        administorList:[{value:"administor",text:"管理员"},{value:"none",text:"非管理员"}],
         stateList:["在校","不在校"]
       }
     },
     methods:{
       getInfo(){
-        this.$axios.get('weekly_war/user/getAllUser.do').then(res => {
+        this.$axios.get().then(res => {
           res = res.data;
           console.log(res);
           if(res.success){
             console.log('获取成功');
             this.initial(res.user);
             this.list = res.user;
-
           }else {
             showPopError(res.msg,this);
           }
@@ -135,8 +139,11 @@ import {showPopRight} from '../../../../../static/pop.js'
         }
       }
     },
+    components:{
+      dpage
+    },
     created(){
-      this.getInfo();
+      // this.getInfo();
     }
   }
 </script>

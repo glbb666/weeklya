@@ -2,29 +2,25 @@
       <div id="bottom">
         <div id="form">
         <label>
-          <!-- <img src="../../../static/1/user.png" alt="" class="font"> -->
           <input  type="text" v-model="user" maxlength="16" placeholder="UserName">
           <img src="../../../static/1/false.png" alt=""
                class="false" @click="del('user',$event)">
         </label>
         <label>
-          <!-- <img src="../../../static/1/pswd.png" alt="" class="font"> -->
           <input type="password" v-model="password" maxlength="18" minlength="4"  placeholder="PassWord"> 
           <img src="../../../static/1/false.png" alt="" class="false" @click="del('password',$event)">
         </label>
         <label>
-          <!-- <img src="../../../static/1/pswd.png" alt="" class="font"> -->
           <input type="email" v-model="email" placeholder="Email">
           <img src="../../../static/1/false.png" alt="" class="false" @click="del('email',$event)">
         </label>
         <label id="code">
-          <!-- <img src="../../../static/1/pswd.png" alt="" class="font"> -->
           <input type="text" v-model="code" maxlength='8'  placeholder="verCode">
           <div @click="getCode()" v-show="!get">获取验证码</div>
           <div v-show="get" v-model="num">{{num}}</div>
         </label>
         <div class="buttonRange">
-          <input type="button" value="注册" class="btn" @click="postInfo()">
+          <input type="button" value="注册" class="btn" @click="postInfo($event)">
           <p>Already has an account ?</p>
           <router-link to="login" class="btn" id="rbtn">登录</router-link>  
         </div> 
@@ -33,13 +29,12 @@
 </template>
 
 <script>
-import {isMail} from '../../../static/common.js'
-import {isLegal} from '../../../static/common.js'
-import {isRange} from '../../../static/common.js'
+import {isMail} from '../../assets/common.js'
+import {isLegal} from '../../assets/common.js'
+import {isRange} from '../../assets/common.js'
 import {showPopError} from '../../../static/pop.js'
 import {showPopRight} from '../../../static/pop.js'
 
-// import '../../styles/outer.css';
 
 export default {
   data () {
@@ -79,7 +74,7 @@ export default {
         });
       }
     },
-    postInfo(){
+    postInfo(e){
       if(!(isRange(this.user,3,16))){
         showPopError('用户名长度为4-16位',this)
       }else if(!isRange(this.password,5,18)){
@@ -87,6 +82,9 @@ export default {
       }else if(!isMail(this.email)){
         showPopError('email不合法',this);
       }else{
+      let loading = e.toElement;
+      loading.value = "";
+      loading.classList.add('loading');
       let url = 'weekly_war/user/register.do';
       var data = {}
       data.user = this.user;
@@ -94,7 +92,8 @@ export default {
       data.email=this.email;
       data.code = this.code;
       this.$axios.post(url,this.$qs.stringify(data)).then(result => {
-        // console.log(result.data)
+        loading.classList.remove('loading');
+        loading.value = "注册";
         var result = result.data;
         console.log(result);
         if (result.success) {
@@ -215,5 +214,8 @@ p{
     background: none;
     color:#686fbf;
     border: 2px solid #686fbf;
+}
+.loading{
+  background: url('../../../static/2/loading.gif') center no-repeat #686fbf;
 }
 </style>

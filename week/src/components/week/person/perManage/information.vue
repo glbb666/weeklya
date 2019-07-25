@@ -4,18 +4,9 @@
       <div id="ptop">
         <label for="">
         上传头像
-        <!-- <div id="personImg">
+        <div id="personImg">
             <input type="file" id="personFile" accept='image/*' @change="upload">
-        </div>  -->
-        <el-upload
-  class="avatar-uploader"
-  action="https://jsonplaceholder.typicode.com/posts/"
-  :show-file-list="false"
-  :on-success="handleAvatarSuccess"
-  :before-upload="beforeAvatarUpload">
-        <img v-if="imageUrl" :src="imageUrl" class="avatar">
-  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-        </el-upload>       
+        </div>
       </label>
       </div>
       <div id="pbottom">
@@ -70,7 +61,6 @@ import {showPopRight} from '../../../../../static/pop.js'
             directionList:[
               {text:'前端'},
               {text:'后台'},
-              // {text:'后端'},
               {text:'视觉'},
               {text:'产品'},
               {text:'IOS'},
@@ -78,7 +68,6 @@ import {showPopRight} from '../../../../../static/pop.js'
             ],
             stateList:[
               {text:'在校'},
-              // {text:'在校'},
               {text:'离校'}
             ],
             username:'',
@@ -87,10 +76,12 @@ import {showPopRight} from '../../../../../static/pop.js'
             professionalClass:'',
             address:'',
             tel:'',
-            email:''
+            email:'',
+            imageUrl: ''
           }
         },
         methods:{
+        
           getInfo(){
             this.$axios.get('weekly_war/user/getUser.do').then(result => {
               result = result.data;
@@ -184,8 +175,15 @@ import {showPopRight} from '../../../../../static/pop.js'
           }
         }
       },
-      created(){ 
+      created(){
+       
         this.getInfo();
+      },
+      mounted(){
+         if(window.localStorage.getItem('pic')){
+        var oPic = document.getElementById('personImg');
+          oPic.style = "background:"+ 'url(\''+window.localStorage.getItem('pic')+'\') no-repeat'+ ';background-position:center;background-size:auto 100%;background-color: white;'
+        }
       }
     }
 </script>
@@ -233,8 +231,8 @@ import {showPopRight} from '../../../../../static/pop.js'
     margin-left:20px;
     width: 82px;
     height: 82px;
-    border-radius: 50%;
-    background: url('../../../../../static/2/pimg.png') no-repeat center;
+    border-radius: 50%; 
+    background: url('../../../../../static/2/add.png') no-repeat center;
     background-size: 'auto 100%';
     box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
   }
