@@ -7,8 +7,12 @@ import axios from 'axios'
 import qs from 'qs'
 import store from './store'
 import ElementUI from 'element-ui';
+import iView from 'iview';
+import 'iview/dist/styles/iview.css';
 import 'element-ui/lib/theme-chalk/index.css';
 Vue.use(ElementUI);
+Vue.use(iView);
+
 
 Vue.config.productionTip = false
 // 配置axios

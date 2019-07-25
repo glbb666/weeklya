@@ -117,9 +117,18 @@
             }
         },
         change(obj,action){
-            var result = null;
+             //obj为 moon或者year
+            //action为1或者-1
+            console.log(this[obj]);
+            let nowYear = new Date().getFullYear();
+            let nowMoon = new Date().getMonth()+1;
+            let result = this[obj]+action;
+
             if(obj==='moon'){
-                result = this.moon+action;
+                if(this.year===nowYear&&result>nowMoon){
+                    showPopError('已经到底了哦',this);
+                    return;
+                }
                 if(result===0){
                     this.moon = 12;
                     this.year--;
@@ -130,10 +139,14 @@
                     this.year++;
                     return;
                 }
-                this.moon = result;
             }else{
-                this.year+=action;
+                if(result>nowYear){
+                    showPopError('已经到底了哦',this);
+                    return;
+                }        
             }
+            this[obj]=result;
+
         },
         select(obj,num){
             console.log(obj);
@@ -278,7 +291,7 @@ input:focus{
 .showWeek{
     position: absolute;
     box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-    z-index: 100;
+    z-index: 8;
     background-color: #fff;
     left: 33px;
     top: 10px;

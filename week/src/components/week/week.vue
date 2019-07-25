@@ -12,7 +12,7 @@
         <router-link to="/week/person"><div id="photo"></div>
         {{name}}</router-link>
       </div>
-      <button id="dropOut" @click="out">退出</button>
+      <button id="dropOut" @click="out"><Icon type="md-exit" title="退出"/></button>
     </div>
     <router-view></router-view>
     </div>
@@ -122,7 +122,7 @@ import {showPopRight} from '../../../static/pop.js'
      display: inline-block;
      height: 100%;
      width: 110px;
-     font-size: 16px;
+     font-size: 25px;
   }
   #photo{
     display: inline-block;

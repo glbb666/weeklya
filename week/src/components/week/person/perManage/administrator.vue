@@ -15,7 +15,7 @@
           </tr>
           </thead>
           <tbody>
-          <tr v-for="(item,i) in list" :key="item.user_id">
+          <tr v-for="(item,i) in this.$store.state.pageList" :key="item.user_id">
             <td>
               {{item.user_email}}
             </td>
@@ -23,23 +23,23 @@
               {{item.user_learningDirection}}
             </td>
             <td v-if="big_administor">
-              <select v-model="item.user_status">
-                <option :value="item.value" v-for="(item,index) in administorList" :key="index">{{item.text}}</option>
-              </select>
+              <Select v-model="item.user_status" size="large">
+                <Option :value="item.value" v-for="(item,index) in administorList" :key="index">{{item.text}}</Option>
+              </Select>
             </td>
             <td>
-              <select v-model="item.user_state">
-                <option :value="item" v-for="(item,index) in stateList" :key="index">{{item}}</option>
-              </select>
+              <Select v-model="item.user_state" size="large">
+                <Option :value="item" v-for="(item,index) in stateList" :key="index">{{item}}</Option>
+              </Select>
             </td>
             <td>
               <el-switch
-              v-model="item.user_reset"
-              active-color="#686fbf"
-              inactive-color="#e5e5e6"
-              active-text="已重置"
-              inactive-text="未重置"
-              @change="reset(i,item.user_id)"
+                v-model="item.user_reset"
+                active-color="#686fbf"
+                inactive-color="#e5e5e6"
+                active-text="已重置"
+                inactive-text="未重置"
+                @change="reset(i,item.user_id)"
               >
               </el-switch>
             </td>
@@ -55,6 +55,7 @@
         <dpage
           url='weekly_war/user/getAllUser.do'
           pageSize=7
+          type='user'
         ></dpage> 
       </div>
     </div>
@@ -76,33 +77,19 @@ import {showPopRight} from '../../../../../static/pop.js'
       }
     },
     methods:{
-      getInfo(){
-        this.$axios.get().then(res => {
-          res = res.data;
-          console.log(res);
-          if(res.success){
-            console.log('获取成功');
-            this.initial(res.user);
-            this.list = res.user;
-          }else {
-            showPopError(res.msg,this);
-          }
-        });
-      },
       modifyUser(id,state,status='none'){
         this.$axios.get('weekly_war/user/updateUserSim.do?state='+state+'&status='+status+"&id="+id).then(res=>{
            res = res.data;
           if(res.success){
             showPopRight('修改成功',this);
-            this.getInfo();
           }else{
              showPopError(res.msg,this);
           }
         });
       },
       reset(i,id){
-        if(this.list[i].user_reset===false){
-          this.list[i].user_reset = !this.list[i].user_reset
+        if(this.$store.state.pageList[i].user_reset===false){
+          this.$store.state.pageList[i].user_reset = !this.$store.state.pageList[i].user_reset;
           showPopError('您已重置过密码',this);
           return;
         }
@@ -116,7 +103,7 @@ import {showPopRight} from '../../../../../static/pop.js'
               }
             })
         }else{
-            this.list[i].user_reset = !this.list[i].user_reset
+            this.$store.state.pageList[i].user_reset = !this.$store.state.pageList[i].user_reset
         }
       },
       deleteUser(id){
@@ -125,25 +112,20 @@ import {showPopRight} from '../../../../../static/pop.js'
           this.$axios.get('weekly_war/user/deleteUser.do?id='+id).then(res=>{
               res = res.data;
               if(res.success){
-                showPopRight('删除成功',this)
-                this.getInfo();
+                showPopRight('删除成功',this);
+
+                //this.getInfo();
               }else 
                 showPopError(res.msg,this)
           });
         }
       },
-      initial(list){
-        for(let item of list){
-          item.user_reset = false;
-          console.log(item);
-        }
-      }
+      
     },
     components:{
       dpage
     },
     created(){
-      // this.getInfo();
     }
   }
 </script>
@@ -157,7 +139,8 @@ import {showPopRight} from '../../../../../static/pop.js'
   }
    /*查找姓名*/
   select{
-    font-size: 16px;
+    font-size: 17px;
+    cursor: pointer;
   }
   #find img{
     position: absolute;
@@ -206,7 +189,7 @@ import {showPopRight} from '../../../../../static/pop.js'
     transition: all .3s;
   }
   tbody tr:hover{
-    background-color:rgba(104,111,191, .2);
+    background-color:rgba(104,111,191, .1);
   }
   tbody tr:hover a{
     background-color:#686fbf;
@@ -220,6 +203,8 @@ import {showPopRight} from '../../../../../static/pop.js'
   }
   tbody tr td{
     position: relative;
+    color: #515a6e;
+    padding:30px 10px;
   }
   a{
     background-color:#e5e5e6;

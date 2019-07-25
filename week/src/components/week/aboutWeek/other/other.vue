@@ -2,10 +2,6 @@
       <!--主要内容-->
       <div>
         <div id="findPart">
-          <label id="find">
-            <input type="text" placeholder="按姓名查找" v-model="keywords">
-            <img src="../../../../../static/2/find.png" alt="">
-          </label>
           <div id="findContain">
             <table>
               <thead>
@@ -18,7 +14,7 @@
               </thead>
               <tbody>
                 <!--此处不能用user_id,否则会报错-->
-              <tr v-for="item in search(keywords)" :key="item.weekly_id">
+              <tr v-for="item in this.$store.state.pageList" :key="item.weekly_id">
                 <td>{{item.user_learningDirection}}</td>
                 <td>{{item.user_name}}</td>
                 <td>{{formatDateTime(item.weekly_taskData)}}</td>
@@ -29,8 +25,9 @@
               </tbody>
             </table>
             <dpage 
-              pageSize=7
               url='weekly_war/task/getAllTasksByUserId.do'
+              pageSize=7
+              type='task'
             ></dpage>
           </div>
         </div>
@@ -51,16 +48,6 @@ import dpage from '../../../dpage'
     },
     
     methods:{
-      search:function(keywords){
-        var newList = [];
-        console.log(this.$store.state.pageList)
-        this.$store.state.pageList.forEach(item=>{
-          if (item["user_name"].indexOf(keywords)!=-1){
-            newList.push(item);
-          }
-        });
-        return newList;
-      },
       formatDateTime(timeStamp){
         return formatDateTime(timeStamp);
       } 
@@ -140,7 +127,7 @@ import dpage from '../../../dpage'
     transition: all .3s;
   }
   tbody tr:hover{
-    background-color:rgba(104,111,191, .2);
+    background-color:rgba(104,111,191, .1);
   }
   tbody tr:hover a{
     background-color:#686fbf;

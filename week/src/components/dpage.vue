@@ -12,7 +12,7 @@ import {showPopError} from '../../static/pop.js'
 import {showPopRight} from '../../static/pop.js'
 export default {
     name:'dpage',
-    props:['url','pageSize'],
+    props:['url','pageSize','type'],
     data(){
         return{
             list:[],
@@ -23,6 +23,9 @@ export default {
         }
     },
     watch:{
+      'type':function(){
+          this.getInfo();       
+      },
       'page':function(){
           this.getInfo();       
       }
@@ -42,7 +45,10 @@ export default {
             var result = result.data;
             if (result.success) {
               //把获取到的全部信息存储到list中
-              this.$store.dispatch('getPage',result.tasks) ;
+              if(this.type==='user'){
+                 this.initial(result.tasks);
+              }
+              this.$store.dispatch('setPage',result.tasks);    
               result.totalPage?this.totalPage=result.totalPage:null;
               this.setPageList(5);
               this.checkPage();
@@ -91,10 +97,20 @@ export default {
               this.pageList.unshift(i);
           }
         },
+        initial(list){
+          for(let item of list){
+            item.user_reset = false;
+            console.log(item);
+          }
+        }
     },
     created(){
+      console.log('as');
       this.getInfo();
     },
+    beforeDestroye(){
+      // console.log('被敲挥')
+    }
 }
 </script>
 

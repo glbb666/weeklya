@@ -17,20 +17,8 @@ router.use('/getTasks.do',function(req,res){
         userId = req.query.id;
     }
     console.log(req.session.user);
-    let data = {};
-    // console.log(Object.entries(req.session))
-    // if(req.session['id']){
-       // Object.keys(req.session).length>1
-        //1.如果session存在,说明我们已经通过session_id查到对应的session了
-        //2.因为session是一个对象,当session没有值时，是一个空对象，布尔值为false的只有null,undefined,0,"",NaN，所以说空对象的布尔值为true
-        //3.为了校验它是不是一个空对象,我们可以用es6的Object.keys()方法,这个方法的返回值是一个由参数对象自身的(不含继承的)可枚举键名组成的数组,我们可以通过判断数组的长度来知道req.session是不是一个空对象。
-        //4.它原本还存在一个值_ctx,所以我们判断的条件应该在原本的条件下加一
-            // from_unixtime用来把时间戳转换为日期
-            //这里我进行了改写
-            /* 
-                这里的curdata()取得的一周是从周日开始到周六,而我想获得的一周是从周一开始到周日,也就是curdata()加一天。我首先想到的是,我可以用明天作为一周的基准 ,但是我发现YEARWEEK(DATE_SUB(curdate(),INTERVAL -1 DAY))没有起作用,于是我修改了一下时间戳,因为时间戳的单位为毫秒,所以我让时间戳减去一天等于本周(星期日到星期六)。这样的话,相当于时间戳不减去一天等于本周(星期一到星期天)
-            */
-           //上周周报
+    let data = {}; 
+           //（以往的最新一周的周报）取出这周之前的最上面的那天,计算出它所属的是那一周,然后把那一周的周报按降序取出
             let lastSQL = myselfSql.select('content',"*","YEARWEEK(date_format(from_unixtime((weekly_taskData)/1000),'%Y-%m-%d'),1) = YEARWEEK(now(),1)-1 and user_id="+userId+" and weekly_flag=0 order by weekly_taskData desc");
 
            //本周周报

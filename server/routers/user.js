@@ -520,17 +520,21 @@ router.use('/updateUserPassword.do',function(req,res){
 })
 //获取全部用户
 router.use('/getAllUser.do',function(req,res){
+    console.log('全部');
+    let msg  = req.body;
+    let pageParams = msg.pageParams;
     let keys = [];
+    let arr= [];
     let where;
     let data;
     if(req.session['user'].status==='big_administor'){
         keys = ['user_id','user_email','user_state','user_status','user_learningDirection'];
         console.log('大管理员');
-        where = 'user_id<>'+req.session['user'].id;
+        where = 'user_id<>'+req.session['user'].id+' limit '+(pageParams.page-1)*pageParams.pageSize+","+pageParams.pageSize;
     }else if(req.session['user'].status === 'administor'){
         keys = ['user_id','user_email','user_state','user_learningDirection'];
         console.log('管理员');
-        where = 'user_status=\'none\'and user_learningDirection=\''+req.session['user'].learningDirection+'\'';
+        where = 'user_status=\'none\'and user_learningDirection=\''+req.session['user'].learningDirection+'\' limit '+(pageParams.page-1)*pageParams.pageSize+","+pageParams.pageSize;
     }else{
         data={
             success:false,
@@ -540,21 +544,25 @@ router.use('/getAllUser.do',function(req,res){
         return;
     }
     let searchSql = myselfSql.select('user',keys,where);
-    let promise = poolP.poolPromise(pool,searchSql);
-    promise.then(result=>{
-            data={
-                success:true,
-                msg:'获取成功',
-                user:result
-            }
-            res.send(JSON.stringify(data))
-        }).catch(err=>{
-        data={
-                success:false,
-                msg:'服务器错误',
-            }
-            res.send(JSON.stringify(data))
-            console.log(err);
+    arr.push(searchSql);
+    if(!msg.totalPage){//是第一次请求
+        let countSql = myselfSql.select('user','count(*)',where);
+        arr.push(countSql);
+    }     
+    Promise.all(poolP.poolPromise(pool,arr)).then(result=>{
+        console.log(result);
+        data = {
+            msg:"获取成功",
+            code:2000,
+            success:true,
+            tasks:result[0]
+        }
+        if(!msg.totalPage){
+           data.totalPage = Math.ceil(result[1][0]["count(*)"]/pageParams.pageSize);
+        }
+        res.send(JSON.stringify(data));
+    }).catch(err=>{
+        console.log(err);
     })
 })
 //重置密码

@@ -19,7 +19,7 @@ const store = new Vuex.Store({
         SHOWPOP(state,newpop){
             state.pop = newpop;
         },
-        GETPAGE(state,newPageList){
+        SETPAGE(state,newPageList){
             state.pageList = newPageList;
         }
     },
@@ -27,9 +27,10 @@ const store = new Vuex.Store({
         showpop(context,newpop){
             context.commit('SHOWPOP',newpop);
         },
-        getPage(context,newPageList){
-            context.commit('GETPAGE',newPageList);
-        }
+        setPage(context,newPageList){
+            context.commit('SETPAGE',newPageList);
+        },
+
     }
 }) 
 export default store
