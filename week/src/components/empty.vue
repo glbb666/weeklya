@@ -1,12 +1,13 @@
 <template>
-    <div v-if="listEmpty(plist)">
-        <h2>亲亲,这里暂时没有内容哦~</h2>
+    <div v-if="listEmpty(plist)" id="empty">
+        <h2>欸？(⊙﹏⊙)内容为空</h2>
+        <h3>快去填写{{words}}吧！</h3>
     </div>
 </template>
 <script>
 export default {
     name:'empty',
-    props:['plist'],
+    props:['plist','backgroundColor','words'],
     data(){
         return{
 
@@ -17,14 +18,16 @@ export default {
         return list.length===0;
       }
     },
+    mounted(){
+        document.getElementById('empty').style.backgroundColor = this.backgroundColor;
+    }
 }
 </script>
 
 <style scoped>
-h2{
+h2,h3{
     letter-spacing: 2px;
-    margin-left: 2%;
-    margin-top: 1%;
+    margin: 1% 2%;
     color: #6e6e74;
 }
 </style>

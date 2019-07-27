@@ -10,7 +10,10 @@
           <planBorder :pi="i" :pitem="item" :plist="pnextPlan" :flag="flag"></planBorder>
       </div>
     </div>
-    <empty :plist="pnextPlan"></empty>
+    <empty :plist="pnextPlan"
+            backgroundColor='rgba(51,133,255,.05)'
+            words='周报'
+    ></empty>
   </div>
 
 </template>
@@ -77,5 +80,10 @@
   .time div{
     float: left;
   }
- 
+ #empty{
+  width: 80%;
+  margin:10px 33px;
+  border-radius: 7px;
+  padding: 10px;
+}
 </style>

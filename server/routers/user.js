@@ -2,6 +2,7 @@ const express = require('express');
 let pool = require('../mysql/db.js');
 let router = express.Router();
 let fs = require('fs');
+let thunkify = require('thunkify');
 const poolP = require('../libs/poolPromise.js');
 const myselfSql = require('../mysql.js');
 const sessionOk = require('../sessionOk.js');
@@ -328,7 +329,8 @@ router.use('/login.do',function(req,res){
                     }
                     var path = './static/pic/'+result[0].user_path;
                     if(path){
-                        fs.readFile(path,function(err,cont){
+                        var read = thunkify(fs.readFile);
+                        read(path)(function(err,cont){
                             if(err){
                                 console.log(err);
                                 res.send(JSON.stringify(data));

@@ -10,7 +10,9 @@
           </div>
         </div>
       </div>
-      <empty :plist="pthisPlan"></empty>
+      <empty :plist="pthisPlan"
+             words='计划'
+      ></empty>
     </div>
 </template>
 <script>
@@ -33,7 +35,6 @@ export default {
 <style scoped>
 #thisPlan{
    position: fixed;
-   /* background-color: rgba(255,215,0,.2); */
    width: 26%;
    height: 80%;
    right: 0;
@@ -42,8 +43,7 @@ export default {
    border-radius: 7px 0 0 7px ;
    overflow-y: auto;
    z-index: 2;
-         box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
-
+   box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
    color: #6e6e74;
   transition: all .2s linear;
  }
@@ -78,5 +78,9 @@ export default {
    width: 100%;
    word-wrap: break-word;
  }
+  #empty{
+  border-radius: 7px;
+  padding: 10px;
+}
 </style>
 

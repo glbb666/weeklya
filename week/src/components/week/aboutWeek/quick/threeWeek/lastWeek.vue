@@ -1,10 +1,14 @@
 <template>
     <div>
-      <selectWeek v-on:func="show"></selectWeek>
+      <selectWeek v-on:func="show"
+      ></selectWeek>
       <div>
           <taskBorder :pi="i" :pitem="item" :plist="list" class="detail" v-for="(item,i) in list||plastTask" :key="i" :flag="flag"></taskBorder>
       </div>
-      <empty :plist="list||plastTask"></empty>
+      <empty :plist="list||plastTask"
+              backgroundColor='#f7f7f9'
+              words='周报'
+      ></empty>
     </div>
 </template>
 
@@ -44,4 +48,10 @@
 .detail{
     width: 75%;
   }
+#empty{
+  width: 80%;
+  margin:10px 33px;
+  border-radius: 7px;
+  padding: 10px;
+}
 </style>

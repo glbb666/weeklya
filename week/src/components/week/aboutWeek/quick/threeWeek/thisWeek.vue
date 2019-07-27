@@ -11,7 +11,10 @@
       </div>
     </div>
     <planBox :pthisPlan="pthisPlan"></planBox>
-    <empty :plist="pthisTask"></empty>
+    <empty :plist="pthisTask"
+            words='周报'
+            backgroundColor='#f7f7f9'
+    ></empty>
   </div>
 
 </template>
@@ -88,4 +91,10 @@
   .time div{
     float: left;
   }
+  #empty{
+  width: 80%;
+  margin:10px 33px;
+  border-radius: 7px;
+  padding: 10px;
+}
 </style>
