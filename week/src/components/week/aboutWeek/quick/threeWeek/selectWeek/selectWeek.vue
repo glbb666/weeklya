@@ -5,7 +5,7 @@
            <div class="year">
                <a @click="change('year',-1)" title="上一年" class="left select">««</a>
                <a @click="change('moon',-1)" title="上个月" class="left select">«</a>
-               <span><a @click="select('year',year)" class="select" title="选择年份">{{year}}年</a><a @click="select('moon',moon)" class="select" title="选择月份">{{moon}}月</a></span>
+               <span><a class="select" title="选择年份">{{year}}年</a><a class="select" title="选择月份">{{moon}}月</a></span>
                <a @click="change('year',1)" title="下一年" class="right select">»»</a>
                <a @click="change('moon',1)" title="下个月" class="right select">»</a>
            </div>
@@ -40,6 +40,7 @@
   import {showPopError,showPopRight} from '../../../../../../../static/pop.js'
   export default {
     name: "selectWeek",
+    props:['pyear','pmoon'],
     data(){
         return{
             year:null,
@@ -57,7 +58,8 @@
             curWeek:null,
             nowWeek:null,
             curWeekday:null,
-            weekList:[]
+            weekList:[],
+            userId:null
         }
     },
     watch:{
@@ -80,8 +82,9 @@
     },
     methods:{
         init(){
-            this.year = new Date().getFullYear();
-            this.moon = new Date().getMonth()+1;
+            this.year = this.pyear
+            this.moon = this.pmoon;
+            this.userId = this.$route.query.userId? this.$route.query.userId:null;
         },
         reset(){
             //当前月的第一天是星期几
@@ -119,10 +122,9 @@
              //obj为 moon或者year
             //action为1或者-1
             console.log(this[obj]);
-            let nowYear = new Date().getFullYear();
-            let nowMoon = new Date().getMonth()+1;
+            let nowYear = this.pyear;
+            let nowMoon = this.pmoon;
             let result = this[obj]+action;
-
             if(obj==='moon'){
                 if(this.year===nowYear&&result>nowMoon){
                     showPopError('已经到底了哦',this);
@@ -146,14 +148,6 @@
             }
             this[obj]=result;
 
-        },
-        select(obj,num){
-            console.log(obj);
-            if(obj==='year'){
-
-            }else{
-
-            }
         },
         getDateList() {
                 this.list = []
@@ -239,7 +233,7 @@
             console.log(this.curYear);
             console.log(this.curWeek);
             let time = this.curYear+""+this.curWeek;
-            this.$axios.get('weekly_war/task/getOneTask.do?weektime='+time).then(result=>{
+            this.$axios.get('weekly_war/task/getOneTask.do?weektime='+time+'&userId='+this.userId).then(result=>{
             result = result.data;
             console.log(result)
             if (result.success){

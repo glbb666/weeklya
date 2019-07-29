@@ -13,6 +13,7 @@
     <empty :plist="pnextPlan"
             backgroundColor='rgba(51,133,255,.05)'
             words='周报'
+            width='75%'
     ></empty>
   </div>
 

@@ -32,7 +32,6 @@ import {showPopError,showPopRight} from '../../../../../static/pop.js'
     methods: {
        getInfo() {
         this.$axios.get('weekly_war/task/getTasks.do?id='+this.userId+"&timeStamp="+this.timeStamp).then(result => {
-          // console.log(result)
           result = result.data
           console.log(result);
           if (result.success) {
@@ -40,27 +39,21 @@ import {showPopError,showPopRight} from '../../../../../static/pop.js'
             this.thisTask = result.thisTask;
             this.thisPlan = result.thisPlan;
             this.nextPlan = result.nextTask;
-            this.init(this.lastTask);
-            this.init(this.thisTask);
-            this.init(this.thisPlan);
-            this.init(this.nextPlan);
-            // console.log(this.lastTask);
-            // console.log(this.thisTask);
-            // console.log(this.nextPlan);
-            // alert(JSON.stringify(this.list));
-            // alert('请求数据成功')
+            this.init([this.lastTask,this.thisTask,this.thisPlan,this.nextPlan]);
           } else {
             showPopError('请求数据失败',this)
-            // this.$router.replace('/login');
           }
         });
       },
       init(week){
+        console.log(week);
         for(let i = 0;i<week.length;i++){
-          week[i].weekly_completeDegree = JSON.parse(week[i].weekly_completeDegree);
-          week[i].weekly_content = JSON.parse(week[i].weekly_content);
-          week[i].weekly_taskName = JSON.parse(week[i].weekly_taskName);
-          week[i].weekly_timeConsuming = JSON.parse(week[i].weekly_timeConsuming);
+            for(let j = 0;j<week[i].length;j++){
+              week[i][j].weekly_completeDegree = JSON.parse(week[i][j].weekly_completeDegree);
+              week[i][j].weekly_content = JSON.parse(week[i][j].weekly_content);
+              week[i][j].weekly_taskName = JSON.parse(week[i][j].weekly_taskName);
+              week[i][j].weekly_timeConsuming = JSON.parse(week[i][j].weekly_timeConsuming);
+          }
         }
       }
     }

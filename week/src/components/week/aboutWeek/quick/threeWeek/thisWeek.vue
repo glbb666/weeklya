@@ -14,6 +14,7 @@
     <empty :plist="pthisTask"
             words='周报'
             backgroundColor='#f7f7f9'
+            width='65%'
     ></empty>
   </div>
 

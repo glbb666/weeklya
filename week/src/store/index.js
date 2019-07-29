@@ -10,14 +10,12 @@ const store = new Vuex.Store({
             type:0
         },
         pageList:[],
-        task:{
-            lastTask:null,
-            thisTask:null,
-            nextTask:null
-        }
     },
     getters:{//等于vue的computed
-        
+        getStateTime:function(state){
+            console.log(state);
+           return state.time;
+        }
     },
     mutations:{
         //    Vue 建议我们mutation 类型用大写常量表示，修改一下，把mutation 类型改为大写
@@ -34,8 +32,7 @@ const store = new Vuex.Store({
         },
         setPage(context,newPageList){
             context.commit('SETPAGE',newPageList);
-        },
-
+        }
     }
 }) 
 export default store

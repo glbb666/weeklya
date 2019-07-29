@@ -27,7 +27,7 @@
       'plist':function(){
           console.log('add');
           if(!this.plist[this.pi].weekly_id){
-          this.writeAble();
+            this.writeAble();
         }
       }
     },

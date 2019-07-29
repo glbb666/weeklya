@@ -79,8 +79,7 @@ import {showPopError,showPopRight} from '../../../../../static/pop.js'
             imageUrl: ''
           }
         },
-        methods:{
-        
+        methods:{     
           getInfo(){
             this.$axios.get('weekly_war/user/getUser.do').then(result => {
               result = result.data;
