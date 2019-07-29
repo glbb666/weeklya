@@ -47,8 +47,6 @@
             moon:null,
             curYear:null,
             curMoon:null,
-            firstday:null,
-            weekFlag:false,
             show:false,
             list:[],
             currentMonthFirstDay: null, // 当前月的1号属于星期几

@@ -59,6 +59,10 @@ import dpage from '../../../dpage'
           return curWeek===now?'thisWeek':'lastWeek';
         }
     } ,
+    beforeRouteLeave(from,to,next){
+      this.$store.dispatch('setPage',null)
+      next();
+    },
     components:{
       dpage
     }
