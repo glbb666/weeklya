@@ -9,7 +9,12 @@ const store = new Vuex.Store({
             words:'',
             type:0
         },
-        pageList:[]
+        pageList:[],
+        task:{
+            lastTask:null,
+            thisTask:null,
+            nextTask:null
+        }
     },
     getters:{//等于vue的computed
         

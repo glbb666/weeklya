@@ -5,54 +5,92 @@ const poolP = require('../libs/poolPromise.js');
 const myselfSql = require('../mysql.js');
 const sessionOk = require('../sessionOk.js');
 
+let formatDateTime = require('../task/formatDateTime')
+let getYearWeek = require('../task/getYearWeek')
+
 router.use(sessionOk())
 //获取三周周报接口
 router.use('/getTasks.do',function(req,res){
     console.log('快捷');
     console.log(req.query);
-    let userId;
+    let userId,time = null;
     if(req.query.id==="null"){
         userId = req.session['user'].id;
     }else{
-        userId = req.query.id;
+        userId = req.query.id;//别人的，有可能是选的，有可能是默认的
+        time = req.query.timeStamp;
+        if(time==='null')time = null;
     }
     console.log(req.session.user);
     let data = {}; 
-           //（以往的最新一周的周报）取出这周之前的最上面的那天,计算出它所属的是那一周,然后把那一周的周报按降序取出
-            let day = myselfSql.select('content',"weekly_taskData","YEARWEEK(date_format(from_unixtime((weekly_taskData)/1000),'%Y-%m-%d'),1) < YEARWEEK(now(),1) and user_id="+userId+" and weekly_flag=0 order by weekly_taskData desc limit 0,1");//求出时间戳
-            
-            let lastSQL = myselfSql.select('content',"*","YEARWEEK(date_format(from_unixtime((weekly_taskData)/1000),'%Y-%m-%d'),1) = "+time+" and user_id="+req.session["user"].id+" order by weekly_taskData");
-            //本周周报
-            let thisSQL = myselfSql.select('content',"*","YEARWEEK(date_format(from_unixtime((weekly_taskData)/1000),'%Y-%m-%d'),1) = YEARWEEK(curdate(),1) and user_id="+userId)+" and weekly_flag=0 order by weekly_taskData desc";
-            //本周计划
-            let thisSQL1 = myselfSql.select('content',"*","YEARWEEK(date_format(from_unixtime((weekly_taskData)/1000),'%Y-%m-%d'),1) = YEARWEEK(curdate(),1) and user_id="+userId)+" and weekly_flag=1 order by weekly_taskData desc";
-        
-            //下周计划
-            let nextSQL = myselfSql.select('content',"*","YEARWEEK(date_format(from_unixtime((weekly_taskData)/1000),'%Y-%m-%d'),1) = YEARWEEK(curdate(),1)+1 and user_id="+userId)+" and weekly_flag=1 order by weekly_taskData desc";
+    //（以往的最新一周的周报）取出这周之前的最上面的那天,计算出它所属的是那一周,然后把那一周的周报按降序取出
+    let day,promise = null;
+    let lastSQL = null; 
+    //本周周报
+    let thisSQL = myselfSql.select('content',"*","YEARWEEK(date_format(from_unixtime((weekly_taskData)/1000),'%Y-%m-%d'),1) = YEARWEEK(curdate(),1) and user_id="+userId)+" and weekly_flag=0 order by weekly_taskData desc";
+    //本周计划
+    let thisSQL1 = myselfSql.select('content',"*","YEARWEEK(date_format(from_unixtime((weekly_taskData)/1000),'%Y-%m-%d'),1) = YEARWEEK(curdate(),1) and user_id="+userId)+" and weekly_flag=1 order by weekly_taskData desc";
 
-            Promise.all(poolP.poolPromise(pool,[lastSQL,thisSQL,thisSQL1,nextSQL])).then(result=>{
-                //这里面的内容只会执行一次
-                // console.log(result);
-                data={
-                    msg:"成功",
-                    code:2000,
-                    success:true,
-                    lastTask:result[0],
-                    thisTask:result[1],
-                    thisPlan:result[2],
-                    nextTask:result[3]
-                }
-                res.send(JSON.stringify(data));
-            }).catch(e=>{
-                console.log(e)
-                data={
-                    msg:"服务器错误",
-                    code:5000,
-                    success:false,
-                }
-                res.send(JSON.stringify(data));
-            });     
-        // console.log(data);
+    //下周计划
+    let nextSQL = myselfSql.select('content',"*","YEARWEEK(date_format(from_unixtime((weekly_taskData)/1000),'%Y-%m-%d'),1) = YEARWEEK(curdate(),1)+1 and user_id="+userId)+" and weekly_flag=1 order by weekly_taskData desc";
+    if(!time){
+        day = myselfSql.select('content',"weekly_taskData","YEARWEEK(date_format(from_unixtime((weekly_taskData)/1000),'%Y-%m-%d'),1) < YEARWEEK(now(),1) and user_id="+userId+" and weekly_flag=0 order by weekly_taskData desc limit 0,1");//求出最新时间戳
+        promise = poolP.poolPromise(pool,day);
+        promise.then(day=>{
+            time = formatDateTime(day[0].weekly_taskData);
+            time = getYearWeek(time);
+            lastSQL = myselfSql.select('content',"*","YEARWEEK(date_format(from_unixtime((weekly_taskData)/1000),'%Y-%m-%d'),1) = "+time+" and user_id="+userId+" order by weekly_taskData desc");
+            return Promise.all(poolP.poolPromise(pool,[lastSQL,thisSQL,thisSQL1,nextSQL]))
+        }).then(result=>{
+            //这里面的内容只会执行一次
+            // console.log(result);
+            data={
+                msg:"成功",
+                code:2000,
+                success:true,
+                lastTask:result[0],
+                thisTask:result[1],
+                thisPlan:result[2],
+                nextTask:result[3]
+            }
+            res.send(JSON.stringify(data));
+        }).catch(e=>{
+            console.log(e)
+            data={
+                msg:"服务器错误",
+                code:5000,
+                success:false,
+            }
+            res.send(JSON.stringify(data));
+        });     
+    }else{
+        time = formatDateTime(parseInt(time));
+        time = getYearWeek(time);
+        lastSQL = myselfSql.select('content',"*","YEARWEEK(date_format(from_unixtime((weekly_taskData)/1000),'%Y-%m-%d'),1) = "+time+" and user_id="+userId+" order by weekly_taskData desc");
+        Promise.all(poolP.poolPromise(pool,[lastSQL,thisSQL,thisSQL1,nextSQL])).then(result=>{
+            //这里面的内容只会执行一次
+            // console.log(result);
+            data={
+                msg:"成功",
+                code:2000,
+                success:true,
+                lastTask:result[0],
+                thisTask:result[1],
+                thisPlan:result[2],
+                nextTask:result[3]
+            }
+            res.send(JSON.stringify(data));
+        }).catch(e=>{
+            console.log(e)
+            data={
+                msg:"服务器错误",
+                code:5000,
+                success:false,
+            }
+            res.send(JSON.stringify(data));
+        });     
+    }
+    
 })
 //获取某一周周报接口
 router.use('/getOneTask.do',function(req,res){

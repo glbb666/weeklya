@@ -19,8 +19,7 @@
 <script>
   import {formatDateTime} from '../../../../../../assets/common'
   import taskContent from './taskContent'
-  import {showPopError} from '../../../../../../../static/pop.js'
-  import {showPopRight} from '../../../../../../../static/pop.js'
+  import {showPopError,showPopRight} from '../../../../../../../static/pop.js'
   export default {
     name: "taskBorder",
     props:['plist','pi','pitem','flag'],

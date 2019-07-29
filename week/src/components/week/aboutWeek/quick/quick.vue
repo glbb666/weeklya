@@ -13,8 +13,7 @@
 </template>
 
 <script>
-import {showPopError} from '../../../../../static/pop.js'
-import {showPopRight} from '../../../../../static/pop.js'
+import {showPopError,showPopRight} from '../../../../../static/pop.js'
   export default {
     name: 'quick',
     data() {
@@ -26,12 +25,13 @@ import {showPopRight} from '../../../../../static/pop.js'
         thisPlan:'',
         nextPlan:'',
         userId:null,
+        timeStamp:null,
         flag:true
       }
     },
     methods: {
        getInfo() {
-        this.$axios.get('weekly_war/task/getTasks.do?id='+this.userId).then(result => {
+        this.$axios.get('weekly_war/task/getTasks.do?id='+this.userId+"&timeStamp="+this.timeStamp).then(result => {
           // console.log(result)
           result = result.data
           console.log(result);
@@ -68,6 +68,7 @@ import {showPopRight} from '../../../../../static/pop.js'
     created(){
       if(this.$route.query.userId){
           this.userId = this.$route.query.userId;
+          this.timeStamp = this.$route.query.timeStamp;
           this.flag = false;
       }
       this.getInfo();

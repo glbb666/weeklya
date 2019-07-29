@@ -37,8 +37,7 @@
   </div>
 </template>
 <script>
-  import {showPopError} from '../../../../../../../static/pop.js'
-  import {showPopRight} from '../../../../../../../static/pop.js'
+  import {showPopError,showPopRight} from '../../../../../../../static/pop.js'
   export default {
     name: "selectWeek",
     data(){

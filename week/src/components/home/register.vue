@@ -29,11 +29,8 @@
 </template>
 
 <script>
-import {isMail} from '../../assets/common.js'
-import {isLegal} from '../../assets/common.js'
-import {isRange} from '../../assets/common.js'
-import {showPopError} from '../../../static/pop.js'
-import {showPopRight} from '../../../static/pop.js'
+import {isMail,isLegal,isRange} from '../../assets/common.js'
+import {showPopError,showPopRight} from '../../../static/pop.js'
 
 
 export default {
@@ -70,7 +67,6 @@ export default {
           }else{
             showPopError(result.msg,this);
           }
-          // console.log(result);   
         });
       }
     },

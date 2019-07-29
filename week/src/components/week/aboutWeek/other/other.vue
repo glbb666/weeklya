@@ -19,7 +19,7 @@
                 <td>{{item.user_name}}</td>
                 <td>{{formatDateTime(item.weekly_taskData)}}</td>
                 <td>
-                  <router-link :to="{path:'/week/aboutWeek/other/quick/thisWeek',query:{userId:item.user_id}}" class="looking" :userId="123">查看</router-link>
+                  <router-link :to="{path:'/week/aboutWeek/other/quick/'+week(formatDateTime(item.weekly_taskData)),query:{userId:item.user_id,timeStamp:week(formatDateTime(item.weekly_taskData))==='lastWeek'?item.weekly_taskData:null}}" class="looking" :userId="123">查看</router-link>
                 </td>
               </tr>
               </tbody>
@@ -35,9 +35,8 @@
 </template>
 
 <script>
-import {formatDateTime} from '../../../../assets/common'
-import {showPopError} from '../../../../../static/pop.js'
-import {showPopRight} from '../../../../../static/pop.js'
+import {formatDateTime,getYearWeek} from '../../../../assets/common'
+import {showPopError,showPopRight} from '../../../../../static/pop.js'
 import dpage from '../../../dpage'
   export default {
     name: 'other',
@@ -46,12 +45,20 @@ import dpage from '../../../dpage'
         keywords:'',
       }
     },
-    
     methods:{
       formatDateTime(timeStamp){
         return formatDateTime(timeStamp);
-      } 
-    },
+      },
+      getYearWeek(weekTime){
+        return getYearWeek(weekTime)
+      },
+      week(time){
+          time = new Date(time);
+          let curWeek = getYearWeek(time)
+          var now = getYearWeek(new Date());
+          return curWeek===now?'thisWeek':'lastWeek';
+        }
+    } ,
     components:{
       dpage
     }
