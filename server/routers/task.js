@@ -106,7 +106,7 @@ router.use('/getOneTask.do',function(req,res){
     }
     let time = req.query.weektime;
     let data = {};
-    let lastSQL = myselfSql.select('content',"*","YEARWEEK(date_format(from_unixtime((weekly_taskData)/1000),'%Y-%m-%d'),1) = "+time+" and user_id="+userId+" order by weekly_taskData");
+    let lastSQL = myselfSql.select('content',"*","YEARWEEK(date_format(from_unixtime((weekly_taskData)/1000),'%Y-%m-%d'),1) = "+time+" and user_id="+userId+" order by weekly_taskData desc");
     let promise = poolP.poolPromise(pool,lastSQL);
     promise.then(result=>{
         //这里面的内容只会执行一次

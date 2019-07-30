@@ -11,6 +11,7 @@
       </div>
     </div>
     <planBox :pthisPlan="pthisPlan"></planBox>
+   
     <empty :plist="pthisTask"
             words='周报'
             backgroundColor='#f7f7f9'
@@ -24,6 +25,7 @@
   import taskBorder from './task/taskBorder'  
   import planBox from './plan/planBox'
   import empty from '../../../../empty'
+
   export default {
     name: "thisWeek",
     props:['pthisTask','pthisPlan','flag'],

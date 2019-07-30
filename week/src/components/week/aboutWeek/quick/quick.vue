@@ -8,12 +8,19 @@
           <img src="../../../../../static/2/point.png" alt="">
           <router-link to='nextWeek'>下周计划</router-link>
         </div>
-          <router-view :plastTask="lastTask" :pthisTask="thisTask" :pthisPlan="thisPlan" :pnextPlan="nextPlan" id="weekBox" :flag="flag" ></router-view>
+        <busy2
+              width='75%'
+              v-if="show"
+        ></busy2>
+        <router-view :plastTask="lastTask" :pthisTask="thisTask" :pthisPlan="thisPlan" :pnextPlan="nextPlan" id="weekBox" :flag="flag"    v-if="!show"
+></router-view>     
     </div>
 </template>
 
 <script>
 import {showPopError,showPopRight} from '../../../../../static/pop.js'
+  import busy2 from '../../../busy2'
+
   export default {
     name: 'quick',
     data() {
@@ -26,8 +33,12 @@ import {showPopError,showPopRight} from '../../../../../static/pop.js'
         nextPlan:'',
         userId:null,
         timeStamp:null,
-        flag:true
+        flag:true,
+        show:true
       }
+    },
+    components:{
+      busy2
     },
     methods: {
        getInfo() {
@@ -35,6 +46,10 @@ import {showPopError,showPopRight} from '../../../../../static/pop.js'
           result = result.data
           console.log(result);
           if (result.success) {
+            var _this = this;
+            setTimeout(function(){
+              _this.show = false;
+            },1000);
             this.lastTask = result.lastTask;
             this.thisTask = result.thisTask;
             this.thisPlan = result.thisPlan;
@@ -59,6 +74,7 @@ import {showPopError,showPopRight} from '../../../../../static/pop.js'
     }
   ,
     created(){
+      //是判断从哪里来的,如果是从他人来的话flag就是false
       if(this.$route.query.userId){
           this.userId = this.$route.query.userId;
           this.timeStamp = this.$route.query.timeStamp;

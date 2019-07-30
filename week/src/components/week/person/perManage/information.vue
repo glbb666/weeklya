@@ -1,6 +1,10 @@
 <template>
   <div id="contain">
-    <div id="person">
+    <busy2
+              width='75%'
+              v-if="show"
+    ></busy2>
+    <div id="person" v-show="!show">
       <div id="ptop">
         <label for="">
         上传头像
@@ -52,6 +56,8 @@
 
 <script>
 import {showPopError,showPopRight} from '../../../../../static/pop.js'
+import busy2 from '../../../busy2'
+
     export default {
         name: "information",
         data () {
@@ -76,7 +82,8 @@ import {showPopError,showPopRight} from '../../../../../static/pop.js'
             address:'',
             tel:'',
             email:'',
-            imageUrl: ''
+            imageUrl: '',
+            show:true
           }
         },
         methods:{     
@@ -86,6 +93,10 @@ import {showPopError,showPopRight} from '../../../../../static/pop.js'
               let pic = result.pic;
               let user = result.user;
               if(result.success){
+                var _this = this;
+                setTimeout(function(){
+                  _this.show = false;
+                },1000);
                 if(pic&&pic.length){
                   document.getElementById('personImg').style = "background:"+ 'url(\''+pic+'\') no-repeat'+ ';background-position:center;background-size:auto 100%;background-color: white;'
                   window.localStorage.setItem('pic',pic);
@@ -173,8 +184,10 @@ import {showPopError,showPopRight} from '../../../../../static/pop.js'
           }
         }
       },
+      components:{
+        busy2
+      },
       created(){
-       
         this.getInfo();
       },
       mounted(){

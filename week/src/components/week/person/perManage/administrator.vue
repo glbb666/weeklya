@@ -1,6 +1,10 @@
 <template>
   <div id="contain">
-    <div id="findPart">
+    <busy2
+              width='75%'
+              v-if="show"
+    ></busy2>
+    <div id="findPart" v-if="!show">
       <div id="findContain">
         <table>
           <thead>
@@ -65,6 +69,8 @@
 <script>
 import dpage from '../../../dpage'
 import {showPopError,showPopRight} from '../../../../../static/pop.js'
+import busy2 from '../../../busy2'
+
   export default {
     name: 'administrator',
     data () {
@@ -72,7 +78,8 @@ import {showPopError,showPopRight} from '../../../../../static/pop.js'
         big_administor:window.localStorage.getItem('userStatus')==='big_administor' ,
         list:[],
         administorList:[{value:"administor",text:"管理员"},{value:"none",text:"非管理员"}],
-        stateList:["在校","不在校"]
+        stateList:["在校","不在校"],
+        show:true
       }
     },
     methods:{
@@ -112,19 +119,25 @@ import {showPopError,showPopRight} from '../../../../../static/pop.js'
               res = res.data;
               if(res.success){
                 showPopRight('删除成功',this);
-
-                //this.getInfo();
               }else 
                 showPopError(res.msg,this)
           });
         }
-      },
-      
+      },  
     },
     components:{
-      dpage
+      dpage,
+      busy2
     },
     created(){
+      var _this = this;
+      setTimeout(function(){
+              _this.show = false;
+      },2000);
+    },
+    beforeRouteLeave(from,to,next){
+      this.$store.dispatch('setPage',null)
+      next();
     }
   }
 </script>

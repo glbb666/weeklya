@@ -5,6 +5,7 @@
         :pyear=year
         :pmoon=moon
       ></selectWeek>
+
       <div>
           <taskBorder :pi="i" :pitem="item" :plist="list" class="detail" v-for="(item,i) in list||plastTask" :key="i" :flag="flag"></taskBorder>
       </div>
@@ -45,7 +46,7 @@
     components:{
       taskBorder,
       selectWeek,
-      empty
+      empty,
     },
     created(){
         //检测是不是从他人页面跳转的,如果是的话,就会带有时间戳
@@ -61,6 +62,10 @@
 .detail{
     width: 75%;
   }
+#busy{
+   width:1000px;
+   height: 200px;
+}
 #empty{
   width: 80%;
   margin:10px 33px;

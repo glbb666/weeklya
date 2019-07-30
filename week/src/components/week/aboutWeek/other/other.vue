@@ -1,7 +1,11 @@
 <template>
       <!--主要内容-->
       <div>
-        <div id="findPart">
+        <busy2
+              width='75%'
+              v-if="show"
+        ></busy2>
+        <div id="findPart" v-if="!show">
           <div id="findContain">
             <table>
               <thead>
@@ -38,11 +42,14 @@
 import {formatDateTime,getYearWeek} from '../../../../assets/common'
 import {showPopError,showPopRight} from '../../../../../static/pop.js'
 import dpage from '../../../dpage'
+import busy2 from '../../../busy2'
+
   export default {
     name: 'other',
     data () {
       return {
         keywords:'',
+        show:true
       }
     },
     methods:{
@@ -59,12 +66,19 @@ import dpage from '../../../dpage'
           return curWeek===now?'thisWeek':'lastWeek';
         }
     } ,
+    created(){
+      var _this = this;
+      setTimeout(function(){
+              _this.show = false;
+      },2000);
+    },
     beforeRouteLeave(from,to,next){
       this.$store.dispatch('setPage',null)
       next();
     },
     components:{
-      dpage
+      dpage,
+      busy2
     }
   }
 </script>
