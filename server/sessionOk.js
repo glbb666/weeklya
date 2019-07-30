@@ -3,7 +3,13 @@
 */
 module.exports = function(){
     return function(req, res, next) {
-        if (req.session['user'])
+        if (req.session['user']){
             next();
+        }else{
+            res.send({
+                'msg':'session不存在'
+            })
+        }
+        
     }   
 }

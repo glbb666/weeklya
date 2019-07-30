@@ -9,11 +9,12 @@
           <router-link to='nextWeek'>下周计划</router-link>
         </div>
         <busy2
-              width='75%'
-              v-if="show"
+              width='65%'
+              v-show="show"
         ></busy2>
-        <router-view :plastTask="lastTask" :pthisTask="thisTask" :pthisPlan="thisPlan" :pnextPlan="nextPlan" id="weekBox" :flag="flag"    v-if="!show"
-></router-view>     
+        <router-view :plastTask="lastTask" :pthisTask="thisTask" :pthisPlan="thisPlan" :pnextPlan="nextPlan" id="weekBox" :flag="flag"  v-show="!show" :userId="userId"
+        :timeStamp="timeStamp"
+        ></router-view>     
     </div>
 </template>
 
@@ -26,7 +27,6 @@ import {showPopError,showPopRight} from '../../../../../static/pop.js'
     data() {
       return {
         add: false,//默认不显示
-        time:'',
         lastTask:'',
         thisTask:'',
         thisPlan:'',
@@ -76,8 +76,8 @@ import {showPopError,showPopRight} from '../../../../../static/pop.js'
     created(){
       //是判断从哪里来的,如果是从他人来的话flag就是false
       if(this.$route.query.userId){
-          this.userId = this.$route.query.userId;
-          this.timeStamp = this.$route.query.timeStamp;
+          this.userId = this.$route.params.userId;
+          this.timeStamp = this.$route.params.timeStamp;
           this.flag = false;
       }
       this.getInfo();

@@ -5,7 +5,7 @@
       <!--侧边栏-->
       <div id="sidebar">
         <ul>
-          <li><router-link to="/week/aboutWeek/quick"><span></span>快捷周报</router-link></li>
+          <li><router-link to="/week/aboutWeek/quick" ><span></span>快捷周报</router-link></li>
           <li><router-link to="/week/aboutWeek/other"><span></span>他人周报</router-link></li>
         </ul>
       </div>

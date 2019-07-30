@@ -4,6 +4,7 @@
        v-on:func="show"
         :pyear=year
         :pmoon=moon
+        :userId=userId
       ></selectWeek>
 
       <div>
@@ -24,7 +25,7 @@
   import {formatDateTime} from '../../../../../assets/common'
   export default {
     name: "lastWeek",
-    props:['plastTask','flag'],
+    props:['plastTask','flag','userId','timeStamp'],
     data() {
       return {
         list:null,
@@ -35,10 +36,9 @@
     methods: {
       show(week){
         for(let i = 0;i<week.length;i++){
-          week[i].weekly_completeDegree = JSON.parse(week[i].weekly_completeDegree);
-          week[i].weekly_content = JSON.parse(week[i].weekly_content);
-          week[i].weekly_taskName = JSON.parse(week[i].weekly_taskName);
-          week[i].weekly_timeConsuming = JSON.parse(week[i].weekly_timeConsuming);
+          for(let item in week[i]){
+            typeof week[i][item] === 'string'?week[i][item] = JSON.parse(week[i][item]):null;
+          }
         }
         this.list = week;
       }
@@ -50,7 +50,8 @@
     },
     created(){
         //检测是不是从他人页面跳转的,如果是的话,就会带有时间戳
-        let time = this.$route.query.timeStamp?formatDateTime(this.$route.query.timeStamp):formatDateTime();
+        console.log(this.userId);
+        let time = this.timeStamp?formatDateTime(this.timeStamp):formatDateTime();
         let arr = time.split('-');
         this.year = parseInt(arr[0]);
         this.moon = parseInt(arr[1]);
@@ -61,7 +62,7 @@
 <style scoped>
 .detail{
     width: 75%;
-  }
+}
 #busy{
    width:1000px;
    height: 200px;

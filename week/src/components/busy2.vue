@@ -4,7 +4,7 @@
         'width':width
       }"
   >
-		<div class="throbber-loader" style="margin:0 auto;margin-top:5rem;" />
+		<div class="throbber-loader" style="margin:0 auto;margin-top:8rem;" />
     <p>努力加载中</p>
 	</div>
 </template>
@@ -94,6 +94,7 @@
 }
 
 .busy p {
+
   font-size: 0.8rem;
   text-align: center;
   padding-top: 0.3rem;

@@ -40,7 +40,7 @@
   import {showPopError,showPopRight} from '../../../../../../../static/pop.js'
   export default {
     name: "selectWeek",
-    props:['pyear','pmoon'],
+    props:['pyear','pmoon','userId'],
     data(){
         return{
             year:null,
@@ -57,7 +57,6 @@
             nowWeek:null,
             curWeekday:null,
             weekList:[],
-            userId:null
         }
     },
     watch:{
@@ -82,7 +81,6 @@
         init(){
             this.year = this.pyear
             this.moon = this.pmoon;
-            this.userId = this.$route.query.userId? this.$route.query.userId:null;
         },
         reset(){
             //当前月的第一天是星期几

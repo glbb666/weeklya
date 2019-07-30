@@ -2,7 +2,7 @@
   <div id="contain">
     <busy2
               width='75%'
-              v-if="show"
+              v-show="show"
     ></busy2>
     <div id="person" v-show="!show">
       <div id="ptop">

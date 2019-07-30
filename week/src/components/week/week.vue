@@ -42,7 +42,7 @@ import {showPopError,showPopRight} from '../../../static/pop.js'
               if(window.localStorage.getItem('pic')){
                 window.localStorage.removeItem("pic");
               }
-              this.$router.replace('/');
+              this.$router.push('/');
             }else{ 
               showPopError('退出失败',this)
             }
