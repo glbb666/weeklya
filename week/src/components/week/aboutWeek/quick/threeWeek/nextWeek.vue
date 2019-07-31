@@ -7,7 +7,15 @@
         </div>
       </div>
       <div class="detail" v-for="(item,i) in pnextPlan" :key="i">
-          <planBorder :pi="i" :pitem="item" :plist="pnextPlan" :flag="flag"></planBorder>
+          <taskBorder :pi="i"
+                      :pitem="item"
+                      :plist="pnextPlan"
+                      :flag="flag"
+                      type="next"
+                      color="#3385ff"
+                      backgroundColor="#3385ff"
+                      taskColor="rgba(51,133,255,.05)"
+             ></taskBorder>
       </div>
     </div>
     <empty :plist="pnextPlan"
@@ -20,7 +28,7 @@
 </template>
 
 <script>
-  import planBorder from './plan/planBorder'
+  import taskBorder from './task/taskBorder'
   import empty from '../../../../empty'
 
   export default {
@@ -49,7 +57,7 @@
     }
     ,
     components:{
-      planBorder,
+      taskBorder,
       empty
     }
   }

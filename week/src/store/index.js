@@ -10,6 +10,9 @@ const store = new Vuex.Store({
             type:0
         },
         pageList:[],
+        task:{
+            
+        }
     },
     getters:{//等于vue的computed
         getStateTime:function(state){

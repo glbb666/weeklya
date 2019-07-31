@@ -8,7 +8,18 @@
       ></selectWeek>
 
       <div>
-          <taskBorder :pi="i" :pitem="item" :plist="list" class="detail" v-for="(item,i) in list||plastTask" :key="i" :flag="flag"></taskBorder>
+          <taskBorder :pi="i"
+                      :pitem="item" 
+                      :plist="list" 
+                      class="detail" 
+                      v-for="(item,i) in list||plastTask" 
+                      :key="i" 
+                      :flag="flag"
+                      type='last'
+                      color="#686fbf"
+                      backgroundColor="#3240dd"
+                      taskColor="#f7f7f9"
+          ></taskBorder>
       </div>
       <empty :plist="list||plastTask"
               backgroundColor='#f7f7f9'
@@ -50,7 +61,7 @@
     },
     created(){
         //检测是不是从他人页面跳转的,如果是的话,就会带有时间戳
-        console.log(this.userId);
+        // console.log(this.userId);
         let time = this.timeStamp?formatDateTime(this.timeStamp):formatDateTime();
         let arr = time.split('-');
         this.year = parseInt(arr[0]);

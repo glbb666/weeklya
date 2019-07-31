@@ -150,9 +150,9 @@
                 // 获取日历第一行的数据（需加上第一个星期中所包含上个月的几天）
                 //temp计算出上个月最后一天的星期数减去这个月第一天的星期数
                 //上个月的最后一天是几号
-                console.log(this.lastMonthEndDate);
+                // console.log(this.lastMonthEndDate);
                 //这个月的第一天是星期几
-                console.log(this.currentMonthFirstDay);
+                // console.log(this.currentMonthFirstDay);
                 //(this.currentMonthFirstDay - 1)得到的是上个月的最后一天是星期几
                 //temp的值是在本页呈现的上个月的开始天数
                 //上个月最后一天是星期五。31号
@@ -181,7 +181,7 @@
                 */
                 // 计算除了第一行剩下的天数
                 const leftDays = this.currentMonthEndDate - (7 - this.currentMonthFirstDay)-1;
-                console.log(leftDays);
+                // console.log(leftDays);
                 // 剩下的星期数,决定还要写多少行
                 const lineNumber = Math.ceil(leftDays / 7)
                 // 包含下个月日历的天数

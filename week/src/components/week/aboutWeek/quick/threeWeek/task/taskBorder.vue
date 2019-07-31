@@ -1,18 +1,53 @@
 <template>
    <div>
    <div class="time">
-          <div class="number">{{pi+1}}</div>
+          <div class="number"
+              :style="{
+                color:color,
+                border:'2px solid '+color
+              }"
+          >{{pi+1}}</div>
           <div class="quantum">
-            <span>{{formatDateTime(pitem.weekly_taskData)}}</span>
-            <span @click="writeAble" v-if="flag"><i class="el-icon-edit"></i>
-</span>           
+            <span v-if="type!=='next'">{{formatDateTime(pitem.weekly_taskData)}}</span>
+            <span @click="writeAble" v-if="flag">
+              <i 
+                class="el-icon-edit"
+                :style="{
+                  color:color
+                }"
+              ></i>
+            </span>           
             <img @click="deleteTask(pitem.weekly_id,$event)" v-if="flag" src="../../../../../../../static/1/close.png" alt="">
           </div>
     </div>
-    <div class="task">
+    <div class="task"
+         :style="{
+           borderColor:color
+         }"
+    >
       <!-- pitem.weekly_taskName是一个数组 -->
-      <taskContent :pi="i" :pitem="pitem" :preadOnly="readOnly" :ppostAble ="postAble" @update="changeReadOnly()" v-for="(item,i) in pitem.weekly_taskName" :key="i"></taskContent>
-      <button class="poBtn" v-if="postAble" @click="postTask($event)">提交</button>
+      <!-- 能不能提交的状态由笔和是不是新创建的同时决定，只要满足一个即可 -->
+      <taskContent 
+                  :pi="i"
+                  :pitem="pitem"
+                  :preadOnly="pitem.weekly_id?readOnly:null"
+                  :ppostAble ="postAble||(type!=='last'&&!plist[pi].weekly_id)"
+                  v-for="(item,i) in pitem.weekly_taskName" 
+                  :key="i"
+                  v-if="update"
+                  :type="type"
+                  :color="color"
+                  :backgroundColor="backgroundColor"
+                  :taskColor="taskColor"
+      ></taskContent>
+      <button class="poBtn"
+              v-show="postAble||(type!=='last'&&!plist[pi].weekly_id)"
+              @click="postTask($event)"
+              :style="{
+                backgroundColor:backgroundColor
+              }" 
+               >提交
+      </button>
     </div>
   </div>
 </template>
@@ -22,19 +57,21 @@
   import {showPopError,showPopRight} from '../../../../../../../static/pop.js'
   export default {
     name: "taskBorder",
-    props:['plist','pi','pitem','flag'],
-    watch:{
-      'plist':function(){
-          console.log('add');
-          if(!this.plist[this.pi].weekly_id){
-            this.writeAble();
-        }
-      }
-    },
+    props:['plist','pi','pitem','flag','type','color','backgroundColor','taskColor'],
     data() {
       return {
           readOnly:'readOnly',
-          postAble:false
+          postAble:false,
+          update:true
+      }
+    },
+    computed:{
+      cpostAble:function(){
+        if(this.type==='last'){
+          return this.postAble;
+        }else{
+          return !this.plist[this.pi].weekly_id||this.postAble;
+        }
       }
     },
     methods: {
@@ -48,8 +85,8 @@
         this.readOnly = val;
       },
       deleteTask(id,event){
-         let del = confirm("你确定要删除这条周报吗？")
-        if(del){
+        let del = confirm("确定删除这条记录吗？")
+         if(del){
           if(id){
               this.$axios.get('weekly_war/task/deleteTask.do?id='+id).then(result=>{
               result = result.data;
@@ -73,35 +110,50 @@
       },
       postTask(e){
           // 当没有值的时候,这里用空字符串不行，只能用长度判断
+          var flag = this.type==='next'?1:0;
           let button = e.toElement;
           console.log(this.pitem);
           let pitem = this.pitem;
-          // if(pitem.weekly_taskName.length===0){
-          //   alert('任务名称为必填项目')
-          // }else if(pitem.weekly_completeDegree.length!==0&&(isNaN(pitem.weekly_completeDegree)||pitem.weekly_completeDegree<0||pitem.weekly_completeDegree>100)){
-          //   // 有值，但是值不准确
-          //   alert('完成度必须是一个0到100之间的数字')
-          // }else{
+            for(let item of pitem.weekly_taskName){
+              if(item===null){
+                    showPopError('任务名称不能为空',this);
+                    return;       
+              }
+              console.log(item);
+            }
+             for(let item of pitem.weekly_content){
+              if(item===null){
+                    showPopError('任务内容不能为空',this);
+                    return;     
+              }
+            }
+            // console.log(pitem.weekly_taskName[0]);
             //判断一下weekly_id是否存在,如果weekly_id存在,进行修改操作,如果weekly_id不存在,进行添加操作。
-            // console.log(pitem.weekly_taskData)
             if(pitem.weekly_id!==undefined){
                 //修改操作
                     console.log(pitem);
                     var url = 'weekly_war/task/updateTask.do?taskName='+JSON.stringify(pitem.weekly_taskName)+'&content='+JSON.stringify(pitem.weekly_content)+'&timeDegree='+JSON.stringify(pitem.weekly_completeDegree)+'&timeConsuming='+JSON.stringify(pitem.weekly_timeConsuming)+'&weekId='+pitem.weekly_id;
             }else{
                   console.log(pitem);
-                  var url = 'weekly_war/task/addTask.do?taskDate='+pitem.weekly_taskData+'&taskName='+JSON.stringify(pitem.weekly_taskName)+'&content='+JSON.stringify(pitem.weekly_content)+'&timeDegree='+JSON.stringify(pitem.weekly_completeDegree)+'&timeConsuming='+JSON.stringify(pitem.weekly_timeConsuming)+'&flag=0';
+                  var url = 'weekly_war/task/addTask.do?taskDate='+pitem.weekly_taskData+'&taskName='+JSON.stringify(pitem.weekly_taskName)+'&content='+JSON.stringify(pitem.weekly_content)+'&timeDegree='+JSON.stringify(pitem.weekly_completeDegree)+'&timeConsuming='+JSON.stringify(pitem.weekly_timeConsuming)+'&flag='+flag;
             }
             this.$axios.get(url).then(res=>{
               console.log(res)
               var res = res.data;
               if (res.code==2000){
-                showPopRight('提交成功',this);
-                this.postAble = false;
-                this.readOnly = 'readOnly';
+                showPopRight('提交成功',this);        
                 if(res.weekly_id){
-                   this.plist[this.pi].weekly_id = res.weekly_id;
-                }
+                  // this.plist[this.pi].weekly_id = res.weekly_id; 
+                    Object.assign(this.plist[this.pi],{weekly_id:res.weekly_id});
+                  }
+                  this.postAble = false;
+                  this.readOnly = 'readOnly';       
+                  this.update = false
+                  // 在组件移除后，重新渲染组件
+                  // this.$nextTick可实现在DOM 状态更新后，执行传入的方法。
+                  this.$nextTick(() => {
+                      this.update = true
+                  })
               } else if(res.code==1003){
                 showPopError('参数为空',this);
               }else if(res.code===1004){
@@ -111,8 +163,7 @@
               }
             })
         }
-    }
-    ,
+    },
     components:{
         taskContent
     }
@@ -139,11 +190,9 @@
     border-radius: 50%;
     height: 35px;
     width: 35px;
-    border: #686fbf 2px solid;
     line-height: 35px;
     text-align: center;
     font-size: 23px;
-    color: #686fbf;
     display:inline-block;
     cursor: default;
     position: -webkit-sticky;
@@ -178,7 +227,6 @@ button{
     width: 40px;
     color: #fff;
     border-radius: 0 7px 7px 0;
-    background: #3240dd;
   }
   .task{
     margin-left: 50px;

@@ -23,7 +23,7 @@
                 <td>{{item.user_name}}</td>
                 <td>{{formatDateTime(item.weekly_taskData)}}</td>
                 <td>
-                  <router-link :to="{path:'/week/aboutWeek/other/quick/'+week(formatDateTime(item.weekly_taskData)),params:{userId:item.user_id,timeStamp:week(formatDateTime(item.weekly_taskData))==='lastWeek'?item.weekly_taskData:null}}" class="looking" >查看</router-link>
+                  <router-link :to="{path:'/week/aboutWeek/other/quick/'+week(formatDateTime(item.weekly_taskData)),query:{userId:item.user_id,timeStamp:week(formatDateTime(item.weekly_taskData))==='lastWeek'?item.weekly_taskData:null}}" class="looking" >查看</router-link>
                 </td>
               </tr>
               </tbody>

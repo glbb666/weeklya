@@ -7,7 +7,15 @@
         </div>
       </div>
       <div class="detail" v-for="(item,i) in pthisTask" :key="i">
-          <taskBorder :pi="i" :pitem="item" :plist="pthisTask" :flag="flag"></taskBorder>
+          <taskBorder :pi="i"
+                      :pitem="item"
+                      :plist="pthisTask" 
+                      :flag="flag"
+                      type='this'
+                      color="#686fbf"
+                      backgroundColor="#3240dd"
+                      taskColor="#f7f7f9"
+          ></taskBorder>
       </div>
     </div>
     <planBox :pthisPlan="pthisPlan"></planBox>
@@ -49,8 +57,7 @@
           weekly_timeConsuming:[null],
           weekly_taskData:new Date().getTime()
         });
-      },
-      
+      },  
     }
     ,
     created(){

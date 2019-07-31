@@ -76,8 +76,8 @@ import {showPopError,showPopRight} from '../../../../../static/pop.js'
     created(){
       //是判断从哪里来的,如果是从他人来的话flag就是false
       if(this.$route.query.userId){
-          this.userId = this.$route.params.userId;
-          this.timeStamp = this.$route.params.timeStamp;
+          this.userId = this.$route.query.userId;
+          this.timeStamp = this.$route.query.timeStamp;
           this.flag = false;
       }
       this.getInfo();

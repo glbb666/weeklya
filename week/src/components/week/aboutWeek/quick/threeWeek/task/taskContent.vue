@@ -1,5 +1,9 @@
 <template>
-          <ul class="taskTable" >
+          <ul class="taskTable"
+              :style="{
+                backgroundColor:taskColor
+              }"
+          >
             <li class="taskName">
               <div>任务名称</div>
               <textarea class="taskAbout"  maxlength="39" v-model="pitem.weekly_taskName[pi]" :readOnly="preadOnly" ref="task"></textarea>
@@ -8,16 +12,30 @@
               <div>任务内容</div>
               <textarea class="taskAbout"  maxlength="1023" v-model="pitem.weekly_content[pi]" :readOnly="preadOnly" ></textarea>
             </li>
-            <li class="taskSchedule">
+            <li class="taskSchedule" v-if="type!=='next'">
               <div>完成度</div>
               <textarea class="taskAbout"  maxlength="3" v-model="pitem.weekly_completeDegree[pi]" :readOnly="preadOnly" onkeyup="this.value=this.value.replace(/[^\r\n0-9]/g,'' );" placeholder="只能填0-100之间的数字" ></textarea>
             </li>
-            <li class="taskTime">
+            <li class="taskTime" v-if="type!=='next'">
               <div>用时</div>
               <textarea class="taskAbout"  maxlength="39" v-model="pitem.weekly_timeConsuming[pi]" :readOnly="preadOnly" ></textarea>
             </li>
-            <button class="deBtn" v-if="ppostAble" @click="deleteMessage()">减少</button>
-            <button class="adBtn" v-if="ppostAble" @click="addMessage()">添加</button>
+            <button 
+                  class="deBtn"
+                  v-show="ppostAble"
+                  @click="deleteMessage()"
+                  :style="{
+                    backgroundColor:backgroundColor
+                  }"
+            >减少</button>
+            <button 
+                  class="adBtn"
+                  v-show="ppostAble"
+                  @click="addMessage()"
+                  :style="{
+                      backgroundColor:backgroundColor
+                  }"
+            >添加</button>
           </ul>
 </template>
 
@@ -25,7 +43,7 @@
   import {showPopError,showPopRight} from '../../../../../../../static/pop.js'
   export default {
     name: "taskContent",
-    props:['pi','pitem','preadOnly','ppostAble'],
+    props:['pi','pitem','preadOnly','ppostAble','type','color','backgroundColor','taskColor'],
     data() {
       return {
       }
@@ -38,10 +56,10 @@
         }
     },
     methods: {
-        changeWriteAble(){
-          //子组件往父组件中传值，因为子组件不能直接修改父组件的属性
-          this.$emit('update','readOnly');
-        },
+        // changeWriteAble(){
+        //   //子组件往父组件中传值，因为子组件不能直接修改父组件的属性
+        //   this.$emit('update','readOnly');
+        // },
         deleteMessage(){
           if(this.pitem.weekly_taskName.length<=1){
             showPopError("不能再减了哦~试试直接删除",this);
@@ -77,6 +95,9 @@
     height:200px ;
     justify-content: space-around;
   }
+  .task .taskTable li{
+    margin-left: 3%;
+  }
   .task .taskTable li div{
     margin-top: 38px;
     margin-left: -7px;
@@ -84,16 +105,16 @@
     font-size: 16px;
   }
   .task .taskTable li.taskName{
-    width: 15%;
+        flex-grow: 1.5;
   }
     .task .taskTable li.taskContent{
-    width: 40%;
+        flex-grow: 4;
   }
     .task .taskTable li.taskSchedule{
-    width: 15%;
+        flex-grow: 1.5;
   }
     .task .taskTable li.taskTime{
-    width: 15%;
+        flex-grow: 1.5;
   }
   .task .taskTable li .taskAbout{
     margin-top: 2px;
@@ -102,10 +123,9 @@
     height: 100px;
     color: #000;
     padding: 10px 20px;
-    width: 80%;
+    width: 90%;
     letter-spacing: 2px;
     font-size: 14px;
-
   }
 button{
     position: absolute;
@@ -115,7 +135,6 @@ button{
     width: 40px;
     color: #fff;
     border-radius: 0 7px 7px 0;
-    background: #3240dd;
 }
 .adBtn{
   bottom: 50px;
