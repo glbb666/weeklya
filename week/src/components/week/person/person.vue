@@ -1,22 +1,15 @@
 <template>
-  <div class="about">
-    <div id="title">个人</div>
-    <div id="content">
-      <!--侧边栏-->
-      <div id="sidebar">
-        <ul>
-          <li><router-link to="/week/person/information"><span class="img img1"></span>信息修改</router-link></li>
-          <li><router-link to="/week/person/password"><span class="img img2"></span>密码修改</router-link></li>
-          <li v-if='administor'><router-link to="/week/person/administrator"><span class="img img3"></span>用户管理</router-link></li>
-        </ul>
-      </div>
-      <!--主要内容-->
-      <router-view id="contain"></router-view>
-    </div>
-  </div>
+  <sidebar
+    title="个人"
+    :toArray="['/week/person/information','/week/person/password','/week/person/administrator']"
+    :ok="[true,true,administor]"
+    :name="['信息修改','密码修改','用户管理']"
+    className="quick"
+  ></sidebar>
 </template>
 
 <script>
+  import sidebar from '../../../components/sidebar'
   export default {
     name: 'person',
     data () {
@@ -24,9 +17,8 @@
         administor:window.localStorage.getItem('userStatus').indexOf('administor')!=-1,
       }
     },
-    methods:{
-    },
-    created(){
+    components:{
+      sidebar
     }
   }
 </script>

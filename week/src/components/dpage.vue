@@ -105,11 +105,7 @@ export default {
         }
     },
     created(){
-      console.log('as');
       this.getInfo();
-    },
-    beforeDestroye(){
-      // console.log('被敲挥')
     }
 }
 </script>

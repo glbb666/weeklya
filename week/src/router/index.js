@@ -19,10 +19,11 @@ import person from '@/components/week/person/person'
 import password from '@/components/week/person/perManage/password'
 import information from'@/components/week/person/perManage/information'
 import administrator from '@/components/week/person/perManage/administrator'
-
+//同事页面
+import workmate from '@/components/week/workmate/workmate'
+import aboutWork from '@/components/week/workmate/aboutWork'
 
 import note from '@/components/note'
-import workmate from '@/components/workmate'
 import history from '@/components/history.vue'
 import write from '@/components/write.vue'
 import meeting from '@/components/meeting.vue'
@@ -173,7 +174,35 @@ export default new Router({
         {
           path: 'workmate',
           name: 'workmate',
-          component: workmate
+          component: workmate,
+          redirect:'workmate/pm',
+          children:[
+            {
+              path:'pm',
+              name:'pm',
+              component:aboutWork
+            },
+            {
+              path:'ios',
+              name:'ios',
+              component:aboutWork
+            },
+            {
+              path:'frontEnd',
+              name:'frontEnd',
+              component:aboutWork
+            },
+            {
+              path:'backEnd',
+              name:'backEnd',
+              component:aboutWork
+            },
+            {
+              path:'Android',
+              name:'Android',
+              component:aboutWork
+            }
+          ]
         }
       ],
       redirect:'/week/aboutWeek'

@@ -4,8 +4,8 @@
     <div id="nav">
       <ul id="banner">
         <li><router-link to="/week/aboutWeek">周报</router-link></li>
-        <!-- <li><router-link to="/week/note">记录</router-link></li>
-        <li><router-link to="/week/workmate">同事</router-link></li> -->
+        <!-- <li><router-link to="/week/note">记录</router-link></li> -->
+        <li><router-link to="/week/workmate">同事</router-link></li>
         <li><router-link to="/week/person">个人</router-link></li>
       </ul>
       <div id="name">

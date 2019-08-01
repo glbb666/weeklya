@@ -31,7 +31,7 @@
                   :pi="i"
                   :pitem="pitem"
                   :preadOnly="pitem.weekly_id?readOnly:null"
-                  :ppostAble ="postAble||(type!=='last'&&!plist[pi].weekly_id)"
+                  :ppostAble ="cpostAble"
                   v-for="(item,i) in pitem.weekly_taskName" 
                   :key="i"
                   v-if="update"
@@ -67,11 +67,8 @@
     },
     computed:{
       cpostAble:function(){
-        if(this.type==='last'){
-          return this.postAble;
-        }else{
-          return !this.plist[this.pi].weekly_id||this.postAble;
-        }
+        
+        return this.postAble||(this.type!=='last'&&!this.plist[this.pi].weekly_id)
       }
     },
     methods: {
@@ -110,7 +107,6 @@
       },
       postTask(e){
           // 当没有值的时候,这里用空字符串不行，只能用长度判断
-          var flag = this.type==='next'?1:0;
           let button = e.toElement;
           console.log(this.pitem);
           let pitem = this.pitem;
@@ -129,7 +125,8 @@
             }
             // console.log(pitem.weekly_taskName[0]);
             //判断一下weekly_id是否存在,如果weekly_id存在,进行修改操作,如果weekly_id不存在,进行添加操作。
-            if(pitem.weekly_id!==undefined){
+          let flag = this.type==='next'?1:0;
+          if(pitem.weekly_id!==undefined){
                 //修改操作
                     console.log(pitem);
                     var url = 'weekly_war/task/updateTask.do?taskName='+JSON.stringify(pitem.weekly_taskName)+'&content='+JSON.stringify(pitem.weekly_content)+'&timeDegree='+JSON.stringify(pitem.weekly_completeDegree)+'&timeConsuming='+JSON.stringify(pitem.weekly_timeConsuming)+'&weekId='+pitem.weekly_id;
@@ -145,15 +142,16 @@
                 if(res.weekly_id){
                   // this.plist[this.pi].weekly_id = res.weekly_id; 
                     Object.assign(this.plist[this.pi],{weekly_id:res.weekly_id});
-                  }
-                  this.postAble = false;
-                  this.readOnly = 'readOnly';       
-                  this.update = false
+                    this.update = false
                   // 在组件移除后，重新渲染组件
                   // this.$nextTick可实现在DOM 状态更新后，执行传入的方法。
                   this.$nextTick(() => {
                       this.update = true
                   })
+                }
+                  this.postAble = false;
+                  this.readOnly = 'readOnly';       
+                  
               } else if(res.code==1003){
                 showPopError('参数为空',this);
               }else if(res.code===1004){

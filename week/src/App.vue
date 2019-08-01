@@ -27,7 +27,7 @@ export default {
   ul{
     list-style: none;
   }
-  a,a:visited{
+  a,a:visited,a:hover{
     text-decoration: none;
     color: #000;
     cursor: pointer;

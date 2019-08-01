@@ -117,9 +117,9 @@
         change(obj,action){
              //obj为 moon或者year
             //action为1或者-1
-            console.log(this[obj]);
-            let nowYear = this.pyear;
-            let nowMoon = this.pmoon;
+            
+            let nowYear = new Date().getFullYear();
+            let nowMoon = new Date().getMonth()+1;
             let result = this[obj]+action;
             if(obj==='moon'){
                 if(this.year===nowYear&&result>nowMoon){

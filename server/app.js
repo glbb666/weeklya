@@ -13,6 +13,7 @@ const sessionOk = require('./sessionOk.js');
 const cbFn = require('./cbFn.js')
 const user = require('./routers/user.js');
 const task = require('./routers/task.js');
+const workmate = require('./routers/workmate.js')
 
 let server = new express();
 
@@ -50,6 +51,7 @@ server.use(cookieParser('secret'));
 
 server.use('/weekly_war/user',user);
 server.use('/weekly_war/task',task);
+server.use('/weekly_war/workmate',workmate)
 //注册接口
 // server.post('/weekly_war/user/register.do',cbFn.register(pool));
 // //登录接口
