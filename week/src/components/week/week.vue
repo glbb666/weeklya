@@ -32,10 +32,9 @@ import {showPopError,showPopRight} from '../../../static/pop.js'
     methods: {
         out(){
           var dropOut = confirm("你确定要退出登录吗？");
-          if(dropOut){
-            this.$axios.get('weekly_war/user/logout.do').then(res=>{
-            res = res.data;
-            if(res.success){
+          if(dropOut){     
+            this.$axios.get('weekly_war/user/logout.do').then(res=>{  
+              res = res.data;
               window.localStorage.removeItem("username");
               window.localStorage.removeItem("userId");
               window.localStorage.removeItem("userStatus");
@@ -43,10 +42,8 @@ import {showPopError,showPopRight} from '../../../static/pop.js'
                 window.localStorage.removeItem("pic");
               }
               this.$router.push('/');
-            }else{ 
-              showPopError('退出失败',this)
-            }
-          })
+              showPopRight('退出成功',this)
+            })
           }
       },
       

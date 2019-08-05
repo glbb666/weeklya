@@ -10,7 +10,6 @@ const cookieParser = require('cookie-parser');
 //session 是基于 cookie生成的
 const cookieSession = require('cookie-session');
 const sessionOk = require('./sessionOk.js');
-const cbFn = require('./cbFn.js')
 const user = require('./routers/user.js');
 const task = require('./routers/task.js');
 const workmate = require('./routers/workmate.js')
@@ -52,37 +51,3 @@ server.use(cookieParser('secret'));
 server.use('/weekly_war/user',user);
 server.use('/weekly_war/task',task);
 server.use('/weekly_war/workmate',workmate)
-//注册接口
-// server.post('/weekly_war/user/register.do',cbFn.register(pool));
-// //登录接口
-// server.post('/weekly_war/user/login.do',cbFn.login(pool));
-
-// //session验证
-// // server.use(sessionOk());
-// //获取三周周报接口
-// server.use('/weekly_war/task/getTasks.do',cbFn.quick(pool));
-// //获取某一周周报接口
-// server.use('/weekly_war/task/getOneTask.do',cbFn.oneTask(pool));
-// //添加周报接口
-// server.use('/weekly_war/task/addTask.do',cbFn.addTask(pool))
-// //修改周报接口
-// server.use('/weekly_war/task/updateTask.do',cbFn.updateTask(pool))
-// //获取所有周报接口
-// server.use('/weekly_war/task/getAllTasksByUserId.do',cbFn.allTasks(pool))
-// //删除周报接口
-// server.use('/weekly_war/task/deleteTask.do',cbFn.deleteTask(pool))
-// //退出接口
-// server.use('/weekly_war/user/logout.do',cbFn.logout())
-// //获取个人信息接口
-// server.use('/weekly_war/user/getUser.do',cbFn.getInfo(pool))
-// //修改个人信息接口
-// server.use('/weekly_war/user/updateUser.do',cbFn.modifyInfo(pool))
-// //修改密码接口
-// server.use('/weekly_war/user/updateUserPassword.do',cbFn.modifyPassword(pool))
-// //获取全部用户接口
-// server.use('/weekly_war/user/getAllUser.do',cbFn.getAllUser(pool))
-// //修改用户接口
-// server.use('/weekly_war/user/updateUserSim.do',
-// cbFn.updateUser(pool))
-// //删除用户接口
-// server.use('/weekly_war/user/deleteUser.do',cbFn.deleteUser(pool))

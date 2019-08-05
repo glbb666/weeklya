@@ -128,12 +128,23 @@ import busy2 from '../../../busy2'
             });
           },
           upload(e){
+            
             var _this = this;
             var _window = window;
             var files = e.target.files;
             var base64Code;
             var oPic = document.getElementById('personImg');
             var oImg = new Image();
+
+            var reader = new FileReader();
+            reader.readAsDataURL(files[0]);
+
+            reader.onload = function (e) {
+              console.log(this);
+              base64Code = this.result;
+              oImg.src = base64Code;
+              oPic.style = "background:"+ 'url(\''+base64Code+'\') no-repeat'+ ';background-position:center;background-size:auto 100%;background-color: white;'
+            }
             oImg.onload = function() {
             var canvas = document.createElement('canvas');
             var context = canvas.getContext('2d');
@@ -174,14 +185,7 @@ import busy2 from '../../../busy2'
               })
             },files.type || 'image/png');
           }
-          var reader = new FileReader();
-          reader.readAsDataURL(files[0]);
-
-          reader.onload = function (e) {
-            base64Code = this.result;
-            oImg.src = base64Code;
-            oPic.style = "background:"+ 'url(\''+base64Code+'\') no-repeat'+ ';background-position:center;background-size:auto 100%;background-color: white;'
-          }
+         
         }
       },
       components:{
