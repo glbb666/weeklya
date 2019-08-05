@@ -43,12 +43,9 @@
           </label>
           <label for="">
              专业班级<input type="text" v-model="professionalClass">
-          </label>
-       
+          </label>     
       </div>
       </div>
-      
-     
       <button class="btn" @click="modifyInfo">保存</button>
     </div>
   </div>

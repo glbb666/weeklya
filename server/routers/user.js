@@ -400,7 +400,7 @@ router.use('/logout.do',function(req,res){
 router.use('/getUser.do',function(req,res){
     console.log('获取个人信息');
     console.log(req.session['user']);
-    let user = req.session['user'];
+    let user = {...req.session['user']};
     delete user.password;
     let path = './static/pic/'+req.session['user'].path;
     if(req.session['user'].path&&req.session['user'].path.length){
@@ -487,6 +487,8 @@ router.use('/updateUserPassword.do',function(req,res){
     //一个crypto实例只能调用digest一次,创建两个不会报错Digest already called
     let oldPas = crypto.createHash("md5").update(password.oldPassword).digest('hex');
     let newPas = crypto.createHash("md5").update(password.newPassword).digest('hex');
+    console.log(oldPas);
+    console.log(req.session['user']);
     if(!checkEqual(oldPas,req.session['user'].password)){
         res.send({
             'success':false,

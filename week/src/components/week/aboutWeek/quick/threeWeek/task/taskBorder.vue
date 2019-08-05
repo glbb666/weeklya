@@ -110,18 +110,20 @@
           let button = e.toElement;
           console.log(this.pitem);
           let pitem = this.pitem;
-            for(let item of pitem.weekly_taskName){
-              if(item===null){
+          for(let item of pitem.weekly_taskName){
+              if(item===null||item.length===0){
+                    console.log(item);
                     showPopError('任务名称不能为空',this);
                     return;       
               }
               console.log(item);
             }
-             for(let item of pitem.weekly_content){
-              if(item===null){
+            for(let item of pitem.weekly_content){
+              if(item===null||item.length===0){
                     showPopError('任务内容不能为空',this);
                     return;     
               }
+                console.log(item);
             }
             // console.log(pitem.weekly_taskName[0]);
             //判断一下weekly_id是否存在,如果weekly_id存在,进行修改操作,如果weekly_id不存在,进行添加操作。

@@ -56,27 +56,19 @@
         }
     },
     methods: {
-        // changeWriteAble(){
-        //   //子组件往父组件中传值，因为子组件不能直接修改父组件的属性
-        //   this.$emit('update','readOnly');
-        // },
         deleteMessage(){
           if(this.pitem.weekly_taskName.length<=1){
             showPopError("不能再减了哦~试试直接删除",this);
             return;
           }
-          let pi = this.pi;
-          this.pitem.weekly_taskName.splice(pi,1);
-          this.pitem.weekly_content.splice(pi,1);
-          this.pitem.weekly_completeDegree.splice(pi,1);
-          this.pitem.weekly_timeConsuming.splice(pi,1);
+          for(let item in this.pitem){
+            this.pitem[item] instanceof Array?this.pitem[item].splice(this.pi,1):null;
+          }
         },
         addMessage(){
-          let pi = this.pi;
-          this.pitem.weekly_taskName.splice(pi+1,0,null);
-          this.pitem.weekly_content.splice(pi+1,0,null);
-          this.pitem.weekly_completeDegree.splice(pi+1,0,null);
-          this.pitem.weekly_timeConsuming.splice(pi+1,0,null);
+          for(let item in this.pitem){
+            this.pitem[item] instanceof Array?this.pitem[item].splice(this.pi+1,0,null):null;
+          }
         }
   }
   }

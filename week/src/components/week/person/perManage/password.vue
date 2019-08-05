@@ -51,6 +51,13 @@ export default {
             this.oldPassword=''
             this.newPassword=''
             this.confirmPassword=''
+            window.localStorage.removeItem("username");
+            window.localStorage.removeItem("userId");
+            window.localStorage.removeItem("userStatus");
+            if(window.localStorage.getItem('pic')){
+              window.localStorage.removeItem("pic");
+            }
+            this.$router.push('/');
           }else {
             showPopError(res.msg,this)
           }
