@@ -17,10 +17,10 @@
         ></router-view>     
     </div>
 </template>
-
 <script>
 import {showPopError,showPopRight} from '../../../../../static/pop.js'
-  import busy2 from '../../../busy2'
+import busy2 from '../../../busy2'
+import {exit} from '../../../../assets/common'  
 
   export default {
     name: 'quick',
@@ -50,12 +50,15 @@ import {showPopError,showPopRight} from '../../../../../static/pop.js'
             setTimeout(function(){
               _this.show = false;
             },1000);
-            this.lastTask = result.lastTask;
-            this.thisTask = result.thisTask;
-            this.thisPlan = result.thisPlan;
-            this.nextPlan = result.nextTask;
+            let {lastTask='',thisTask='',thisPlan='',nextPlan=''} = result;
+            Object.assign(this,{lastTask,thisTask,thisPlan,nextPlan})
             this.init([this.lastTask,this.thisTask,this.thisPlan,this.nextPlan]);
           } else {
+            if(result.code===1000){
+              showPopError('未登录',this);
+              exit();
+              return;
+            }
             showPopError('请求数据失败',this)
           }
         });
@@ -64,10 +67,12 @@ import {showPopError,showPopRight} from '../../../../../static/pop.js'
         console.log(week);
         for(let i = 0;i<week.length;i++){
             for(let j = 0;j<week[i].length;j++){
-              week[i][j].weekly_completeDegree = JSON.parse(week[i][j].weekly_completeDegree);
-              week[i][j].weekly_content = JSON.parse(week[i][j].weekly_content);
-              week[i][j].weekly_taskName = JSON.parse(week[i][j].weekly_taskName);
-              week[i][j].weekly_timeConsuming = JSON.parse(week[i][j].weekly_timeConsuming);
+              for(let item in week[i][j]){
+                let test =/^\[.+\]$/;
+                if(test.test(week[i][j][item])){
+                    week[i][j][item] = JSON.parse( week[i][j][item]);
+                }
+              }
           }
         }
       }

@@ -20,12 +20,15 @@ router.use('/getTasks.do',function(req,res){
         userId = req.query.id;//别人的，有可能是选的，有可能是默认的
         time = req.query.timeStamp;
         if(time==='null')time = null;
+        else{
+            time = formatDateTime(time);
+            time = getYearWeek(time);
+        }
     }
     console.log(req.session.user);
     let data = {}; 
     //（以往的最新一周的周报）取出这周之前的最上面的那天,计算出它所属的是那一周,然后把那一周的周报按降序取出
-    let day,promise = null;
-    let year,moon;
+    let day = null;
     let lastSQL = null; 
     //本周周报
     let thisSQL = myselfSql.select('content',"*","YEARWEEK(date_format(from_unixtime((weekly_taskData)/1000),'%Y-%m-%d'),1) = YEARWEEK(curdate(),1) and user_id="+userId)+" and weekly_flag=0 order by weekly_taskData desc";
@@ -34,64 +37,39 @@ router.use('/getTasks.do',function(req,res){
 
     //下周计划
     let nextSQL = myselfSql.select('content',"*","YEARWEEK(date_format(from_unixtime((weekly_taskData)/1000),'%Y-%m-%d'),1) = YEARWEEK(curdate(),1)+1 and user_id="+userId)+" and weekly_flag=1 order by weekly_taskData desc";
-    if(!time){
-        day = myselfSql.select('content',"weekly_taskData","YEARWEEK(date_format(from_unixtime((weekly_taskData)/1000),'%Y-%m-%d'),1) < YEARWEEK(now(),1) and user_id="+userId+" and weekly_flag=0 order by weekly_taskData desc limit 0,1");//求出最新时间戳
-        promise = poolP.poolPromise(pool,day);
-        promise.then(day=>{
+    
+    const asyncDay = async function(){
+        if(!time){
+            day = myselfSql.select('content',"weekly_taskData","YEARWEEK(date_format(from_unixtime((weekly_taskData)/1000),'%Y-%m-%d'),1) < YEARWEEK(now(),1) and user_id="+userId+" and weekly_flag=0 order by weekly_taskData desc limit 0,1");
+            day = await poolP.poolPromise(pool,day);
+            console.log(day);
             time = formatDateTime(day[0].weekly_taskData);
             time = getYearWeek(time);
-            lastSQL = myselfSql.select('content',"*","YEARWEEK(date_format(from_unixtime((weekly_taskData)/1000),'%Y-%m-%d'),1) = "+time+" and user_id="+userId+" order by weekly_taskData desc");
-            return Promise.all(poolP.poolPromise(pool,[lastSQL,thisSQL,thisSQL1,nextSQL]))
-        }).then(result=>{
-            //这里面的内容只会执行一次
-            // console.log(result);
-            data={
-                msg:"成功",
-                code:2000,
-                success:true,
-                lastTask:result[0],
-                thisTask:result[1],
-                thisPlan:result[2],
-                nextTask:result[3],            
-            }
-            res.send(JSON.stringify(data));
-        }).catch(e=>{
-            console.log(e)
-            data={
-                msg:"服务器错误",
-                code:5000,
-                success:false,
-            }
-            res.send(JSON.stringify(data));
-        });     
-    }else{
-        time = formatDateTime(parseInt(time));
-        time = getYearWeek(time);
-        lastSQL = myselfSql.select('content',"*","YEARWEEK(date_format(from_unixtime((weekly_taskData)/1000),'%Y-%m-%d'),1) = "+time+" and user_id="+userId+" order by weekly_taskData desc");
-        Promise.all(poolP.poolPromise(pool,[lastSQL,thisSQL,thisSQL1,nextSQL])).then(result=>{
-            //这里面的内容只会执行一次
-            // console.log(result);
-            data={
-                msg:"成功",
-                code:2000,
-                success:true,
-                lastTask:result[0],
-                thisTask:result[1],
-                thisPlan:result[2],
-                nextTask:result[3],
-            }
-            res.send(JSON.stringify(data));
-        }).catch(e=>{
-            console.log(e)
-            data={
-                msg:"服务器错误",
-                code:5000,
-                success:false,
-            }
-            res.send(JSON.stringify(data));
-        });     
+        }
+        console.log(time,userId);
+        lastSQL = myselfSql.select('content',"*","YEARWEEK(date_format(from_unixtime((weekly_taskData)/1000),'%Y-%m-%d'),1) = "+time+" and user_id="+userId+" and weekly_flag=0 order by weekly_taskData desc");
+        return await Promise.all(poolP.poolPromise(pool,[lastSQL,thisSQL,thisSQL1,nextSQL]));
     }
-    
+    asyncDay().then(result=>{
+        data={
+                        msg:"成功",
+                        code:2000,
+                        success:true,
+                        lastTask:result[0],
+                        thisTask:result[1],
+                        thisPlan:result[2],
+                        nextTask:result[3],            
+                    }
+                    res.send(JSON.stringify(data));
+    }).catch(err=>{
+        console.log(err)
+        data={
+            msg:"服务器错误",
+            code:5000,
+            success:false,
+        }
+        res.send(JSON.stringify(data));
+    });  
 })
 //获取某一周周报接口
 router.use('/getOneTask.do',function(req,res){
@@ -106,7 +84,7 @@ router.use('/getOneTask.do',function(req,res){
     }
     let time = req.query.weektime;
     let data = {};
-    let lastSQL = myselfSql.select('content',"*","YEARWEEK(date_format(from_unixtime((weekly_taskData)/1000),'%Y-%m-%d'),1) = "+time+" and user_id="+userId+" order by weekly_taskData desc");
+    let lastSQL = myselfSql.select('content',"*","YEARWEEK(date_format(from_unixtime((weekly_taskData)/1000),'%Y-%m-%d'),1) = "+time+" and user_id="+userId+" and content.weekly_flag = 0 order by weekly_taskData desc");
     let promise = poolP.poolPromise(pool,lastSQL);
     promise.then(result=>{
         //这里面的内容只会执行一次
@@ -210,7 +188,7 @@ router.use('/getAllTasksByUserId.do',function(req,res){
     let selectSql = myselfSql.select('content left join user on content.user_id=user.user_id',"content.user_id,content.weekly_taskData,user.user_learningDirection,user.user_name,content.weekly_id","content.user_id<>"+req.session['user'].id+" and content.weekly_flag = 0 and user.user_learningDirection='"+req.session['user'].learningDirection+"'order by content.weekly_taskData desc limit "+(pageParams.page-1)*pageParams.pageSize+","+pageParams.pageSize);
     arr.push(selectSql);
     if(!msg.totalPage){//是第一次请求
-        let countSql = myselfSql.select('content left join user on content.user_id=user.user_id','count(*)',"content.user_id<>"+req.session['user'].id+" and content.weekly_flag = 0 and user.user_learningDirection='"+req.session['user'].learningDirection+"'order by content.weekly_taskData desc");
+        let countSql = myselfSql.select('content left join user on content.user_id=user.user_id','count(*)',"content.user_id<>"+req.session['user'].id+" and content.weekly_flag = 0 and user.user_learningDirection='"+req.session['user'].learningDirection+"\'");
         arr.push(countSql);
     }            
     Promise.all(poolP.poolPromise(pool,arr)).then(result=>{

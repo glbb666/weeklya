@@ -22,7 +22,7 @@
       </div>
 </template>
 <script>
-import { isRange } from '../../../../assets/common';
+import { isRange, exit } from '../../../../assets/common';
 import {showPopError,showPopRight} from '../../../../../static/pop.js'
 export default {
     name: 'password',
@@ -48,17 +48,13 @@ export default {
           res = res.data;
           if(res.success){
             showPopRight('修改成功！',this)
-            this.oldPassword=''
-            this.newPassword=''
-            this.confirmPassword=''
-            window.localStorage.removeItem("username");
-            window.localStorage.removeItem("userId");
-            window.localStorage.removeItem("userStatus");
-            if(window.localStorage.getItem('pic')){
-              window.localStorage.removeItem("pic");
-            }
-            this.$router.push('/');
+            exit(this);
           }else {
+            if(res.code===1000){
+              showPopError('未登录',this);
+              exit();
+              return;
+            }
             showPopError(res.msg,this)
           }
         });

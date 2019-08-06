@@ -27,19 +27,22 @@
     >
       <!-- pitem.weekly_taskName是一个数组 -->
       <!-- 能不能提交的状态由笔和是不是新创建的同时决定，只要满足一个即可 -->
-      <taskContent 
-                  :pi="i"
-                  :pitem="pitem"
-                  :preadOnly="pitem.weekly_id?readOnly:null"
-                  :ppostAble ="cpostAble"
-                  v-for="(item,i) in pitem.weekly_taskName" 
-                  :key="i"
-                  v-if="update"
-                  :type="type"
-                  :color="color"
-                  :backgroundColor="backgroundColor"
-                  :taskColor="taskColor"
-      ></taskContent>
+      <div                   
+        v-if="update"
+      >
+        <taskContent 
+                    :pi="i"
+                    :pitem="pitem"
+                    :preadOnly="pitem.weekly_id?readOnly:null"
+                    :ppostAble ="postAble||(type!=='last'&&!plist[pi].weekly_id)"
+                    v-for="(item,i) in pitem.weekly_taskName" 
+                    :key="i"
+                    :type="type"
+                    :color="color"
+                    :backgroundColor="backgroundColor"
+                    :taskColor="taskColor"
+        ></taskContent>
+      </div>
       <button class="poBtn"
               v-show="postAble||(type!=='last'&&!plist[pi].weekly_id)"
               @click="postTask($event)"
@@ -63,12 +66,6 @@
           readOnly:'readOnly',
           postAble:false,
           update:true
-      }
-    },
-    computed:{
-      cpostAble:function(){
-        
-        return this.postAble||(this.type!=='last'&&!this.plist[this.pi].weekly_id)
       }
     },
     methods: {
@@ -142,18 +139,17 @@
               if (res.code==2000){
                 showPopRight('提交成功',this);        
                 if(res.weekly_id){
-                  // this.plist[this.pi].weekly_id = res.weekly_id; 
-                    Object.assign(this.plist[this.pi],{weekly_id:res.weekly_id});
-                    this.update = false
+                  this.plist[this.pi].weekly_id = res.weekly_id; 
+                  Object.assign(this.plist[this.pi],{weekly_id:res.weekly_id});
                   // 在组件移除后，重新渲染组件
-                  // this.$nextTick可实现在DOM 状态更新后，执行传入的方法。
+                  // this.$nextTick可实现在DOM 状态更新后，执行传入的方法。     
+                  this.update = false;
                   this.$nextTick(() => {
-                      this.update = true
+                      this.update = true;
                   })
                 }
                   this.postAble = false;
-                  this.readOnly = 'readOnly';       
-                  
+                  this.readOnly = 'readOnly';                  
               } else if(res.code==1003){
                 showPopError('参数为空',this);
               }else if(res.code===1004){

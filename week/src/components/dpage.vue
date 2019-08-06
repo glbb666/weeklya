@@ -10,6 +10,7 @@
 <script>
 import {showPopError} from '../../static/pop.js'
 import {showPopRight} from '../../static/pop.js'
+import {exit} from '../assets/common'
 export default {
     name:'dpage',
     props:['url','pageSize','type'],
@@ -53,6 +54,11 @@ export default {
               this.setPageList(5);
               this.checkPage();
             } else {
+              if(result.code===1000){
+                   showPopError('未登录',this);
+                   exit(this);
+                   return;
+              }
               showPopError(result.msg,this)
             }
           });

@@ -73,11 +73,21 @@ function isRange(str,min,max) {
     d = Math.round((date1.valueOf() - date2.valueOf()) / 86400000);
     return ''+a+Math.ceil((d + ((date2.getDay() + 1) - 1)) / 7);
 }
+function exit(_this){
+    window.localStorage.removeItem("username");
+    window.localStorage.removeItem("userId");
+    window.localStorage.removeItem("userStatus");
+    if(window.localStorage.getItem('pic')){
+    window.localStorage.removeItem("pic");
+    }
+    _this.$router.push('/');
+}
 
 export {
 	isMail,
     isRange,
     isLegal,
     formatDateTime,
-    getYearWeek
+    getYearWeek,
+    exit
 }

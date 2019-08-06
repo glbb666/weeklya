@@ -7,7 +7,8 @@ module.exports = function(){
             next();
         }else{
             res.send({
-                'msg':'session不存在'
+                'msg':'session不存在',
+                'code':1000
             })
         }
         

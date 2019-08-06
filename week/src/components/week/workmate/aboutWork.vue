@@ -7,6 +7,7 @@
 <script>
 import mateTable from './mateTable/mateTable'
 import '../../../assets/common'
+import { exit } from '../../../assets/common';
 export default {
     name:'aboutWork',
     data(){
@@ -35,8 +36,12 @@ export default {
                 setTimeout(function(){
                 _this.show = false;
                 },1000);
-               
             } else {
+                if(result.code===1000){
+                    showPopError('未登录',this);
+                    exit(this);
+                    return;
+                }
                 showPopError('请求数据失败',this)
             }
             });

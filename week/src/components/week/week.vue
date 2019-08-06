@@ -20,6 +20,7 @@
 
 <script>
 import {showPopError,showPopRight} from '../../../static/pop.js'
+import {exit} from '../../assets/common'
   export default {
     name: 'week',
     data() {
@@ -35,18 +36,11 @@ import {showPopError,showPopRight} from '../../../static/pop.js'
           if(dropOut){     
             this.$axios.get('weekly_war/user/logout.do').then(res=>{  
               res = res.data;
-              window.localStorage.removeItem("username");
-              window.localStorage.removeItem("userId");
-              window.localStorage.removeItem("userStatus");
-              if(window.localStorage.getItem('pic')){
-                window.localStorage.removeItem("pic");
-              }
-              this.$router.push('/');
+              exit(this);
               showPopRight('退出成功',this)
             })
           }
-      },
-      
+      },  
     },
     mounted(){
       this.name = window.localStorage.getItem('username');

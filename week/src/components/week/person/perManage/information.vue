@@ -54,6 +54,7 @@
 <script>
 import {showPopError,showPopRight} from '../../../../../static/pop.js'
 import busy2 from '../../../busy2'
+import {exit} from '../../../../assets/common'
 
     export default {
         name: "information",
@@ -108,6 +109,11 @@ import busy2 from '../../../busy2'
                 this.address = user.address;
                 this.tel = user.phone;
               }else {
+                if(result.code===1000){
+                  showPopError('未登录',this)
+                  exit(this);
+                  return;
+                }
                 showPopError('获取资料失败',this)
               }
             });

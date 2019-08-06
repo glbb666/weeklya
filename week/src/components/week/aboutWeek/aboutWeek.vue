@@ -12,10 +12,6 @@
   import sidebar from '../../../components/sidebar'
   export default{
     name: 'my',
-    data () {
-      return {
-      }
-    },
     components:{
       sidebar
     }

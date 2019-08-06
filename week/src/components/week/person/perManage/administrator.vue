@@ -70,6 +70,7 @@
 import dpage from '../../../dpage'
 import {showPopError,showPopRight} from '../../../../../static/pop.js'
 import busy2 from '../../../busy2'
+import {exit} from '../../../../assets/common'
 
   export default {
     name: 'administrator',
@@ -120,8 +121,14 @@ import busy2 from '../../../busy2'
               if(res.success){
                 showPopRight('删除成功',this);
                 this.$router.go(-1);
-              }else 
+              }else{
+                if(result.code===1000){
+                  showPopError('未登录',this)
+                  exit(this);
+                  return;
+                }
                 showPopError(res.msg,this)
+              } 
           });
         }
       },  
