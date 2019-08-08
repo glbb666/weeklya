@@ -56,7 +56,7 @@ import {exit} from '../../../../assets/common'
           } else {
             if(result.code===1000){
               showPopError('未登录',this);
-              exit();
+              exit(this);
               return;
             }
             showPopError('请求数据失败',this)

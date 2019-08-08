@@ -19,6 +19,7 @@ import person from '@/components/week/person/person'
 import password from '@/components/week/person/perManage/password'
 import information from'@/components/week/person/perManage/information'
 import administrator from '@/components/week/person/perManage/administrator'
+import mail from '@/components/week/person/perManage/mail'
 //同事页面
 import workmate from '@/components/week/workmate/workmate'
 import aboutWork from '@/components/week/workmate/aboutWork'
@@ -168,6 +169,11 @@ export default new Router({
               path:'administrator',
               name:'administrator',
               component:administrator
+            },
+            {
+              path:'mail',
+              name:'mail',
+              component:mail
             }
           ]
         },

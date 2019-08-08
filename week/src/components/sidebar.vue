@@ -7,8 +7,10 @@
         <ul>
           <li v-for="(item,i) in ableTo" :key="i">
             <router-link :to="item">
+             <i class="el-icon-message" v-if="i===3&&className==='quick'"></i>
             <span
               :class=[className]
+              v-if="i!==3||className!=='quick'"
             >  
             </span>{{name[i]}}</router-link>
           </li>
@@ -101,20 +103,14 @@
   .select{
     color: #686fbf;
   }
-  #sidebar ul li img{
-    margin-left: 29px;
-    margin-bottom: -4px;
-  }
   #sidebar ul li span{
     margin-left: 15px;
-  }
- #sidebar li span{
     display: inline-block;
      width: 30px;
      height: 24px;
      margin-bottom: -5px;
      margin-right: 10px;
- }
+  }
  #sidebar li a .workmate{
     background: url('../../static/2/workmate.png') no-repeat;
  }
@@ -138,6 +134,15 @@
  }
  #sidebar li:nth-child(3) a.router-link-active .quick{
      background: url('../../static/2/myed.png') no-repeat;
+ }
+  #sidebar li:nth-child(4) i{
+    color: #000;
+    font-size: 28px;
+    margin-left: 12px;
+    margin-right: 9px;
+ }
+ #sidebar li:nth-child(4) a.router-link-active i{
+    color: #686fbf;
  }
  #contain{
    width:100%;

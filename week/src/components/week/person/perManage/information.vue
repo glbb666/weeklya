@@ -125,13 +125,17 @@ import {exit} from '../../../../assets/common'
               if(res.success){
                 showPopRight('修改资料成功',this)
                 window.localStorage.setItem('username',this.username);
-              }else{
+              }else{ 
+                if(result.code===1000){
+                  showPopError('未登录',this)
+                  exit(this);
+                  return;
+                }
                 showPopError(res.msg,this)
               } 
             });
           },
-          upload(e){
-            
+          upload(e){     
             var _this = this;
             var _window = window;
             var files = e.target.files;
@@ -187,8 +191,7 @@ import {exit} from '../../../../assets/common'
                   }
               })
             },files.type || 'image/png');
-          }
-         
+          }        
         }
       },
       components:{

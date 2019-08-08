@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-   <pop v-show="popobj.popif" :words="popobj.words" :type="popobj.type"></pop>    
+   <pop v-show="popobj.popif" :words="popobj.words" :type="popobj.type"></pop>
    <router-view></router-view>
   </div>
 </template>

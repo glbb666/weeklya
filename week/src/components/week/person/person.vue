@@ -1,9 +1,9 @@
 <template>
   <sidebar
     title="个人"
-    :toArray="['/week/person/information','/week/person/password','/week/person/administrator']"
-    :ok="[true,true,administor]"
-    :name="['信息修改','密码修改','用户管理']"
+    :toArray="['/week/person/information','/week/person/password','/week/person/administrator','/week/person/mail']"
+    :ok="[true,true,administor,administor]"
+    :name="['信息修改','密码修改','用户管理','消息盒子']"
     className="quick"
   ></sidebar>
 </template>

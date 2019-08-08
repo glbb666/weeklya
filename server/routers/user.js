@@ -323,7 +323,8 @@ router.use('/login.do',function(req,res){
                         user:{
                             userName:req.session['user'].userName,
                             id:req.session['user'].id,
-                            administor:req.session['user'].status
+                            administor:req.session['user'].status,
+                            learningDirection:req.session['user'].learningDirection
                         },
                         success:true
                     }
@@ -435,24 +436,32 @@ router.use('/getUser.do',function(req,res){
 router.use('/updateUser.do',function(req,res){
     console.log(req.query);
     let {userName,professionalClass,phone,address,learningDirection,state,email} = req.query;
-    let updateSql = myselfSql.update('user',['user_email','user_phone','user_state','user_professionalClass','user_learningDirection','user_address','user_name'],[email,phone,state,professionalClass,learningDirection,address,userName],'user_id='+req.session['user'].id);
-    let promise = poolP.poolPromise(pool,updateSql);
-    let data;
-    promise.then(result=>{
-        req.session['user'] = {...req.session['user'],...req.query};
-        data = {
-            success:true,
-            msg:'插入成功'
+    const asyncMes = async function(){
+        //如果修改的学习方向和之前的不一样,我们需要把user_check置0,并且存储一条未读消息在消息列表中
+        let keyArr = ['user_email','user_phone','user_state','user_professionalClass','user_learningDirection','user_address','user_name'];
+        let valueArr = [email,phone,state,professionalClass,learningDirection,address,userName];
+        if(learningDirection!=req.session['user'].learningDirection){
+            keyArr.push('user_check');
+            valueArr.push(0);//更改了学习方向,把check重新定义为未审核状态
+            let addSql = myselfSql.insert('mes',['user_id','mes_send','mes_learningDirection','mes_agree'],[req.session['user'].id,0,"\'"+learningDirection+"\'",0]);
+            await poolP.poolPromise(pool,addSql);
         }
-        res.send(JSON.stringify(data));
+        let updateSql = myselfSql.update('user',keyArr,valueArr,'user_id='+req.session['user'].id);
+        await poolP.poolPromise(pool,updateSql);
+    }
+    asyncMes().then(()=>{
+        req.session['user'] = {...req.session['user'],...req.query};
+        res.send({
+            'success':true,
+            'msg':'插入成功'
+        });
     }).catch(err=>{
         console.log(err);
-        data = {
-            success:false,
-            msg:'插入失败'
-        }
-        res.send(JSON.stringify(data));
-    })
+        res.send({
+            'success':false,
+            'msg':'插入失败'
+        });
+    });
 })
 //修改头像
 // upload.single('photo')每次上传单个照片的配置信息
@@ -668,6 +677,46 @@ router.use('/deleteUser.do',function(req,res){
             msg:'服务器错误'
         }
         res.send(JSON.stringify(data))
+    })
+})
+//同意用户进组
+router.use('/admit.do',function(req,res){
+    let {userId,mlearningDirection,mesId} = req.query;
+    let asyncAdmit = async function(){
+        //根据用户id查用户是否被check了
+        let selectSQL = myselfSql.select('user','user_check','user_id='+userId); 
+        let check = await poolP.poolPromise(pool,selectSQL);
+        console.log(check);
+        if(check[0].user_check===1){
+            return false;
+        }
+        //把用户的状态更新为被接纳
+        //把消息状态更新为被同意
+        //这两个可以并行
+        let updateCheck = myselfSql.update('user',['user_check','user_learningDirection'],[1,'mlearningDirection'],'user_id='+userId);
+        let updateAgree = myselfSql.update('mes',['mes_agree'],[1],'mes_id='+mesId);
+        await Promise.all(poolP.poolPromise(pool,[updateCheck,updateAgree]))
+    }
+    asyncAdmit().then((result)=>{
+        console.log(result);
+        if(result){
+            res.send({
+                'msg':'成功',
+                'success':true
+            })
+        }else{
+            res.send({
+                'msg':'此人已成为别组成员',
+                'success':false
+            })
+        }
+        
+    }).catch(err=>{
+        console.log(err);
+        res.send({
+            'msg':'服务器错误',
+            'success':false
+        })
     })
 })
 module.exports = router;

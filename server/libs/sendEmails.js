@@ -1,4 +1,4 @@
-var sendEmail = function(mailTransport, options, callback) {
+function sendEmail(mailTransport, options, callback) {
 	mailTransport.sendMail(options , function(err, msg) {
 		console.log(err);
 		if(err) {

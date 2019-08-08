@@ -13,7 +13,7 @@ router.use(sessionOk())
 router.use('/getWorkmate.do',function(req,res){
     console.log('全部');
     let data;
-    let keys = ['user_id','user_email','user_state','user_professionalClass','user_phone','user_address'];
+    let keys = ['user_id','user_name','user_state','user_professionalClass','user_phone','user_address'];
     let where = 'user_id<>'+req.session['user'].id;
     let arr = ['前端','后台','ios','Android','产品'];
     let searchSql = []

@@ -80,7 +80,8 @@ import {exit} from '../../../../assets/common'
         list:[],
         administorList:[{value:"administor",text:"管理员"},{value:"none",text:"非管理员"}],
         stateList:["在校","不在校"],
-        show:true
+        show:true,
+        messageList:[]
       }
     },
     methods:{
@@ -131,7 +132,8 @@ import {exit} from '../../../../assets/common'
               } 
           });
         }
-      },  
+      },
+      
     },
     components:{
       dpage,

@@ -97,10 +97,10 @@ export default {
           if(result.pic){
            window.localStorage.setItem("pic", result.pic);
           }
-
           window.localStorage.setItem("username", result.user.userName);
           window.localStorage.setItem("userId",result.user.id)
           window.localStorage.setItem("userStatus",result.user.administor)
+          window.localStorage.setItem("userLearningDirection",result.user.learningDirection)
           showPopRight('登录成功',this);
           this.$router.replace('/week');
         } else {

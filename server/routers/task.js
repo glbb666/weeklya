@@ -39,16 +39,24 @@ router.use('/getTasks.do',function(req,res){
     let nextSQL = myselfSql.select('content',"*","YEARWEEK(date_format(from_unixtime((weekly_taskData)/1000),'%Y-%m-%d'),1) = YEARWEEK(curdate(),1)+1 and user_id="+userId)+" and weekly_flag=1 order by weekly_taskData desc";
     
     const asyncDay = async function(){
-        if(!time){
-            day = myselfSql.select('content',"weekly_taskData","YEARWEEK(date_format(from_unixtime((weekly_taskData)/1000),'%Y-%m-%d'),1) < YEARWEEK(now(),1) and user_id="+userId+" and weekly_flag=0 order by weekly_taskData desc limit 0,1");
-            day = await poolP.poolPromise(pool,day);
-            console.log(day);
-            time = formatDateTime(day[0].weekly_taskData);
-            time = getYearWeek(time);
-        }
-        console.log(time,userId);
-        lastSQL = myselfSql.select('content',"*","YEARWEEK(date_format(from_unixtime((weekly_taskData)/1000),'%Y-%m-%d'),1) = "+time+" and user_id="+userId+" and weekly_flag=0 order by weekly_taskData desc");
-        return await Promise.all(poolP.poolPromise(pool,[lastSQL,thisSQL,thisSQL1,nextSQL]));
+        try{
+            if(!time){
+                day = myselfSql.select('content',"weekly_taskData","YEARWEEK(date_format(from_unixtime((weekly_taskData)/1000),'%Y-%m-%d'),1) < YEARWEEK(now(),1) and user_id="+userId+" and weekly_flag=0 order by weekly_taskData desc limit 0,1");
+                day = await poolP.poolPromise(pool,day);
+                console.log(day);
+                if(day.length>0){
+                    time = formatDateTime(day[0].weekly_taskData);
+                    time = getYearWeek(time);
+                }else{
+                    time = -1;
+                }
+            }
+            console.log(time,userId);
+            lastSQL = myselfSql.select('content',"*","YEARWEEK(date_format(from_unixtime((weekly_taskData)/1000),'%Y-%m-%d'),1) = "+time+" and user_id="+userId+" and weekly_flag=0 order by weekly_taskData desc");
+            return await Promise.all(poolP.poolPromise(pool,[lastSQL,thisSQL,thisSQL1,nextSQL]));
+        }catch(e){
+            console.log(e);
+        }  
     }
     asyncDay().then(result=>{
         data={

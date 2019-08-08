@@ -76,12 +76,17 @@ function isRange(str,min,max) {
 function exit(_this){
     window.localStorage.removeItem("username");
     window.localStorage.removeItem("userId");
+    window.localStorage.removeItem("userLearningDirection");
+    if(window.localStorage.getItem("userStatus")==='administor'){
+        window.localStorage.removeItem('list');
+    }
     window.localStorage.removeItem("userStatus");
     if(window.localStorage.getItem('pic')){
-    window.localStorage.removeItem("pic");
+        window.localStorage.removeItem("pic");
     }
     _this.$router.push('/');
 }
+
 
 export {
 	isMail,
@@ -89,5 +94,6 @@ export {
     isLegal,
     formatDateTime,
     getYearWeek,
-    exit
+    exit,
+    WebSocketTest
 }

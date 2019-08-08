@@ -19,7 +19,7 @@
           <tbody>
           <tr v-for="(item,i) in personList" :key="item.user_id">
             <td>
-              {{item.user_email}}
+              {{item.user_name}}
             </td>
             <td>
                 {{item.user_state}}
