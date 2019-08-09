@@ -35,6 +35,11 @@ router.use('/getWorkmate.do',function(req,res){
         res.send(JSON.stringify(data));
     }).catch(err=>{
         console.log(err);
+        res.send({
+            'msg':'服务器错误',
+            'success':false
+        });
+
     })
 })
 module.exports = router;

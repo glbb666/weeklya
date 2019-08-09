@@ -10,10 +10,18 @@
         </div>
         <busy2
               width='65%'
-              v-show="show"
+              v-if="show"
         ></busy2>
-        <router-view :plastTask="lastTask" :pthisTask="thisTask" :pthisPlan="thisPlan" :pnextPlan="nextPlan" id="weekBox" :flag="flag"  v-show="!show" :userId="userId"
-        :timeStamp="timeStamp"
+        <router-view 
+              v-else 
+              :plastTask="lastTask" 
+              :pthisTask="thisTask" 
+              :pthisPlan="thisPlan" 
+              :pnextPlan="nextPlan" 
+              id="weekBox" 
+              :flag="flag"   
+              :userId="userId"
+              :timeStamp="timeStamp"
         ></router-view>     
     </div>
 </template>

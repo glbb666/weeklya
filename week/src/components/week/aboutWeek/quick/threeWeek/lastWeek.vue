@@ -6,7 +6,6 @@
         :pmoon=moon
         :userId=userId
       ></selectWeek>
-
       <div>
           <taskBorder :pi="i"
                       :pitem="item" 

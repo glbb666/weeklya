@@ -8,6 +8,7 @@ module.exports = function(){
         }else{
             res.send({
                 'msg':'session不存在',
+                'success':false,
                 'code':1000
             })
         }

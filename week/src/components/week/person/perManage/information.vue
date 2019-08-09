@@ -2,9 +2,9 @@
   <div id="contain">
     <busy2
               width='75%'
-              v-show="show"
+              v-if="show"
     ></busy2>
-    <div id="person" v-show="!show">
+    <div id="person" v-else>
       <div id="ptop">
         <label for="">
         上传头像

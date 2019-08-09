@@ -3,9 +3,9 @@
       <div>
         <busy2
               width='65%'
-              v-show="show"
+              v-if="show"
         ></busy2>
-        <div id="findPart" v-show="!show">
+        <div id="findPart" v-else>
           <div id="findContain">
             <table>
               <thead>

@@ -24,10 +24,6 @@ import mail from '@/components/week/person/perManage/mail'
 import workmate from '@/components/week/workmate/workmate'
 import aboutWork from '@/components/week/workmate/aboutWork'
 
-import note from '@/components/note'
-import history from '@/components/history.vue'
-import write from '@/components/write.vue'
-import meeting from '@/components/meeting.vue'
 Vue.use(Router)
 
 export default new Router({
@@ -89,16 +85,6 @@ export default new Router({
                 }
               ]
             },
-            // {
-            //   path:'my',
-            //   name:'my',
-            //   component:my
-            // },
-            // {
-            //   path:'my/content',
-            //   name:'content',
-            //   component:content
-            // },
             {
               path:'other',
               name:'other',
@@ -122,30 +108,6 @@ export default new Router({
                   component:nextWeek
                 }
               ]
-            }
-          ]
-        },
-       ,
-        {
-          path:'note',
-          name:'note',
-          component:note,
-          redirect:'note/history',
-          children:[
-            {
-              path:'history',
-              name:'history',
-              component:history,
-            },
-            {
-              path:'write',
-              name:'write',
-              component:write
-            },
-            {
-              path:'history/meeting',
-              name:'meeting',
-              component:meeting
             }
           ]
         },

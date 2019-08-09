@@ -8,7 +8,7 @@
            <h3>新的成员</h3>
            <div class="message" v-for="(item,i) in list" :key ="i">
                <img :src="item.pic" alt="">
-               <div>
+               <div class="detail">
                     <p id="name">{{item.user_name}}</p>
                     <p>
                         申请加入
@@ -16,14 +16,25 @@
                         组
                     </p>
                </div>
-               <button v-if="!item.mes_agree"@click="getInfo(item.user_id,item.mes_learningDirection,item.mes_id)">同意</button>
-               <span v-else>已同意</span>
+               <agreeBtn 
+                        v-if="item.mes_agree===0"
+                        id="agreeBtn"
+                        :userId="item.user_id"
+                        :mlearningDirection="item.mes_learningDirection"
+                        :mesId="item.mes_id"
+                        :pi="i"
+                >
+                </agreeBtn>
+               <span class="admitted" v-else-if="item.mes_agree===1">已同意</span>
+               <span class="admitted" v-else-if="item.mes_agree===-1">已拒绝</span>
+               <span class="admitted" v-else>已处理</span>
            </div>
        </div>
     </div>
 </template>
 <script>
 import busy2 from '../../../busy2'
+import agreeBtn from './mail/agreeBtn'
   export default {
     name: 'mail',
     data () {
@@ -38,14 +49,11 @@ import busy2 from '../../../busy2'
         }
     },
     methods:{
-        getInfo:function(userId,learningDirection,mesId){
-            this.$axios.get('weekly_war/user/admit.do?userId='+userId+'&mlearningDirection='+learningDirection+"&mesId="+mesId).then((res)=>{
-                console.log(res);
-            })
-        }
+        
     },
     components:{ 
-        busy2
+        busy2,
+        agreeBtn
     }
   }
 </script>
@@ -63,7 +71,6 @@ import busy2 from '../../../busy2'
         display: flex;
         align-items: center;
         border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-
     }
     .message img{
         margin:1% 2%;
@@ -81,21 +88,15 @@ import busy2 from '../../../busy2'
     .message p{
         font-size: 15px;
     }
-    .message div{
+    .message .detail{
         display: flex;
         flex: auto;
         flex-direction: column;
         justify-content: flex-start;
     }
-    .message button{
+    .message .admitted{
         padding:5px  10px;
-        margin-right: 2%;
-        border-radius: 7px;
-        border: 1px solid rgba(0, 0, 0, 0.12);
-    }
-    .message span{
-        padding:5px  10px;
-        margin-right: 2%;
+        margin-right: 3%;
     }
     .message:hover{
         background-color: rgba(104,111,191, .1);

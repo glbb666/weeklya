@@ -679,38 +679,39 @@ router.use('/deleteUser.do',function(req,res){
         res.send(JSON.stringify(data))
     })
 })
-//同意用户进组
+//审核用户进组
 router.use('/admit.do',function(req,res){
-    let {userId,mlearningDirection,mesId} = req.query;
+    let {userId,mlearningDirection,mesId,agree} = req.query;
     let asyncAdmit = async function(){
         //根据用户id查用户是否被check了
         let selectSQL = myselfSql.select('user','user_check','user_id='+userId); 
         let check = await poolP.poolPromise(pool,selectSQL);
         console.log(check);
         if(check[0].user_check===1){
-            return false;
+            agree=2;//表明消息已经被处理
         }
         //把用户的状态更新为被接纳
         //把消息状态更新为被同意
         //这两个可以并行
-        let updateCheck = myselfSql.update('user',['user_check','user_learningDirection'],[1,'mlearningDirection'],'user_id='+userId);
-        let updateAgree = myselfSql.update('mes',['mes_agree'],[1],'mes_id='+mesId);
+        let updateCheck = myselfSql.update('user',['user_check','user_learningDirection'],[1,mlearningDirection],'user_id='+userId);
+        let updateAgree = myselfSql.update('mes',['mes_agree'],[agree],'mes_id='+mesId);
         await Promise.all(poolP.poolPromise(pool,[updateCheck,updateAgree]))
+        return agree;
     }
     asyncAdmit().then((result)=>{
-        console.log(result);
-        if(result){
+        if(agree!==2){
             res.send({
                 'msg':'成功',
+                'agree':agree,
                 'success':true
             })
         }else{
             res.send({
                 'msg':'此人已成为别组成员',
+                'agree':agree,
                 'success':false
             })
         }
-        
     }).catch(err=>{
         console.log(err);
         res.send({
