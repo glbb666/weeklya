@@ -316,7 +316,8 @@ router.use('/login.do',function(req,res){
                         address:result[0].user_address,
                         status:result[0].user_status,
                         userName:result[0].user_name,
-                        path:result[0].user_path
+                        path:result[0].user_path,
+                        check:result[0].user_check
                     }
                     let data = {
                         msg:'登录成功',
@@ -445,6 +446,7 @@ router.use('/updateUser.do',function(req,res){
             valueArr.push(0);//更改了学习方向,把check重新定义为未审核状态
             let addSql = myselfSql.insert('mes',['user_id','mes_send','mes_learningDirection','mes_agree'],[req.session['user'].id,0,"\'"+learningDirection+"\'",0]);
             await poolP.poolPromise(pool,addSql);
+            req.session['user'].check = 0;
         }
         let updateSql = myselfSql.update('user',keyArr,valueArr,'user_id='+req.session['user'].id);
         await poolP.poolPromise(pool,updateSql);
@@ -543,11 +545,11 @@ router.use('/getAllUser.do',function(req,res){
     if(req.session['user'].status==='big_administor'){
         keys = ['user_id','user_email','user_state','user_status','user_learningDirection'];
         console.log('大管理员');
-        where = 'user_id<>'+req.session['user'].id+' limit '+(pageParams.page-1)*pageParams.pageSize+","+pageParams.pageSize;
+        where = 'user_check = 1 and user_id<>'+req.session['user'].id+' limit '+(pageParams.page-1)*pageParams.pageSize+","+pageParams.pageSize;
     }else if(req.session['user'].status === 'administor'){
         keys = ['user_id','user_email','user_state','user_learningDirection'];
         console.log('管理员');
-        where = 'user_status=\'none\'and user_learningDirection=\''+req.session['user'].learningDirection+'\' limit '+(pageParams.page-1)*pageParams.pageSize+","+pageParams.pageSize;
+        where = 'user_check = 1 and user_status=\'none\'and user_learningDirection=\''+req.session['user'].learningDirection+'\' limit '+(pageParams.page-1)*pageParams.pageSize+","+pageParams.pageSize;
     }else{
         data={
             success:false,
@@ -698,7 +700,7 @@ router.use('/admit.do',function(req,res){
         await Promise.all(poolP.poolPromise(pool,[updateCheck,updateAgree]))
         return agree;
     }
-    asyncAdmit().then((result)=>{
+    asyncAdmit().then((agree)=>{
         if(agree!==2){
             res.send({
                 'msg':'成功',

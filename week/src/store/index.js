@@ -10,9 +10,7 @@ const store = new Vuex.Store({
             type:0
         },
         pageList:[],
-        task:{
-            
-        }
+        messageList:[]
     },
     getters:{//等于vue的computed
         getStateTime:function(state){
@@ -27,6 +25,9 @@ const store = new Vuex.Store({
         },
         SETPAGE(state,newPageList){
             state.pageList = newPageList;
+        },
+        SETMESSAGE(state,newMessageList){
+            state.messageList = newMessageList;
         }
     },
     actions:{
@@ -35,6 +36,9 @@ const store = new Vuex.Store({
         },
         setPage(context,newPageList){
             context.commit('SETPAGE',newPageList);
+        },
+        setMessage(context,newMessageList){
+            context.commit('SETMESSAGE',newMessageList)
         }
     }
 }) 

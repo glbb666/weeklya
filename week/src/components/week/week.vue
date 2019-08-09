@@ -28,6 +28,7 @@
 <script>
 import {showPopError,showPopRight} from '../../../static/pop.js'
 import {exit} from '../../assets/common'
+import myStorage from '../../assets/myStorage'
   export default {
     name: 'week',
     data() {
@@ -53,7 +54,7 @@ import {exit} from '../../assets/common'
           if ("WebSocket" in window) {
               // 打开一个 web socket
               var ws = new WebSocket("ws://localhost:8090");
-              ws.onopen = function(learning_Direction) {
+              ws.onopen = function() {
                   // Web Socket 已连接上，使用 send() 方法发送数据
                   var obj = {
                       id:window.localStorage.getItem('userId'),
@@ -63,13 +64,10 @@ import {exit} from '../../assets/common'
               };
 
               ws.onmessage = function(evt) {
-                  var list = JSON.parse(window.localStorage.getItem('list'));
+                  var list = myStorage.getItem('list');
                   var mlist = JSON.parse(evt.data).result;
                   list = [...mlist,...list];
-                  window.localStorage.setItem('list',JSON.stringify(list));
-                  if(mlist.length>0){
-
-                  }
+                  myStorage.setItem('list',list,_this);
                   console.log(mlist);
               };
               ws.onclose = function() {
@@ -89,9 +87,10 @@ import {exit} from '../../assets/common'
       }
     },
     created(){
-        if(window.localStorage.getItem('userStatus')==='administor'){
+      //大管理员不需要消息盒子
+        if(window.localStorage.getItem('userStatus')!=='big_administor'){
           var list = [];
-          window.localStorage.setItem('list',JSON.stringify(list));
+          myStorage.setItem('list',list,this);
           this.WebSocketTest();
         }
     }
@@ -149,6 +148,7 @@ import {exit} from '../../assets/common'
     height: 100%;
     width: 100%;
     display: flex;
+    flex-shrink: 0;
     /* min-width: 100px; */
     align-items: center;
   }

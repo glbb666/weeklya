@@ -14,9 +14,17 @@ router.use('/getTasks.do',function(req,res){
     console.log('快捷');
     console.log(req.query);
     let userId,time = null;
-    if(req.query.id==="null"){
+    if(req.query.id==="null"){//自己的
         userId = req.session['user'].id;
     }else{
+        //如果是别人的,看看自己有没有小组资格
+        if(req.session['user'].check){
+            res.send({
+                'msg':'你还没有加入这个小组哦',
+                'success':false
+            })
+            return;
+        }
         userId = req.query.id;//别人的，有可能是选的，有可能是默认的
         time = req.query.timeStamp;
         if(time==='null')time = null;
@@ -193,10 +201,10 @@ router.use('/getAllTasksByUserId.do',function(req,res){
     let pageParams = msg.pageParams;
     let data;
     let arr = [];
-    let selectSql = myselfSql.select('content left join user on content.user_id=user.user_id',"content.user_id,content.weekly_taskData,user.user_learningDirection,user.user_name,content.weekly_id","content.user_id<>"+req.session['user'].id+" and content.weekly_flag = 0 and user.user_learningDirection='"+req.session['user'].learningDirection+"'order by content.weekly_taskData desc limit "+(pageParams.page-1)*pageParams.pageSize+","+pageParams.pageSize);
+    let selectSql = myselfSql.select('content left join user on content.user_id=user.user_id',"content.user_id,content.weekly_taskData,user.user_learningDirection,user.user_name,content.weekly_id","content.user_id<>"+req.session['user'].id+" and content.weekly_flag = 0 and user.user_check = 1 and user.user_learningDirection='"+req.session['user'].learningDirection+"'order by content.weekly_taskData desc limit "+(pageParams.page-1)*pageParams.pageSize+","+pageParams.pageSize);
     arr.push(selectSql);
     if(!msg.totalPage){//是第一次请求
-        let countSql = myselfSql.select('content left join user on content.user_id=user.user_id','count(*)',"content.user_id<>"+req.session['user'].id+" and content.weekly_flag = 0 and user.user_learningDirection='"+req.session['user'].learningDirection+"\'");
+        let countSql = myselfSql.select('content left join user on content.user_id=user.user_id','count(*)',"content.user_id<>"+req.session['user'].id+" and content.weekly_flag = 0 and user.user_check = 1 and user.user_learningDirection='"+req.session['user'].learningDirection+"\'");
         arr.push(countSql);
     }            
     Promise.all(poolP.poolPromise(pool,arr)).then(result=>{

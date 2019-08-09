@@ -5,7 +5,7 @@
               width='65%'
               v-if="show"
         ></busy2>
-        <div id="findPart" v-else>
+        <div id="findPart" v-show="!show">
           <div id="findContain">
             <table>
               <thead>

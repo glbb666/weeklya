@@ -1,10 +1,11 @@
 <template>
   <sidebar
     title="个人"
-    :toArray="['/week/person/information','/week/person/password','/week/person/administrator','/week/person/mail']"
-    :ok="[true,true,administor,administor]"
-    :name="['信息修改','密码修改','用户管理','消息盒子']"
+    :toArray="['/week/person/information','/week/person/password','/week/person/mail','/week/person/administrator']"
+    :ok="[true,true,notBig,administor]"
+    :name="['信息修改','密码修改','消息盒子','用户管理']"
     className="quick"
+    :notBig="notBig"
   ></sidebar>
 </template>
 
@@ -14,7 +15,8 @@
     name: 'person',
     data () {
       return {
-        administor:window.localStorage.getItem('userStatus').indexOf('administor')!=-1,
+        administor:window.localStorage.getItem('userStatus').indexOf('administor')!=-1,//是管理员
+        notBig:window.localStorage.getItem('userStatus').indexOf('big')===-1,//不是大管理员
       }
     },
     components:{

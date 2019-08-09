@@ -7,12 +7,12 @@
         <ul>
           <li v-for="(item,i) in ableTo" :key="i">
             <router-link :to="item">
-             <i class="el-icon-message" v-if="i===3&&className==='quick'"></i>
+             <i class="el-icon-message" v-if="i===2&&notBig&&className==='quick'"></i>
             <span
               :class=[className]
-              v-if="i!==3||className!=='quick'"
+              v-if="i!==2||!notBig||className!=='quick'"
             >  
-            </span>{{name[i]}}</router-link>
+            </span>{{nameArr[i]}}</router-link>
           </li>
         </ul>
       </div>
@@ -26,9 +26,10 @@
   // Vue.prototype.$qs = qs
   export default{
     name: 'sidebar',
-    props:['title','toArray','name','ok','className'],
+    props:['title','toArray','name','ok','className','notBig'],
     data () {
       return {
+        'nameArr':[]
       }
     },
     computed:{
@@ -38,6 +39,7 @@
             for(let i = 0;i<length;i++){
                 if(this.ok[i]){
                     arr.push(this.toArray[i]);
+                    this.nameArr.push(this.name[i]);
                 }
             }
             return arr;
@@ -129,19 +131,25 @@
  #sidebar li:nth-child(2) a.router-link-active .quick{
      background: url('../../static/2/othered.png') no-repeat;
  }
- #sidebar li:nth-child(3) .quick{
+  #sidebar li:nth-child(3) .quick{
      background: url('../../static/2/my.png') no-repeat;
  }
  #sidebar li:nth-child(3) a.router-link-active .quick{
      background: url('../../static/2/myed.png') no-repeat;
  }
-  #sidebar li:nth-child(4) i{
+ #sidebar li:nth-child(4) .quick{
+     background: url('../../static/2/my.png') no-repeat;
+ }
+ #sidebar li:nth-child(4) a.router-link-active .quick{
+     background: url('../../static/2/myed.png') no-repeat;
+ }
+  #sidebar li:nth-child(3) i{
     color: #000;
     font-size: 28px;
     margin-left: 12px;
     margin-right: 9px;
  }
- #sidebar li:nth-child(4) a.router-link-active i{
+ #sidebar li:nth-child(3) a.router-link-active i{
     color: #686fbf;
  }
  #contain{

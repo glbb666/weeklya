@@ -19,6 +19,8 @@
 <script>
 import {showPopRight,showPopError} from '../../../../../../static/pop'
 import { exit } from '../../../../../assets/common';
+import myLocalStorage from '../../../../../assets/myStorage'
+import myStorage from '../../../../../assets/myStorage';
 export default {
     name:'agreeBtn',
     data(){
@@ -52,7 +54,7 @@ export default {
                         return;
                     }
                     if(res.agree===2){
-                        showPopError('此人已成为别组成员');
+                        showPopError('此人已成为别组成员',this);
                         this.resetAgree(agree);
                     }
                     showPopError(res.msg,this);
@@ -60,9 +62,9 @@ export default {
             })
         },
         resetAgree(agree){
-            let list = JSON.parse(window.localStorage.getItem('list'));
-            list[this.pi].mes_agree = res.agree;
-            window.localStorage.setItem('list',JSON.stringify(list));
+            let list = myStorage.getItem('list');
+            list[this.pi].mes_agree = agree;
+            myStorage.setItem('list',list,this);
         }
     }
 }

@@ -56,7 +56,7 @@
       </div>
 </template>
 <script>
-import {isMail,isLegal,isRange} from '../../assets/common.js'
+import {isMail,isLegal,isRange,enter} from '../../assets/common.js'
 import {showPopError,showPopRight} from '../../../static/pop.js'
 
 export default {
@@ -91,18 +91,10 @@ export default {
         console.log(result.data)
         var result = result.data;
         if (result.success) {
-          showPopRight('登录成功',this);
           //登录成功后切换到主页面组件
           console.log(result);
-          if(result.pic){
-           window.localStorage.setItem("pic", result.pic);
-          }
-          window.localStorage.setItem("username", result.user.userName);
-          window.localStorage.setItem("userId",result.user.id)
-          window.localStorage.setItem("userStatus",result.user.administor)
-          window.localStorage.setItem("userLearningDirection",result.user.learningDirection)
+          enter(result,this);
           showPopRight('登录成功',this);
-          this.$router.replace('/week');
         } else {
           showPopError(result.msg,this);
         }
@@ -110,7 +102,6 @@ export default {
       }
     },
     postfcode(e,url){
-     
       console.log(url)
       var data = {}
       data.name = this.user;

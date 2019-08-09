@@ -2,8 +2,9 @@
 	<div class="pop">
 		<div class="pop-bd">
 			<div class="pop-hd">
-				<i class="el-icon-circle-close sad" v-show="!type"></i>
-				<i class="el-icon-circle-check happy" v-show="type"></i>
+				<i class="el-icon-circle-close" v-if="type===0"></i>
+				<i class="el-icon-circle-check" v-else-if="type===1"></i>
+				<i class="el-icon-warning" v-else></i>
 			</div>
 			<div class="pop-cont">
 				{{words}}
@@ -51,14 +52,7 @@ export default {
 	width: 100%;
 	height: 55%;
 }
-.pop-hd .sad {
-	width: 100%;
-	height: 100%;
-	background-size: auto 70%;
-	background-position: center;
-}
-
-.pop-hd .happy {
+.pop-hd i {
 	width: 100%;
 	height: 100%;
 	background-size: auto 70%;

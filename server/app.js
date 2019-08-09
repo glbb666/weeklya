@@ -21,7 +21,8 @@ const readFile = require('./libs/readFile');
 let server = new express();
 var ws = require('nodejs-websocket');
 
-ws.createServer(function(conn) {
+
+ws.createServer(function(conn){
     var timer;
     conn.on('text', function(obj) {
         let {id,learningDirection} = JSON.parse(obj);

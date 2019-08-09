@@ -1,3 +1,4 @@
+import myStorage from './myStorage'
 function sql_str(){
     var str="and,delete,or,exec,insert,select,union,update,count,*,',join,>,<";
     return str;
@@ -73,27 +74,34 @@ function isRange(str,min,max) {
     d = Math.round((date1.valueOf() - date2.valueOf()) / 86400000);
     return ''+a+Math.ceil((d + ((date2.getDay() + 1) - 1)) / 7);
 }
+function enter(result,_this){
+    if(result.pic){
+        window.localStorage.setItem("pic", result.pic);
+       }
+       window.localStorage.setItem("username", result.user.userName);
+       window.localStorage.setItem("userId",result.user.id)
+       window.localStorage.setItem("userStatus",result.user.administor)
+       window.localStorage.setItem("userLearningDirection",result.user.learningDirection)
+       myStorage.setItem("list",[],_this);
+       _this.$router.replace('/week');
+}
 function exit(_this){
     window.localStorage.removeItem("username");
     window.localStorage.removeItem("userId");
     window.localStorage.removeItem("userLearningDirection");
-    if(window.localStorage.getItem("userStatus")==='administor'){
-        window.localStorage.removeItem('list');
-    }
+    window.localStorage.removeItem('list');
     window.localStorage.removeItem("userStatus");
     if(window.localStorage.getItem('pic')){
         window.localStorage.removeItem("pic");
     }
     _this.$router.push('/');
 }
-
-
 export {
 	isMail,
     isRange,
     isLegal,
     formatDateTime,
     getYearWeek,
-    exit,
-    WebSocketTest
+    enter,
+    exit
 }

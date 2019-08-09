@@ -13,7 +13,7 @@
               v-if="show"
         ></busy2>
         <router-view 
-              v-else 
+              v-show="!show"
               :plastTask="lastTask" 
               :pthisTask="thisTask" 
               :pthisPlan="thisPlan" 

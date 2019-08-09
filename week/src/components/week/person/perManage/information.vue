@@ -4,14 +4,14 @@
               width='75%'
               v-if="show"
     ></busy2>
-    <div id="person" v-else>
+    <div id="person" v-show="!show">
       <div id="ptop">
         <label for="">
         上传头像
         <div id="personImg">
             <input type="file" id="personFile" accept='image/*' @change="upload">
         </div>
-      </label>
+        </label>
       </div>
       <div id="pbottom">
           <div id="pleft">
@@ -23,7 +23,7 @@
         </label>
       <label for="">
         <div>学习方向</div>
-            <select v-model="learningDirection">
+            <select v-model="learningDirection" >
               <option :value="item.text" v-for="(item,index) in directionList" :key="index">{{item.text}}</option>
             </select>
       </label>
@@ -52,11 +52,11 @@
 </template>
 
 <script>
-import {showPopError,showPopRight} from '../../../../../static/pop.js'
+import {showPopError,showPopRight,showPopWarning} from '../../../../../static/pop.js'
 import busy2 from '../../../busy2'
 import {exit} from '../../../../assets/common'
 
-    export default {
+export default {
         name: "information",
         data () {
           return {
@@ -84,6 +84,13 @@ import {exit} from '../../../../assets/common'
             show:true
           }
         },
+        watch:{
+          'learningDirection'(newVal,oldVal){
+            if(oldVal!==''&&newVal!==oldVal){
+              this.warning();
+            }
+          }
+        },
         methods:{     
           getInfo(){
             this.$axios.get('weekly_war/user/getUser.do').then(result => {
@@ -96,6 +103,7 @@ import {exit} from '../../../../assets/common'
                   _this.show = false;
                 },1000);
                 if(pic&&pic.length){
+                  console.log(document.getElementById('personImg'))
                   document.getElementById('personImg').style = "background:"+ 'url(\''+pic+'\') no-repeat'+ ';background-position:center;background-size:auto 100%;background-color: white;'
                   window.localStorage.setItem('pic',pic);
                 }else{
@@ -192,7 +200,10 @@ import {exit} from '../../../../assets/common'
               })
             },files.type || 'image/png');
           }        
-        }
+        },
+          warning(e){
+            showPopWarning("如若改变学习方向,提交表单后,您将退出当前小组",this)
+          }
       },
       components:{
         busy2
@@ -201,8 +212,8 @@ import {exit} from '../../../../assets/common'
         this.getInfo();
       },
       mounted(){
-         if(window.localStorage.getItem('pic')){
-        var oPic = document.getElementById('personImg');
+        if(window.localStorage.getItem('pic')){
+          var oPic = document.getElementById('personImg');
           oPic.style = "background:"+ 'url(\''+window.localStorage.getItem('pic')+'\') no-repeat'+ ';background-position:center;background-size:auto 100%;background-color: white;'
         }
       }

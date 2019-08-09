@@ -2,11 +2,11 @@
     <div id="contain">
         <busy2
               width='75%'
-              v-if="list.length===0"
+              v-if="this.$store.state.messageList.length===0"
         ></busy2>
        <div id="new" v-else>
            <h3>新的成员</h3>
-           <div class="message" v-for="(item,i) in list" :key ="i">
+           <div class="message" v-for="(item,i) in this.$store.state.messageList" :key ="i">
                <img :src="item.pic" alt="">
                <div class="detail">
                     <p id="name">{{item.user_name}}</p>
@@ -39,13 +39,8 @@ import agreeBtn from './mail/agreeBtn'
     name: 'mail',
     data () {
         return{
-            show:false
-        }
-    },
-    computed:{
-        list:function(){
-            console.log(window.localStorage.getItem('list'));
-            return JSON.parse(window.localStorage.getItem('list'));
+            show:false,
+            list:[]
         }
     },
     methods:{
