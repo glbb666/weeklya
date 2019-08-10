@@ -35,13 +35,15 @@ import myStorage from '../../assets/myStorage'
       return {
         name: '',
         add: false,//默认不显示
-        time:''
+        time:'',
+        ws:null
       }
     },
     methods: {
         out(){
           var dropOut = confirm("你确定要退出登录吗？");
-          if(dropOut){     
+          if(dropOut){
+            this.ws.close();
             this.$axios.get('weekly_war/user/logout.do').then(res=>{  
               res = res.data;
               exit(this);
@@ -52,18 +54,15 @@ import myStorage from '../../assets/myStorage'
       WebSocketTest(list) {
           var _this = this;
           if ("WebSocket" in window) {
-              // 打开一个 web socket
+              // 打开一个 web socket                                 
               var ws = new WebSocket("ws://localhost:8090");
               ws.onopen = function() {
                   // Web Socket 已连接上，使用 send() 方法发送数据
-                  var obj = {
-                      id:window.localStorage.getItem('userId'),
-                      learningDirection:window.localStorage.getItem('userLearningDirection')               
-                  }
-                  ws.send(JSON.stringify(obj));
+                  var id = myStorage.getItem('userId');
+                  ws.send(id);
               };
-
               ws.onmessage = function(evt) {
+                //从服务器接受数据
                   var list = myStorage.getItem('list');
                   var mlist = JSON.parse(evt.data).result;
                   list = [...mlist,...list];
@@ -72,8 +71,10 @@ import myStorage from '../../assets/myStorage'
               };
               ws.onclose = function() {
                   // 关闭 websocket
-                  alert("连接已关闭...");
+                  showPopError('连接已关闭',_this);
+                  exit(_this);
               };
+              return ws;
           } else {
               // 浏览器不支持 WebSocket
                showPopError('您的浏览器不支持websocket',this);
@@ -91,7 +92,7 @@ import myStorage from '../../assets/myStorage'
         if(window.localStorage.getItem('userStatus')!=='big_administor'){
           var list = [];
           myStorage.setItem('list',list,this);
-          this.WebSocketTest();
+          this.ws = this.WebSocketTest();
         }
     }
   }

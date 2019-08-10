@@ -9,7 +9,8 @@ var myStorage = {
         window.localStorage.setItem(key,val);
     },
     getItem(key,...rest){
-        if(key==='list'){
+        var arr = ['list']
+        if(arr.indexOf(key)!==-1){
             return JSON.parse(window.localStorage.getItem(key));
         }
         return window.localStorage.getItem(key);

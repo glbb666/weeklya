@@ -2,9 +2,16 @@
     <div id="contain">
         <busy2
               width='75%'
-              v-if="this.$store.state.messageList.length===0"
+              v-show="show"
         ></busy2>
-       <div id="new" v-else>
+        <empty
+                v-show = "!show"
+                v-if="this.$store.state.messageList.length===0"
+        ></empty>
+       <div id="new" 
+                v-show = "!show"
+                v-else
+        >
            <h3>新的成员</h3>
            <div class="message" v-for="(item,i) in this.$store.state.messageList" :key ="i">
                <img :src="item.pic" alt="">
@@ -34,12 +41,13 @@
 </template>
 <script>
 import busy2 from '../../../busy2'
+import empty from '../../../empty'
 import agreeBtn from './mail/agreeBtn'
   export default {
     name: 'mail',
     data () {
         return{
-            show:false,
+            show:true,
             list:[]
         }
     },
@@ -48,7 +56,13 @@ import agreeBtn from './mail/agreeBtn'
     },
     components:{ 
         busy2,
-        agreeBtn
+        agreeBtn,
+        empty
+    },
+    created(){
+        setTimeout(()=>{
+            this.show = false;
+        },2000)
     }
   }
 </script>

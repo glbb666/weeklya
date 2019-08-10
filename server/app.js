@@ -24,22 +24,53 @@ var ws = require('nodejs-websocket');
 
 ws.createServer(function(conn){
     var timer;
-    conn.on('text', function(obj) {
-        let {id,learningDirection} = JSON.parse(obj);
-        console.log(id);
-        let count = 0;
+    let count = 0;
+    conn.on('text', function(id) {
         timer = setInterval(() => {
             if(id) {
                 var asyncMsg = async function(){
-                    let selectSql;
-                    if(count === 0){//第一次读取的时候获取所有信息
-                        console.log('第1次');
-                        selectSql= myselfSql.select('mes left join user on mes.user_id = user.user_id','*','mes.user_id<>'+id+'  and mes.mes_learningDirection=\''+learningDirection+'\' order by mes_id desc');
-                    }else{//之后读取只获得未读取信息
-                        selectSql= myselfSql.select('mes left join user on mes.user_id = user.user_id','*','mes.user_id<>'+id+' and mes.mes_send = 0 and mes.mes_learningDirection=\''+learningDirection+'\' order by mes_id desc');
-                    }      
-                    let updateSql = myselfSql.update('mes left join user on mes.user_id = user.user_id',['mes.mes_send'],[1],'user.user_check = 0 and mes.user_id<>'+id+' and mes.mes_send = 0 and mes.mes_learningDirection=\''+learningDirection+'\'');
+                    let selectPerson,selectSql;
+                    //判断身份
+                    selectPerson = myselfSql.select('user',['user_status','user_learningDirection'],'user_id='+id);
+                    let  [{user_status,user_learningDirection}] = await poolP.poolPromise(pool,selectPerson);
+                    console.log(user_status);
+                    if(user_status==='big_administor'){
+                        var mes = {
+                            'success' : false,
+                            'result' : '用户没有此权限'
+                        }
+                        conn.sendText(mes);
+                        clearInterval(timer);
+                        return;
+                    }
+                    if(count === 0){//第一次读取,获取所有信息
+                        count++;
+                        console.log('第1次'); 
+                        //判断身份
+                        //普通用户获得的是被拒绝或者同意的信息
+                        if(user_status==="none"){
+                            selectSql= myselfSql.select('mes left join user on mes.user_id = user.user_id','*','(mes.mes_agree = 1 or mes.mes_agree = -1) and  mes.user_id='+id+' order by mes_id desc');
+                        }else{
+                            //管理员获得的是申请的信息
+                        selectSql= myselfSql.select('mes left join user on mes.user_id = user.user_id','*','mes.user_id<>'+id+'  and mes.mes_learningDirection=\''+user_learningDirection+'\' order by mes_id desc');
+                        }
+                    }else{
+                        //之后只获得未读取信息,或是未接收信息
+                        if(user_status==="none"){
+                            selectSql= myselfSql.select('mes left join user on mes.user_id = user.user_id','*','(mes.mes_agree = 1 or mes.mes_agree = -1) and mes.mes_accept = 0 and  mes.user_id='+id+' order by mes_id desc');
+                        }else{  
+                            selectSql= myselfSql.select('mes left join user on mes.user_id = user.user_id','*','mes.user_id<>'+id+' and mes.mes_send = 0 and mes.mes_learningDirection=\''+user_learningDirection+'\' order by mes_id desc');
+                        }    
+                    }
+                    let updateSql;
+                    if(user_status==="none"){
+                        updateSql= myselfSql.update('mes left join user on mes.user_id = user.user_id',['mes.mes_accept'],[1],'(mes.mes_agree = 1 or mes.mes_agree = -1) and mes.mes_accept = 0 and  mes.user_id='+id);
+                    }else{
+                        updateSql = myselfSql.update('mes left join user on mes.user_id = user.user_id',['mes.mes_send'],[1],'user.user_check = 0 and mes.user_id<>'+id+' and mes.mes_send = 0 and mes.mes_learningDirection=\''+user_learningDirection+'\'');
+                    }    
+                    
                     var result = await poolP.poolPromise(pool,selectSql);
+                    console.log(result);
                     for(let i = 0,length=result.length;i<length;i++){
                         console.log("i:"+i);
                         console.log(result[i].user_path)
@@ -55,14 +86,13 @@ ws.createServer(function(conn){
                         }
                         conn.sendText(JSON.stringify(mes));
                     });
-                    count++;
                 }
                 asyncMsg().catch((err)=>{
                     console.log(err);
                 });
             }else {
                 var mes = {
-                    'error' : true,
+                    'success':false,
                     'result' : '用户未登录'
                 }
                 conn.sendText(mes);
@@ -72,7 +102,7 @@ ws.createServer(function(conn){
     })
     conn.on('connect', function(code) {
         console.log('开启连接', code)
-      })
+    })
     conn.on('close', function(code, res) {
         clearInterval(timer);
     })

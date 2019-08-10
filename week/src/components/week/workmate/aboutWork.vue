@@ -8,6 +8,7 @@
 import mateTable from './mateTable/mateTable'
 import '../../../assets/common'
 import { exit } from '../../../assets/common';
+import {showPopError} from '../../../../static/pop'
 export default {
     name:'aboutWork',
     data(){
