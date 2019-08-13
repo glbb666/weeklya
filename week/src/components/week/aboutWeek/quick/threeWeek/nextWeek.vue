@@ -12,15 +12,15 @@
                       :plist="pnextPlan"
                       :flag="flag"
                       type="next"
-                      color="#3385ff"
-                      backgroundColor="#3385ff"
-                      taskColor="rgba(51,133,255,.05)"
+                      color="#686fbf"
+                      backgroundColor="#3240dd"
+                      taskColor="#f7f7f9"
              ></taskBorder>
       </div>
     </div>
     <empty :plist="pnextPlan"
-            backgroundColor='rgba(51,133,255,.05)'
-            words='快去填写周报八~'
+            backgroundColor='#f7f7f9'
+            words='快去填写计划八~'
             width='75%'
     ></empty>
   </div>
@@ -45,6 +45,7 @@
         return date.setTime(date);
       },
       addTask(){
+        console.log(this.pnextPlan);
         this.pnextPlan.unshift({
           weekly_taskName:[null],
           weekly_completeDegree:[null],
@@ -71,15 +72,15 @@
     margin-left: 33px;
     height: 39px;
   }
-  .detail .time .number{
+   .detail .time .number{
     border-radius: 50%;
     height: 35px;
     width: 35px;
-    border: #3385ff 2px solid;
+    border: #686fbf 2px solid;
     line-height: 35px;
     text-align: center;
     font-size: 23px;
-    color: #3385ff;
+    color: #686fbf;
     display:inline-block;
     cursor: default;
   }

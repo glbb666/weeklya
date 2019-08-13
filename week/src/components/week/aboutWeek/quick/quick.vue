@@ -17,7 +17,7 @@
               :plastTask="lastTask" 
               :pthisTask="thisTask" 
               :pthisPlan="thisPlan" 
-              :pnextPlan="nextPlan" 
+              :pnextPlan="nextTask" 
               id="weekBox" 
               :flag="flag"   
               :userId="userId"
@@ -38,7 +38,7 @@ import {exit} from '../../../../assets/common'
         lastTask:'',
         thisTask:'',
         thisPlan:'',
-        nextPlan:'',
+        nextTask:'',
         userId:null,
         timeStamp:null,
         flag:true,
@@ -58,9 +58,9 @@ import {exit} from '../../../../assets/common'
             setTimeout(function(){
               _this.show = false;
             },1000);
-            let {lastTask='',thisTask='',thisPlan='',nextPlan=''} = result;
-            Object.assign(this,{lastTask,thisTask,thisPlan,nextPlan})
-            this.init([this.lastTask,this.thisTask,this.thisPlan,this.nextPlan]);
+            let {lastTask='',thisTask='',thisPlan='',nextTask=''} = result;
+            Object.assign(this,{lastTask,thisTask,thisPlan,nextTask})
+            this.init([this.lastTask,this.thisTask,this.thisPlan,this.nextTask]);
           } else {
             if(result.code===1000){
               showPopError('未登录',this);
@@ -136,8 +136,5 @@ import {exit} from '../../../../assets/common'
   }
   #week .router-link-active{
     color: #686fbf;
-  }
-  #week a:last-child.router-link-active{
-    color: #3385ff;
   }
 </style>

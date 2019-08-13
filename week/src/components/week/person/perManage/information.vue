@@ -54,7 +54,8 @@
 <script>
 import {showPopError,showPopRight,showPopWarning} from '../../../../../static/pop.js'
 import busy2 from '../../../busy2'
-import {exit} from '../../../../assets/common'
+import {exit,checkAddress,checkPhone} from '../../../../assets/common'
+import myStorage from '../../../../assets/myStorage';
 
 export default {
         name: "information",
@@ -85,13 +86,14 @@ export default {
           }
         },
         watch:{
-          'learningDirection'(newVal,oldVal){
+          'learningDirection'(newVal){
+            var oldVal = myStorage.getItem('userLearningDirection');
             if(oldVal!==''&&newVal!==oldVal){
               this.warning();
             }
           }
         },
-        methods:{     
+        methods:{
           getInfo(){
             this.$axios.get('weekly_war/user/getUser.do').then(result => {
               result = result.data;
@@ -128,12 +130,21 @@ export default {
             });
           },
           modifyInfo(){
+            if(!checkAddress(this.address)){
+               showPopError('地址不符合规范',this)
+               return;
+            }
+            if(!checkPhone(this.tel)){
+               showPopError('电话号码不符合规范',this)
+               return;
+            }
             this.$axios.get('weekly_war/user/updateUser.do?userName='+this.username+'&professionalClass='+this.professionalClass+'&phone='+this.tel+'&address='+this.address+'&learningDirection='+this.learningDirection+'&state='+this.state+'&email='+this.email).then(res => {
               console.log(res)
               res = res.data;
               if(res.success){
                 showPopRight('修改资料成功',this)
-                window.localStorage.setItem('username',this.username);
+                myStorage.setItem('username',this.username);
+                myStorage.setItem('userLearningDirection',this.learningDirection);
               }else{ 
                 if(result.code===1000){
                   showPopError('未登录',this)

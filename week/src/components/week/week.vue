@@ -91,7 +91,6 @@ import myStorage from '../../assets/myStorage'
                 }
               };
               ws.onclose = function() {
-                  showPopError('连接已关闭',_this);
                   exit(_this);
               };
               return ws;

@@ -62,7 +62,7 @@ function isRange(str,min,max) {
     // second = second < 10 ? ('0' + second) : second;
     return y + '-' + m + '-' + d;
  }   
- function getYearWeek(time) {
+function getYearWeek(time) {
     //date1是当前日期
     //date2是当年第一天
     //d是当前日期是今年第多少天
@@ -99,6 +99,13 @@ function exit(_this){
     }
     _this.$router.push('/');
 }
+function checkAddress(str){
+    var reg = /.+省.+市/;
+    return reg.test(str);
+}
+function checkPhone(str){
+    return !isNaN(str);
+}
 export {
 	isMail,
     isRange,
@@ -106,5 +113,7 @@ export {
     formatDateTime,
     getYearWeek,
     enter,
-    exit
+    exit,
+    checkAddress,
+    checkPhone
 }

@@ -30,10 +30,4 @@ h2,h3{
     margin: 1% 2%;
     color: #6e6e74;
 }
-#empty{
-  width: 80%;
-  margin:10px 33px;
-  border-radius: 7px;
-  padding: 10px;
-}
 </style>

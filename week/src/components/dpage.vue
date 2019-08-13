@@ -168,5 +168,10 @@ export default {
     color: #fff;
     background-color: #686fbf;
   }
+  #empty{
+    margin: -10px -33px;
+    border-radius: 7px;
+    padding: 10px;
+ }
 </style>
 

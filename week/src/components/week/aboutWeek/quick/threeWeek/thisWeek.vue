@@ -91,9 +91,6 @@
     color: #686fbf;
     display:inline-block;
     cursor: default;
-    position: sticky;
-    position: -webkit-sticky;
-    top:150px;
   }
   .detail .time .adding{
     cursor: pointer;
