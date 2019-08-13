@@ -66,7 +66,7 @@ export default {
               {text:'后台'},
               {text:'视觉'},
               {text:'产品'},
-              {text:'IOS'},
+              {text:'ios'},
               {text:'Andriod'}
             ],
             stateList:[
@@ -112,6 +112,7 @@ export default {
                 this.username = user.userName;
                 this.email = user.email;
                 this.learningDirection = user.learningDirection;
+                console.log(this.learningDirection);
                 this.state = user.state;
                 this.professionalClass =user.professionalClass;
                 this.address = user.address;

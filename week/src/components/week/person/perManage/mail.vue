@@ -5,12 +5,15 @@
               v-show="show"
         ></busy2>
         <empty
+                id="empty"
                 v-show = "!show"
-                v-if="this.$store.state.messageList.length===0"
+                :plist="this.$store.state.messageList"
+                words='暂时没有消息呢~'
+                width='75%'
         ></empty>
        <div id="new" 
                 v-show = "!show"
-                v-else
+                v-if="this.$store.state.messageList.length"
         >
            <h3>新的成员</h3>
            <div class="message" v-for="(item,i) in this.$store.state.messageList" :key ="i">
@@ -43,6 +46,7 @@
 import busy2 from '../../../busy2'
 import empty from '../../../empty'
 import agreeBtn from './mail/agreeBtn'
+import myStorage from '../../../../assets/myStorage';
   export default {
     name: 'mail',
     data () {
@@ -63,6 +67,7 @@ import agreeBtn from './mail/agreeBtn'
         setTimeout(()=>{
             this.show = false;
         },2000)
+        myStorage.setItem('msgCount',0,this);
     }
   }
 </script>
@@ -71,6 +76,10 @@ import agreeBtn from './mail/agreeBtn'
 <style scoped>
     #new{
         margin:0 1%;
+    }
+    #empty{
+       margin:0 1%;
+       padding: 10px;
     }
     #new h3{
         padding: 10px 10px;

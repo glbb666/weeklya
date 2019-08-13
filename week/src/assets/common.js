@@ -94,6 +94,9 @@ function exit(_this){
     if(window.localStorage.getItem('pic')){
         window.localStorage.removeItem("pic");
     }
+    if(window.localStorage.getItem('msgCount')){
+        window.localStorage.removeItem("msgCount");
+    }
     _this.$router.push('/');
 }
 export {

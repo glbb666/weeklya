@@ -11,7 +11,7 @@
         </div>
       </div>
       <empty :plist="pthisPlan"
-             words='计划'
+             words='记得制定计划哦~'
       ></empty>
     </div>
 </template>

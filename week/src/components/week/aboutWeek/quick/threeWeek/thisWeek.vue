@@ -21,7 +21,7 @@
     <planBox :pthisPlan="pthisPlan"></planBox>
    
     <empty :plist="pthisTask"
-            words='周报'
+            words='快去填写周报八~'
             backgroundColor='#f7f7f9'
             width='65%'
     ></empty>

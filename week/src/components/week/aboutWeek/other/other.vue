@@ -5,9 +5,9 @@
               width='65%'
               v-if="show"
         ></busy2>
-        <div id="findPart" v-show="!show">
-          <div id="findContain">
-            <table>
+       <div id="findPart" v-show="!show">
+          <div id="findContain" >
+            <table v-show="this.$store.state.pageList.length">
               <thead>
               <tr>
                 <th>所属组别</th>
@@ -32,6 +32,7 @@
               url='weekly_war/task/getAllTasksByUserId.do'
               pageSize=7
               type='task'
+              pwords='你的小组还没有人写周报呢~'
             ></dpage>
           </div>
         </div>
@@ -43,6 +44,7 @@ import {formatDateTime,getYearWeek} from '../../../../assets/common'
 import {showPopError,showPopRight} from '../../../../../static/pop.js'
 import dpage from '../../../dpage'
 import busy2 from '../../../busy2'
+import empty from '../../../empty'
 
   export default {
     name: 'other',
@@ -73,12 +75,13 @@ import busy2 from '../../../busy2'
       },2000);
     },
     beforeRouteLeave(from,to,next){
-      this.$store.dispatch('setPage',null)
+      this.$store.dispatch('setPage',[])
       next();
     },
     components:{
       dpage,
-      busy2
+      busy2,
+      empty
     }
   }
 </script>

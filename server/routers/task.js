@@ -17,14 +17,6 @@ router.use('/getTasks.do',function(req,res){
     if(req.query.id==="null"){//自己的
         userId = req.session['user'].id;
     }else{
-        //如果是别人的,看看自己有没有小组资格
-        if(req.session['user'].check){
-            res.send({
-                'msg':'你还没有加入这个小组哦',
-                'success':false
-            })
-            return;
-        }
         userId = req.query.id;//别人的，有可能是选的，有可能是默认的
         time = req.query.timeStamp;
         if(time==='null')time = null;
@@ -196,6 +188,15 @@ router.use('/updateTask.do',function(req,res){
 //获取所有周报接口
 router.use('/getAllTasksByUserId.do',function(req,res){
     console.log("所有:")
+    //如果是别人的,看看自己有没有小组资格
+    console.log("checkis"+req.session['user'].check);
+    if(req.session['user'].check===0){
+        res.send({
+            'msg':'你还没有加入任何小组哦',
+            'success':false
+        })
+        return;
+    }
     console.log(req.body);
     let msg  = req.body;
     let pageParams = msg.pageParams;

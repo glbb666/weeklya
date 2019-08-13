@@ -6,7 +6,7 @@
     ></busy2>
     <div id="findPart" v-show="!show">
       <div id="findContain">
-        <table>
+        <table v-show="this.$store.state.pageList.length">
           <thead>
           <tr>
             <th>账户名</th>
@@ -60,6 +60,7 @@
           url='weekly_war/user/getAllUser.do'
           pageSize=7
           type='user'
+          pwords="暂时没有可以管理的用户哦~"
         ></dpage> 
       </div>
     </div>
@@ -145,7 +146,7 @@ import {exit} from '../../../../assets/common'
       },2000);
     },
     beforeRouteLeave(from,to,next){
-      this.$store.dispatch('setPage',null)
+      this.$store.dispatch('setPage',[])
       next();
     }
   }

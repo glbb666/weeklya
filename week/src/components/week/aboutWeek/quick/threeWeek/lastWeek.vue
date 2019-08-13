@@ -7,22 +7,22 @@
         :userId=userId
       ></selectWeek>
       <div>
-          <taskBorder :pi="i"
-                      :pitem="item" 
-                      :plist="list" 
-                      class="detail" 
-                      v-for="(item,i) in list||plastTask" 
-                      :key="i" 
-                      :flag="flag"
-                      type='last'
-                      color="#686fbf"
-                      backgroundColor="#3240dd"
-                      taskColor="#f7f7f9"
-          ></taskBorder>
+      <taskBorder :pi="i"
+                  :pitem="item" 
+                  :plist="list" 
+                  class="detail" 
+                  v-for="(item,i) in list||plastTask" 
+                  :key="i" 
+                  :flag="flag"
+                  type='last'
+                  color="#686fbf"
+                  backgroundColor="#3240dd"
+                  taskColor="#f7f7f9"
+      ></taskBorder>
       </div>
       <empty :plist="list||plastTask"
               backgroundColor='#f7f7f9'
-              words='周报'
+              words='快去填写周报八~'
               width='75%'
       ></empty>
     </div>

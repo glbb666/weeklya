@@ -9,7 +9,13 @@
 			<div class="pop-cont">
 				{{words}}
 			</div>
-			<div class="pop-btn" @click="popnone">确定</div>
+			<div class="pop-box" v-if="type!==2">
+				<button @click="popnone(false)" class="pop-btn">确定</button>
+			</div>
+			<div class="pop-box" v-else>
+				<button class="pop-btn" @click="popnone(true)">去加入</button>
+				<button class="pop-btn" @click="popnone(false)"> 算了</button>
+			</div>
 		</div>
 	</div> 
 </template>
@@ -18,9 +24,13 @@
 export default {
 	name : 'pop',
 	methods : {
-		popnone () {
+		popnone (go) {
+			console.log(go);
+			if(go){
+				this.$router.replace('/week/person/information');
+			}
 			this.$store.dispatch("showpop",{'popif' : false,'words' : '','type' : 0});
-		}
+		},
 	},
 	props : ['words','type']
 }
@@ -47,7 +57,6 @@ export default {
 	margin: 50% auto;
 	background-color: white;
 }
-
 .pop-bd .pop-hd {
 	width: 100%;
 	height: 55%;
@@ -77,13 +86,17 @@ export default {
 	width: 30%;
 	border-radius: 90px;
 	height: 15%;
-	margin: 3% auto;
+	margin: 3% ;
 	line-height: 50px;
 	font-size: 25px;
 	text-align: center;
 	color:white;
 	background-color: #686fbf;
 	cursor: pointer;
+}
+.pop-box{
+	display:flex;
+	justify-content: center;
 }
 i{
 	display: block;

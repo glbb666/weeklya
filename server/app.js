@@ -25,6 +25,7 @@ var ws = require('nodejs-websocket');
 ws.createServer(function(conn){
     var timer;
     let count = 0;
+    var sendArr;
     conn.on('text', function(id) {
         timer = setInterval(() => {
             if(id) {
@@ -79,13 +80,12 @@ ws.createServer(function(conn){
                             result[i].pic = 'data:image/png;base64,' +cont.toString('base64');
                         }  
                     }
-                    await poolP.poolPromise(pool,updateSql).then(()=>{
-                        var mes = {
-                            'result':result,
-                            'msg':'加入信息'
-                        }
-                        conn.sendText(JSON.stringify(mes));
-                    });
+                    var mes = {
+                        'result':result,
+                        'msg':'加入信息'
+                    }
+                    conn.sendText(JSON.stringify(mes));
+                    await poolP.poolPromise(pool,updateSql);
                 }
                 asyncMsg().catch((err)=>{
                     console.log(err);

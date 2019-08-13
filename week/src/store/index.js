@@ -10,7 +10,8 @@ const store = new Vuex.Store({
             type:0
         },
         pageList:[],
-        messageList:[]
+        messageList:[],
+        messageCount:0
     },
     getters:{//等于vue的computed
         getStateTime:function(state){
@@ -28,6 +29,9 @@ const store = new Vuex.Store({
         },
         SETMESSAGE(state,newMessageList){
             state.messageList = newMessageList;
+        },
+        SETMESCOUNT(state,newMessageCount){
+            state.messageCount = newMessageCount;
         }
     },
     actions:{
@@ -39,6 +43,9 @@ const store = new Vuex.Store({
         },
         setMessage(context,newMessageList){
             context.commit('SETMESSAGE',newMessageList)
+        },
+        setMesCount(context,newMessageCount){
+            context.commit('SETMESCOUNT',newMessageCount)
         }
     }
 }) 

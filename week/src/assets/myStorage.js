@@ -1,15 +1,18 @@
 var myStorage = {
     setItem(key,val,...rest){
-        if(key==='list'){
+        var arr = ['list','msgCount']
+        if(arr.indexOf(key)!==-1){
             window.localStorage.setItem(key,JSON.stringify(val));
             var _this = rest[0];
-            _this.$store.dispatch("setMessage",val);
+            var method;
+            method = key==='list'?"setMessage":"setMesCount";
+            _this.$store.dispatch(method,val);
             return;
         }
         window.localStorage.setItem(key,val);
     },
     getItem(key,...rest){
-        var arr = ['list']
+        var arr = ['list','msgCount']
         if(arr.indexOf(key)!==-1){
             return JSON.parse(window.localStorage.getItem(key));
         }

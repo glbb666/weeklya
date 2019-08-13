@@ -9,14 +9,15 @@
         <li><router-link to="/week/person">个人</router-link></li>
       </ul>
       <div id="name">
-        <router-link to="/week/person">
           <div id="photo"><span></span></div>
-          {{name}}
-        </router-link>
-        <router-link to="/week/person/mail" v-if="true">
-            <el-badge is-dot class="item">
-              <i class="el-icon-message"></i>
-            </el-badge>
+          <span>{{name}}</span>
+      </div>
+      <div id="mail">
+        <router-link @click.native="clearZero" to="/week/person/mail" v-if="!isBig">
+          <span class="dot" v-if="this.$store.state.messageCount>0">
+            {{this.$store.state.messageCount}}
+          </span>
+          <i class="el-icon-message"></i>
         </router-link>
       </div>
       <button id="dropOut" @click="out"><Icon type="md-exit" title="退出"/></button>
@@ -36,14 +37,18 @@ import myStorage from '../../assets/myStorage'
         name: '',
         add: false,//默认不显示
         time:'',
-        ws:null
+        ws:null,
+        isBig:null
       }
     },
     methods: {
-        out(){
+      out(){
           var dropOut = confirm("你确定要退出登录吗？");
           if(dropOut){
-            this.ws.close();
+            console.log(this.ws);
+            if(this.ws){
+               this.ws.close();
+            }
             this.$axios.get('weekly_war/user/logout.do').then(res=>{  
               res = res.data;
               exit(this);
@@ -63,14 +68,29 @@ import myStorage from '../../assets/myStorage'
               };
               ws.onmessage = function(evt) {
                 //从服务器接受数据
+                try{
                   var list = myStorage.getItem('list');
+                  var count = myStorage.getItem('msgCount');
                   var mlist = JSON.parse(evt.data).result;
+                  var userStatus = myStorage.getItem('userStatus');
+                  for(let item of mlist){
+                    console.log(item);
+                    console.log(item.mes_accept);
+                    if(userStatus==='administor'&&item.mes_send === 0){
+                      count++;
+                    }
+                    if(userStatus==='none'&&item.mes_accept === 0){
+                      count++;
+                    }
+                  }
                   list = [...mlist,...list];
                   myStorage.setItem('list',list,_this);
-                  console.log(mlist);
+                  myStorage.setItem('msgCount',count,_this);
+                }catch(e){
+                  ws.close();
+                }
               };
               ws.onclose = function() {
-                  // 关闭 websocket
                   showPopError('连接已关闭',_this);
                   exit(_this);
               };
@@ -79,6 +99,10 @@ import myStorage from '../../assets/myStorage'
               // 浏览器不支持 WebSocket
                showPopError('您的浏览器不支持websocket',this);
           }
+      },
+      clearZero(){
+        console.log(2321);
+        myStorage.setItem('msgCount',0,this);
       }
     },
     mounted(){
@@ -87,13 +111,18 @@ import myStorage from '../../assets/myStorage'
         document.getElementById('photo').style = "background:"+ 'url(\''+window.localStorage.getItem('pic')+'\') no-repeat'+ ';background-position:center;background-size:auto 100%;background-color: white;'
       }
     },
-    created(){
+    beforeCreate(){
       //大管理员不需要消息盒子
-        if(window.localStorage.getItem('userStatus')!=='big_administor'){
-          var list = [];
-          myStorage.setItem('list',list,this);
-          this.ws = this.WebSocketTest();
+        this.isBig = myStorage.getItem('userStatus')==='big_administor';
+        if(!this.isBig){
+          myStorage.setItem('list',[],this);
+          myStorage.setItem('msgCount',0,this);
         }
+    },
+    created(){
+      if(!this.isBig){
+        this.ws = this.WebSocketTest();
+      }
     }
   }
 </script>
@@ -136,38 +165,69 @@ import myStorage from '../../assets/myStorage'
   }
   #name{
     height: 100%;
-    display: inline-flex;
+    display:flex;
     flex:auto;
-    margin-right: 20px;
-    flex-wrap: nowrap;
     color: #fff;
     font-size: 20px;
     overflow: hidden;
+    align-items: center;
   }
   #name a{
     color: #fff;
     height: 100%;
-    width: 100%;
     display: flex;
-    flex-shrink: 0;
-    /* min-width: 100px; */
     align-items: center;
+    margin-right: 20px;
+  }
+  #name a span{
+      display: inline-flex;
+      height: 100%;
+      flex:auto;
+      flex-wrap: nowrap;
+      justify-content: center;
   }
   #mail{
     flex: auto;
+    height: 100%;
+    margin-right: 2%;
   }
   #mail a{
+      position: relative;
       color: #fff;
       height: 100%;
       display: inline-flex;
       align-items: center;
+      padding: 0 10px;
+  }
+  #mail a i{
+      font-size: 28px;
+      font-weight: 500;
+      margin-bottom: -3px;
+  }
+  #mail a span{
+    position: absolute;
+    height: 18px;
+    line-height: 18px;
+    display: block;
+    border-radius: 10px;
+    background-color: #f56c6c;
+    color: #fff;
+    font-size: 12px;
+    padding: 0 6px;
+    border: 1px solid #fff;
+    text-align: center;
+    white-space:nowrap;
+    top: 10px;
+    right: -18px;
   }
   #dropOut{
      color: #fff;
-     flex: auto;
+     padding: 10px;
+     margin-right: 2%;
      display: inline-block;
      height: 100%;
-     font-size: 25px;
+     font-size: 28px;
+     line-height: 28px;
   }
   #photo{
     display: inline-block;
@@ -179,12 +239,4 @@ import myStorage from '../../assets/myStorage'
     margin-right: 5%;
     position: relative;
   }
-  .item {
-  margin-top: 4px;
-  font-size:28px;
-  padding: 0 10px;
-}
-.ivu-icon{
-  font-size: 28px;
-}
 </style>

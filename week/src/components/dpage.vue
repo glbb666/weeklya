@@ -1,18 +1,28 @@
 <template>
-    <ul id="findPage">
-        <li @click="page=1">第一页</li>
-        <li @click="changePage(-1,true)" ref="pre">上一页</li>
-        <li v-for="item in pageList" @click="page=item" :ref="item">{{item}}</li>
-        <li @click="changePage(1,true)" ref="next">下一页</li>
-        <li @click="page=totalPage">最末页</li>
-    </ul>
+    <div>
+      <empty
+        :words="pwords"
+        :plist="this.$store.state.pageList"
+        width="100%"
+        backgroundColor="#f7f7f9"
+      >
+      </empty>
+      <ul id="findPage" v-show="this.$store.state.pageList.length">
+          <li @click="page=1">第一页</li>
+          <li @click="changePage(-1,true)" ref="pre">上一页</li>
+          <li v-for="item in pageList" @click="page=item" :ref="item">{{item}}</li>
+          <li @click="changePage(1,true)" ref="next">下一页</li>
+          <li @click="page=totalPage">最末页</li>
+      </ul>
+    </div>
 </template>
 <script>
-import {showPopError,showPopRight} from '../../static/pop.js'
+import {showPopError,showPopRight,showPopJoin} from '../../static/pop.js'
 import {exit} from '../assets/common'
+import empty from './empty'
 export default {
     name:'dpage',
-    props:['url','pageSize','type'],
+    props:['url','pageSize','type','pwords'],
     data(){
         return{
             list:[],
@@ -48,7 +58,8 @@ export default {
               if(this.type==='user'){
                  this.initial(result.tasks);
               }
-              this.$store.dispatch('setPage',result.tasks);    
+              this.$store.dispatch('setPage',result.tasks);
+              console.log(this.$store.state.pageList);
               result.totalPage?this.totalPage=result.totalPage:null;
               this.setPageList(5);
               this.checkPage();
@@ -58,7 +69,12 @@ export default {
                    exit(this);
                    return;
               }
-              showPopError(result.msg,this)
+              if(this.type==='task'){
+                  this.$router.go(-1);
+                  showPopJoin(result.msg,this);
+                  return;
+              }
+              showPopError(result.msg,this);
             }
           });
         },
@@ -73,11 +89,11 @@ export default {
         checkPage(){
           this.$nextTick(function(){
                   if(this.preLi){
-                  this.preLi.classList.remove('select');
+                    this.preLi.classList.remove('select');
                   }
                   if(this.$refs[this.page]){
-                  this.$refs[this.page][0].classList.add('select');
-                  this.preLi =  this.$refs[this.page][0];
+                    this.$refs[this.page][0].classList.add('select');
+                    this.preLi =  this.$refs[this.page][0];
                   }  
           })
             if(this.page === 1){
@@ -85,7 +101,7 @@ export default {
             }else{
                 this.$refs['pre'].classList.remove('unClick');
             }
-            if(this.page===this.totalPage){
+            if(this.page>=this.totalPage){
                 this.$refs['next'].classList.add('unClick');
             }else{
                 this.$refs['next'].classList.remove('unClick');
@@ -108,6 +124,9 @@ export default {
             console.log(item);
           }
         }
+    },
+    components:{
+      empty
     },
     created(){
       this.getInfo();

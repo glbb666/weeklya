@@ -12,15 +12,23 @@ function showPopRight(mes,_this){
         type: 1
     });
 }
-function showPopWarning(mes,_this) {
+function showPopJoin(mes,_this) {
     _this.$store.dispatch("showpop",{
         popif: true,
         words: mes,
         type: 2
     });
 }
+function showPopWarning(mes,_this){
+    _this.$store.dispatch('showpop',{
+        popif:true,
+        words:mes,
+        type:3
+    })
+}
 export {
     showPopRight,
     showPopError,
+    showPopJoin,
     showPopWarning
 }
