@@ -87,8 +87,26 @@ export default {
     height: 100%;
     display: flex;
   }
-  /*会议记录*/
-  #history{
-    margin-left: 69px;
-  }
+  /* 复选框初始化 */
+ .el-checkbox__inner{
+    width: 20px;
+    height: 20px;
+}
+.el-checkbox{
+    font-size: 20px;
+}
+.el-checkbox__input.is-checked .el-checkbox__inner, .el-checkbox__input.is-indeterminate .el-checkbox__inner {
+    background-color: #a7a7cc;
+    border-color: #a7a7cc;
+}
+.el-checkbox__inner:hover{
+    border-color: #a7a7cc;
+}
+.el-checkbox__input.is-focus .el-checkbox__inner{
+    border-color: #a7a7cc;
+}
+.el-checkbox__inner::after{
+    height: 14px;
+    left: 8px;
+}
 </style>

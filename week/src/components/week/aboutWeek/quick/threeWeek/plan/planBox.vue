@@ -2,12 +2,10 @@
     <div id="thisPlan">
       <h1>本周计划</h1>
       <div class="inner" >
-        <div v-for="(item,i) in pthisPlan" :key="i">
-          <h2>{{i+1}}.</h2>
-          <div v-for="(item,j) in pthisPlan[i].weekly_taskName">
-            <h3>{{pthisPlan[i].weekly_taskName[j]}}</h3>
-            <p>{{pthisPlan[i].weekly_content[j]}}</p>    
-          </div>
+        <div v-for="(item,i) in pthisPlan" :key="item.weekly_taskData">
+          <checkPlan 
+            :item="item"
+          ></checkPlan>
         </div>
       </div>
       <empty :plist="pthisPlan"
@@ -17,7 +15,7 @@
 </template>
 <script>
 import empty from '../../../../../empty'
-
+import checkPlan from './checkPlan/checkPlan'
 export default {
     name:'planBox',
     data(){
@@ -27,7 +25,8 @@ export default {
     },
     props:['pthisPlan'],
     components:{
-      empty
+      empty,
+      checkPlan
     }
 }
 </script>
@@ -56,27 +55,12 @@ export default {
    text-align: center;
    height: 55px;
    line-height: 55px;
+   font-weight: 400;
+   letter-spacing: 4px;
  }
  #thisPlan .inner{
   width: 100%;
   /* height: 90%; */
- }
- #thisPlan .inner p{
-    width: 100%;
-    background-color: #fff;
-    border-radius: 7px;
-    padding: 10px;
-    margin-bottom: 5px;
-    word-wrap: break-word;
-    position: sticky;
-    top: 500px;
-    background-color: #f7f7f9;
- }
- h3{
-   /* height: 55px; */
-   line-height: 55px;
-   width: 100%;
-   word-wrap: break-word;
  }
   #empty{
   border-radius: 7px;

@@ -114,17 +114,13 @@ import myStorage from '../../assets/myStorage'
         document.getElementById('photo').style = "background:"+ 'url(\''+window.localStorage.getItem('pic')+'\') no-repeat'+ ';background-position:center;background-size:auto 100%;background-color: white;'
       }
     },
-    beforeCreate(){
-      //大管理员不需要消息盒子
-        this.isBig = myStorage.getItem('userStatus')==='big_administor';
-        if(!this.isBig){
+    created(){
+     //大管理员不需要消息盒子
+      this.isBig = myStorage.getItem('userStatus')==='big_administor';
+      if(!this.isBig){
           myStorage.setItem('list',[],this);
           myStorage.setItem('msgCount',0,this);
-        }
-    },
-    created(){
-      if(!this.isBig){
-        this.ws = this.WebSocketTest();
+          this.ws = this.WebSocketTest();
       }
     }
   }

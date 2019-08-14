@@ -247,4 +247,22 @@ router.use('/deleteTask.do',function(req,res){
         res.send(JSON.stringify(data));
     })
 })
+//计划是否完成接口
+router.use('/checkFinished',function(req,res){
+    let {id,checked} = req.query;
+    let updateSql = myselfSql.update('content',['weekly_check'],[checked],'weekly_id='+id);
+    let promise = poolP.poolPromise(pool,updateSql);
+    promise.then(()=>{
+        res.send({
+            'msg':'修改成功',
+            'success':true
+        })
+    }).catch((err)=>{
+        console.log(err);
+        res.send({
+            'msg':'服务器错误',
+            'success':false
+        })
+    })
+})
 module.exports = router;

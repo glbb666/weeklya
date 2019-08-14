@@ -40,7 +40,7 @@ ws.createServer(function(conn){
                             'success' : false,
                             'result' : '用户没有此权限'
                         }
-                        conn.sendText(mes);
+                        conn.sendText(JSON.stringify(mes));
                         clearInterval(timer);
                         return;
                     }
