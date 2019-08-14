@@ -12,7 +12,7 @@
                   :plist="list" 
                   class="detail" 
                   v-for="(item,i) in list||plastTask" 
-                  :key="i" 
+                  :key="item.weekly_taskData"
                   :flag="flag"
                   type='last'
                   color="#686fbf"

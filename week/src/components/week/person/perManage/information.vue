@@ -24,7 +24,7 @@
       <label for="">
         <div>学习方向</div>
             <select v-model="learningDirection" >
-              <option :value="item.text" v-for="(item,index) in directionList" :key="index">{{item.text}}</option>
+              <option  v-for="(item,index) in directionList" :key="index">{{item}}</option>
             </select>
       </label>
       <label for="">
@@ -38,7 +38,7 @@
           <label for="">
            个人状态
             <select v-model="state">
-              <option :value="item.text" v-for="(item,index) in stateList" :key="index">{{item.text}}</option>
+              <option  v-for="(item,index) in stateList" :key="index">{{item}}</option>
             </select>
           </label>
           <label for="">
@@ -63,16 +63,16 @@ export default {
           return {
             keywords:'',
             directionList:[
-              {text:'前端'},
-              {text:'后台'},
-              {text:'视觉'},
-              {text:'产品'},
-              {text:'ios'},
-              {text:'Andriod'}
+              '前端',
+              '后台',
+              '视觉',
+              '产品',
+              'ios',
+              'Andriod'
             ],
             stateList:[
-              {text:'在校'},
-              {text:'离校'}
+              '在校',
+              '离校'
             ],
             username:'',
             learningDirection:'',

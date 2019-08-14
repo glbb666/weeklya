@@ -7,7 +7,7 @@
         ></busy2>
        <div id="findPart" v-show="!show">
           <div id="findContain" >
-            <table v-show="this.$store.state.pageList.length">
+            <table v-show="spageList.length">
               <thead>
               <tr>
                 <th>所属组别</th>
@@ -18,12 +18,23 @@
               </thead>
               <tbody>
                 <!--此处不能用user_id,否则会报错-->
-              <tr v-for="item in this.$store.state.pageList" :key="item.weekly_id">
+              <tr v-for="item in spageList" :key="item.weekly_id">
                 <td>{{item.user_learningDirection}}</td>
                 <td>{{item.user_name}}</td>
                 <td>{{formatDateTime(item.weekly_taskData)}}</td>
                 <td>
-                  <router-link :to="{path:'/week/aboutWeek/other/quick/'+week(formatDateTime(item.weekly_taskData)),query:{userId:item.user_id,timeStamp:week(formatDateTime(item.weekly_taskData))==='lastWeek'?item.weekly_taskData:null}}" class="looking" >查看</router-link>
+                  <router-link 
+                  :to="{
+                        path:'/week/aboutWeek/other/quick/'+week(item.weekly_taskData),
+                        query:{
+                          userId:item.user_id,
+                          timeStamp:week(item.weekly_taskData)==='lastWeek'?item.weekly_taskData:null
+                          }
+                        }"
+                    class="looking"
+                  >
+                  查看
+                  </router-link>
                 </td>
               </tr>
               </tbody>
@@ -54,6 +65,11 @@ import empty from '../../../empty'
         show:true
       }
     },
+    computed:{
+      spageList:function(){
+        return this.$store.state.pageList;
+      }
+    },
     methods:{
       formatDateTime(timeStamp){
         return formatDateTime(timeStamp);
@@ -62,6 +78,7 @@ import empty from '../../../empty'
         return getYearWeek(weekTime)
       },
       week(time){
+          time = this.formatDateTime(time);
           time = new Date(time);
           let curWeek = getYearWeek(time)
           var now = getYearWeek(new Date());

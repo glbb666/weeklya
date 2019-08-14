@@ -11,6 +11,7 @@
                       :pitem="item"
                       :plist="pthisTask" 
                       :flag="flag"
+                      :key="item.weekly_taskData"
                       type='this'
                       color="#686fbf"
                       backgroundColor="#3240dd"

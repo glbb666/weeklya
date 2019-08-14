@@ -7,13 +7,18 @@
           <img src="../../../static/1/false.png" alt="" class="false" @click="del('user',$event)">
         </label>
         <label>
-          <input type="password" v-model="password" maxlength="18" id="password" placeholder="PassWord">
+          <input type="password" v-model="password" maxlength="18" id="password" placeholder="PassWord" 
+          >
           <img src="../../../static/1/false.png" alt="" class="false" @click="del('password',$event)">
         </label>
         <div class="buttonRange">
           <p @click="change('c')" id="fp">忘 记 密 码 ？</p>
-          <input type="button" value="登录" class="btn" @click="postInfo($event,'weekly_war/user/login.do')">
-
+          <input 
+            type="button"
+            value="登录" 
+            class="btn"
+            @click="postInfo($event,'weekly_war/user/login.do')"
+          >
           <p>Don't have an account？</p>
           <router-link to="register" class="btn" id="rbtn">注册</router-link>
         </div> 
@@ -73,6 +78,7 @@ export default {
   },
   methods:{
     postInfo(e,url){
+      console.log(e);
       console.log(url)
       var data = {}
       data.userName = this.user;

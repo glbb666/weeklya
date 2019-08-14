@@ -11,6 +11,7 @@
                       :pitem="item"
                       :plist="pnextPlan"
                       :flag="flag"
+                      :key="item.weekly_taskData"
                       type="next"
                       color="#686fbf"
                       backgroundColor="#3240dd"

@@ -27,25 +27,21 @@
     >
       <!-- pitem.weekly_taskName是一个数组 -->
       <!-- 能不能提交的状态由笔和是不是新创建的同时决定，只要满足一个即可 -->
-      <div                   
-        v-if="update"
-      >
         <taskContent 
                     :pi="i"
                     :pitem="pitem"
                     :preadOnly="pitem.weekly_id?readOnly:null"
                     :ppostAble ="postAble||(type!=='last'&&!plist[pi].weekly_id)"
-                    v-for="(item,i) in pitem.weekly_taskName" 
+                    v-for="(item,i) in pitem.weekly_taskName"
                     :key="i"
                     :type="type"
                     :color="color"
                     :backgroundColor="backgroundColor"
                     :taskColor="taskColor"
         ></taskContent>
-      </div>
       <button class="poBtn"
               v-show="postAble||(type!=='last'&&!plist[pi].weekly_id)"
-              @click="postTask($event)"
+              @click.once="postTask($event)"
               :style="{
                 backgroundColor:backgroundColor
               }" 
@@ -64,8 +60,7 @@
     data() {
       return {
           readOnly:'readOnly',
-          postAble:false,
-          update:true
+          postAble:false
       }
     },
     methods: {
@@ -139,14 +134,7 @@
               if (res.code==2000){
                 showPopRight('提交成功',this);        
                 if(res.weekly_id){
-                  this.plist[this.pi].weekly_id = res.weekly_id; 
-                  Object.assign(this.plist[this.pi],{weekly_id:res.weekly_id});
-                  // 在组件移除后，重新渲染组件
-                  // this.$nextTick可实现在DOM 状态更新后，执行传入的方法。     
-                  this.update = false;
-                  this.$nextTick(() => {
-                      this.update = true;
-                  })
+                  this.$set(this.plist[this.pi],'weekly_id',res.weekly_id);
                 }
                   this.postAble = false;
                   this.readOnly = 'readOnly';                  

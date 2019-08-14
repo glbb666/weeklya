@@ -7,10 +7,10 @@
         <ul>
           <li v-for="(item,i) in ableTo" :key="i">
             <router-link :to="item">
-             <i class="el-icon-message" v-if="i===2&&notBig&&className==='quick'"></i>
+             <i class="el-icon-message" v-if="mail(i)"></i>
             <span
               :class=[className]
-              v-if="i!==2||!notBig||className!=='quick'"
+              v-if="!mail(i)"
             >  
             </span>{{nameArr[i]}}</router-link>
           </li>
@@ -43,6 +43,11 @@
                 }
             }
             return arr;
+        },
+        mail:function(){
+          return function(i){
+            !!i===2&&this.notBig&&this.className==='quick';
+          }
         }
     },
     created(){

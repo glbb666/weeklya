@@ -14,8 +14,8 @@
       </div>
       <div id="mail">
         <router-link @click.native="clearZero" to="/week/person/mail" v-if="!isBig">
-          <span class="dot" v-if="this.$store.state.messageCount>0">
-            {{this.$store.state.messageCount}}
+          <span class="dot" v-show="count>0">
+            {{count}}
           </span>
           <i class="el-icon-message"></i>
         </router-link>
@@ -38,7 +38,12 @@ import myStorage from '../../assets/myStorage'
         add: false,//默认不显示
         time:'',
         ws:null,
-        isBig:null
+        isBig:null,
+      }
+    },
+    computed:{
+      count(){
+        return this.$store.state.messageCount;
       }
     },
     methods: {
@@ -100,7 +105,6 @@ import myStorage from '../../assets/myStorage'
           }
       },
       clearZero(){
-        console.log(2321);
         myStorage.setItem('msgCount',0,this);
       }
     },

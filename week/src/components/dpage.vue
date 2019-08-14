@@ -2,12 +2,12 @@
     <div>
       <empty
         :words="pwords"
-        :plist="this.$store.state.pageList"
+        :plist="spageList"
         width="100%"
         backgroundColor="#f7f7f9"
       >
       </empty>
-      <ul id="findPage" v-show="this.$store.state.pageList.length">
+      <ul id="findPage" v-show="spageList.length">
           <li @click="page=1">第一页</li>
           <li @click="changePage(-1,true)" ref="pre">上一页</li>
           <li v-for="item in pageList" @click="page=item" :ref="item">{{item}}</li>
@@ -31,6 +31,11 @@ export default {
             preLi:null,
             pageList:null
         }
+    },
+    computed:{
+      spageList:function(){
+        return this.$store.state.pageList;
+      }
     },
     watch:{
       'type':function(){
@@ -59,7 +64,6 @@ export default {
                  this.initial(result.tasks);
               }
               this.$store.dispatch('setPage',result.tasks);
-              console.log(this.$store.state.pageList);
               result.totalPage?this.totalPage=result.totalPage:null;
               this.setPageList(5);
               this.checkPage();

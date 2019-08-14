@@ -7,16 +7,15 @@
         <empty
                 id="empty"
                 v-show = "!show"
-                :plist="this.$store.state.messageList"
+                :plist="msgList"
                 words='暂时没有消息呢~'
                 width='75%'
         ></empty>
        <div id="new" 
-                v-show = "!show"
-                v-if="this.$store.state.messageList.length"
+                v-show = "!show&&msgList.length"
         >
            <h3>新的成员</h3>
-           <div class="message" v-for="(item,i) in this.$store.state.messageList" :key ="i">
+           <div class="message" v-for="(item,i) in msgList" :key ="i">
                <img :src="item.pic" alt="">
                <div class="detail">
                     <p id="name">{{item.user_name}}</p>
@@ -55,8 +54,10 @@ import myStorage from '../../../../assets/myStorage';
             list:[]
         }
     },
-    methods:{
-        
+    computed:{
+        msgList:function(){
+            return this.$store.state.messageList
+        }
     },
     components:{ 
         busy2,
