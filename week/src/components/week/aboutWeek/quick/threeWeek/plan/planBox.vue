@@ -55,13 +55,31 @@ export default {
    text-align: center;
    height: 55px;
    line-height: 55px;
-   font-weight: 400;
-   letter-spacing: 4px;
  }
  #thisPlan .inner{
   width: 100%;
   /* height: 90%; */
  }
+ #thisPlan .inner p{
+    width: 100%;
+    background-color: #fff;
+    border-radius: 7px;
+    padding: 10px;
+    margin-bottom: 5px;
+    word-wrap: break-word;
+    position: sticky;
+    top: 500px;
+    background-color: #f7f7f9;
+ }
+ /* h1{
+   font-weight: 500;
+   letter-spacing: 3px;
+ }
+ h3{
+   line-height: 55px;
+   width: 100%;
+   word-wrap: break-word;
+ } */
   #empty{
   border-radius: 7px;
   padding: 10px;

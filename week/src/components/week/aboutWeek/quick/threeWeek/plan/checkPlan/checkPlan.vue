@@ -5,12 +5,12 @@
             @change="getInfo(item.weekly_id)"
         >
         </el-checkbox>
-        <div>
+        <div class="checkOuter">
             <div ref="checkTask" class="checkTask" v-for="(task,j) in item.weekly_taskName">
                 <h3>{{item.weekly_taskName[j]}}</h3>
                 <p>{{item.weekly_content[j]}}</p>    
             </div>
-        </div>      
+        </div>
     </div>
 </template>
 <script>
@@ -25,13 +25,12 @@ export default {
     },
     methods:{
         getInfo(id){
-            console.log(id);
+            this.changeCheck('toggle');
             var ck;
             ck = this.checked?1:0;
             this.$axios.get('weekly_war/task/checkFinished?id='+id+'&checked='+ck).then(result=>{
                 result = result.data;
                 if (result.success) {
-                    this.changeCheck('toggle');
                     this.$set(this.item,'weekly_check',ck);
                 } else {
                     if(result.code===1000){
@@ -69,8 +68,16 @@ export default {
     border-bottom:1px solid rgb(247, 247, 249);
     align-items: center;
 }
+.checkOuter{
+    width: 80%;
+}
 .checkTask{
     padding-top: 10px;
+    width: 100%;
+}
+.checkTask p{
+    /* width: 100%; */
+    word-wrap: break-word;
 }
 .delete{
     text-decoration: line-through;
