@@ -18,8 +18,7 @@
               :pthisTask="thisTask" 
               :pthisPlan="thisPlan" 
               :pnextPlan="nextTask" 
-              id="weekBox" 
-              :flag="flag"   
+              :flag="flag"
               :userId="userId"
               :timeStamp="timeStamp"
         ></router-view>     
@@ -35,10 +34,10 @@ import {exit} from '../../../../assets/common'
     data() {
       return {
         add: false,//默认不显示
-        lastTask:'',
-        thisTask:'',
-        thisPlan:'',
-        nextTask:'',
+        lastTask:[],
+        thisTask:[],
+        thisPlan:[],
+        nextTask:[],
         userId:null,
         timeStamp:null,
         flag:true,

@@ -27,6 +27,9 @@ export default {
     components:{
       empty,
       checkPlan
+    },
+    created(){
+      console.log(this.pthisPlan); 
     }
 }
 </script>

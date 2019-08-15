@@ -19,7 +19,9 @@
           ></taskBorder>
       </div>
     </div>
-    <planBox :pthisPlan="pthisPlan"></planBox>
+    <planBox :pthisPlan="pthisPlan"
+             v-bind="$attrs"
+    ></planBox>
    
     <empty :plist="pthisTask"
             words='快去填写周报八~'
@@ -37,7 +39,8 @@
 
   export default {
     name: "thisWeek",
-    props:['pthisTask','pthisPlan','flag'],
+    inheritAttrs:false,
+    props:['pthisTask','flag','pthisPlan'],
     data() {
       return {
       }

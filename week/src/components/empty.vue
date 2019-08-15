@@ -11,7 +11,12 @@
 <script>
 export default {
     name:'empty',
-    props:['plist','backgroundColor','words','width'],
+    props:{
+        'plist':Array,
+        'backgroundColor':String,
+        'words':String,
+        'width':String
+    },
     data(){
         return{
         }

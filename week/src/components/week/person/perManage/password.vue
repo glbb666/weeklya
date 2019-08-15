@@ -2,6 +2,9 @@
       <!--主要内容-->
       <div id="contain">
         <div id="passwordModify">
+          <base-input v-on:hellodad="happy"
+                      
+          ></base-input>
           <label for="">
             <div>原密码</div>
             <input type="password" minlength="4" maxlength="18" v-model="oldPassword">
@@ -24,6 +27,7 @@
 <script>
 import { isRange, exit } from '../../../../assets/common';
 import {showPopError,showPopRight} from '../../../../../static/pop.js'
+import baseInput from '../../../base-input'
 export default {
     name: 'password',
     data () {
@@ -31,7 +35,8 @@ export default {
         name:'',
         oldPassword:'',
         newPassword:'',
-        confirmPassword:''
+        confirmPassword:'',
+        value:323
       }
     },
     methods:{
@@ -78,7 +83,14 @@ export default {
         }else{
           this.confirmPassword = ''
         }
+      },
+      happy(data){
+        console.log(data);
+        console.log('hello,my son');
       }
+    },
+    components:{
+      baseInput
     },
     created(){
       this.name = localStorage.getItem('username');

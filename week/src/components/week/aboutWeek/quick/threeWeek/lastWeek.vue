@@ -35,6 +35,7 @@
   import {formatDateTime} from '../../../../../assets/common'
   export default {
     name: "lastWeek",
+    inheritAttrs:false,
     props:['plastTask','flag','userId','timeStamp'],
     data() {
       return {
