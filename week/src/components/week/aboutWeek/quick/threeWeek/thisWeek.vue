@@ -20,7 +20,6 @@
       </div>
     </div>
     <planBox :pthisPlan="pthisPlan"
-             v-bind="$attrs"
     ></planBox>
    
     <empty :plist="pthisTask"

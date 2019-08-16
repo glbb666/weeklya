@@ -82,16 +82,24 @@
     color: #6e6e74;
     background-color: #f7f7f9;
     margin-left: 33px;
-    border-radius: 7px;
     width: 100%;
-    height:200px ;
+    /* height:200px ; */
     justify-content: space-around;
+  }
+  .task .taskTable:first-child{
+    border-radius: 7px 7px 0 0;
+  }
+  .task .taskTable:nth-last-child(2){
+    border-radius: 0 0 7px 7px;
+    padding-bottom: 38px;
   }
   .task .taskTable li{
     margin-left: 3%;
   }
-  .task .taskTable li div{
+  .task .taskTable:first-child li div{
     margin-top: 38px;
+  }
+  .task .taskTable li div{
     margin-left: -7px;
     letter-spacing: 2px;
     font-size: 16px;

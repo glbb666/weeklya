@@ -34,6 +34,7 @@
 
   export default {
     name: "nextWeek",
+    inheritAttrs:false,
     props:['pnextPlan','flag'],
     data() {
       return {

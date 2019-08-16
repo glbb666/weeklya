@@ -41,7 +41,7 @@
         ></taskContent>
       <button class="poBtn"
               v-show="postAble||(type!=='last'&&!plist[pi].weekly_id)"
-              @click.once="postTask($event)"
+              @click="postTask($event)"
               :style="{
                 backgroundColor:backgroundColor
               }" 

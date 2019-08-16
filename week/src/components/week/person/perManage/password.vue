@@ -2,9 +2,12 @@
       <!--主要内容-->
       <div id="contain">
         <div id="passwordModify">
-          <base-input v-on:hellodad="happy"
-                      
-          ></base-input>
+          <base-input>
+          <template v-slot:header>
+            <h1>是可爱阿甘</h1>
+          </template>
+          {{value}}
+          </base-input>
           <label for="">
             <div>原密码</div>
             <input type="password" minlength="4" maxlength="18" v-model="oldPassword">
