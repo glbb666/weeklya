@@ -44,13 +44,6 @@
       return {
       }
     },
-    watch:{
-      'pthisTask':function(){
-        if(this.pthisTask.length===0){
-          this.$emit('func',null);
-        }
-      }
-    },
     methods: {
       addTask(){
         this.pthisTask.unshift({

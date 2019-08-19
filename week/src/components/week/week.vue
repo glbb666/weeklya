@@ -37,7 +37,6 @@ import myStorage from '../../assets/myStorage'
         name: '',
         add: false,//默认不显示
         time:'',
-        ws:null,
         isBig:null,
       }
     },
@@ -49,11 +48,7 @@ import myStorage from '../../assets/myStorage'
     methods: {
       out(){
           var dropOut = confirm("你确定要退出登录吗？");
-          if(dropOut){
-            console.log(this.ws);
-            if(this.ws){
-               this.ws.close();
-            }
+          if(dropOut){            
             this.$axios.get('weekly_war/user/logout.do').then(res=>{  
               res = res.data;
               exit(this);
@@ -77,6 +72,7 @@ import myStorage from '../../assets/myStorage'
                   var list = myStorage.getItem('list');
                   var count = myStorage.getItem('msgCount');
                   var mlist = JSON.parse(evt.data).result;
+                  console.log(mlist);
                   var userStatus = myStorage.getItem('userStatus');
                   for(let item of mlist){
                     console.log(item);
@@ -98,7 +94,10 @@ import myStorage from '../../assets/myStorage'
               ws.onclose = function() {
                   exit(_this);
               };
-              return ws;
+              _this.$once('hook:beforeDestroy',function(){
+                console.log(ws);
+                ws.close();
+              })
           } else {
               // 浏览器不支持 WebSocket
                showPopError('您的浏览器不支持websocket',this);
@@ -120,9 +119,9 @@ import myStorage from '../../assets/myStorage'
       if(!this.isBig){
           myStorage.setItem('list',[],this);
           myStorage.setItem('msgCount',0,this);
-          this.ws = this.WebSocketTest();
+          this.WebSocketTest();
       }
-    }
+    },
   }
 </script>
 
