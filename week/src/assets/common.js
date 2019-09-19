@@ -86,17 +86,7 @@ function enter(result,_this){
        _this.$router.replace('/week');
 }
 function exit(_this){
-    window.localStorage.removeItem("username");
-    window.localStorage.removeItem("userId");
-    window.localStorage.removeItem("userLearningDirection");
-    window.localStorage.removeItem('list');
-    window.localStorage.removeItem("userStatus");
-    if(window.localStorage.getItem('pic')){
-        window.localStorage.removeItem("pic");
-    }
-    if(window.localStorage.getItem('msgCount')){
-        window.localStorage.removeItem("msgCount");
-    }
+    window.localStorage.clear();
     _this.$router.push('/');
 }
 function checkAddress(str){
