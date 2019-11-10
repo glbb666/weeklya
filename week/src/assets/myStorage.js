@@ -1,12 +1,13 @@
 var myStorage = {
     setItem(key,val,...rest){
-        var arr = ['list','msgCount']
-        if(arr.indexOf(key)!==-1){
+        var obj = {
+            'list':'setMessage',
+            'msgCount':'setMesCount'
+        };
+        if(obj[key]){
             window.localStorage.setItem(key,JSON.stringify(val));
             var _this = rest[0];
-            var method;
-            method = key==='list'?"setMessage":"setMesCount";
-            _this.$store.dispatch(method,val);
+            _this.$store.dispatch(obj[key],val);
             return;
         }
         window.localStorage.setItem(key,val);
