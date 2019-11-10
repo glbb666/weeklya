@@ -29,9 +29,11 @@ const store = new Vuex.Store({
         },
         SETMESSAGE(state,newMessageList){
             state.messageList = newMessageList;
+            window.localStorage.setItem('list',JSON.stringify(newMessageList));
         },
         SETMESCOUNT(state,newMessageCount){
             state.messageCount = newMessageCount;
+            window.localStorage.setItem('msgCount',JSON.stringify(newMessageCount));
         }
     },
     actions:{
