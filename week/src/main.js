@@ -19,7 +19,6 @@ Vue.config.productionTip = false
 Vue.prototype.$axios = axios
 Vue.prototype.$qs = qs
 /* eslint-disable no-new */
-// axios.defaults.headers.common['authKey'] = AUTH_TOEKN;
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';//配置全局请求头信息
 axios.defaults.withCredentials=true;//允许携带cookie
 new Vue({
