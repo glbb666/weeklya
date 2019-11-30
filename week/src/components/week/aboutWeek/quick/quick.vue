@@ -95,14 +95,12 @@ import {exit} from '../../../../assets/common'
       this.getInfo();
     }
     ,
-    beforeRouteLeave(to,from,next){
-      //如果是跳回快捷页面
-      if(to.path==="/week/aboutWeek/quick/thisWeek"){
+    beforeRouteUpdate(to,from,next){
+      //组件复用
         this.userId = null;
         this.flag = true;
         this.getInfo();
-      }
-      next();
+        next();
     }
   }
 </script>
