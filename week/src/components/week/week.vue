@@ -91,7 +91,7 @@ import myStorage from '../../assets/myStorage'
                   ws.close();
                 }
               };
-              ws.onclose = function() {
+              ws.onclose = function(){
                   exit(_this);
               };
               _this.$once('hook:beforeDestroy',function(){

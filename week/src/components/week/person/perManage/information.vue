@@ -197,7 +197,6 @@ export default {
             context.clearRect(0,0,targW,targH);
             //图片压缩
             context.drawImage(oImg,0,0,targW,targH);
-            var newUrl = canvas.toDataURL('image/jpeg', 0.5);
             //canvas转为blob并上传
             canvas.toBlob(function (blob) {
               var formData = new FormData();
