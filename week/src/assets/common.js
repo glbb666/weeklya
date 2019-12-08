@@ -82,12 +82,13 @@ function enter(result,_this){
        window.localStorage.setItem("userId",result.user.id)
        window.localStorage.setItem("userStatus",result.user.administor)
        window.localStorage.setItem("userLearningDirection",result.user.learningDirection)
+       window.localStorage.setItem("login","true")
        myStorage.setItem("list",[],_this);
        _this.$router.replace('/week');
 }
 function exit(_this){
-    window.localStorage.clear();
-    _this.$router.push('/');
+    window.localStorage.setItem('login','false');
+    _this.$router.replace('/home');
 }
 function checkAddress(str){
     var reg = /.+省.+市/;

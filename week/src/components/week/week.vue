@@ -51,7 +51,7 @@ import myStorage from '../../assets/myStorage'
           if(dropOut){            
             this.$axios.get('weekly_war/user/logout.do').then(res=>{  
               res = res.data;
-              exit(this);
+              exit(this);      
               showPopRight('退出成功',this)
             })
           }

@@ -30,23 +30,35 @@ export default new Router({
   routes: [
     {
       path:'/',
+      meta:{
+        login:['home']
+      },
       component:App,
       redirect:'/home',
     },
     {
       path:'/home',
       name:'home',
+      meta:{
+        login:['home']
+      },
       component:home,
       redirect:'/home/login',
       children:[
         {
           path:'login',
           name:'login',
+          meta:{
+            login:['home']
+          },
           component:login
         },
         {
           path:'register',
           name:'register',
+          meta:{
+            login:['home']
+          },
           component:register
         }
       ]
@@ -54,33 +66,51 @@ export default new Router({
     {
       path:'/week',
       name:'week',
+      meta:{
+        login:['week']
+      },
       component:week,
       children:[
         {
           path:'/week/aboutWeek',
           name:'aboutWeek',
+          meta:{
+            login:['week']
+          },
           component:aboutWeek,
           redirect:'/week/aboutWeek/quick',
           children:[
             {
               path:'quick',
               name:'quick',
+              meta:{
+                login:['week']
+              },
               component:quick,
               redirect:'/week/aboutWeek/quick/thisWeek',
               children: [
                 {
                   path:'lastWeek',
                   name:'lastWeek',
+                  meta:{
+                    login:['week']
+                  },
                   component:lastWeek
                 },
                 {
                  path:'thisWeek',
                  name:'thisWeek',
+                 meta:{
+                  login:['week']
+                },
                  component:thisWeek
                 },
                 {
                   path:'nextWeek',
                   name:'nextWeek',
+                  meta:{
+                    login:['week']
+                  },
                   component:nextWeek
                 }
               ]
@@ -88,23 +118,39 @@ export default new Router({
             {
               path:'other',
               name:'other',
+              meta:{
+                login:['week']
+              },
               component:other
             },
             {
               path:'other/quick',
+              name:'OtherQuick',
+              meta:{
+                login:['week']
+              },
               component:quick,
               redirect:'other/quick/thisWeek',
               children: [
                 {
                   path:'lastWeek',
+                  meta:{
+                    login:['week']
+                  },
                   component:lastWeek
                 },
                 {
                  path:'thisWeek',
+                 meta:{
+                  login:['week']
+                },
                  component:thisWeek
                 },
                 {
                   path:'nextWeek',
+                  meta:{
+                    login:['week']
+                  },
                   component:nextWeek
                 }
               ]
@@ -120,21 +166,51 @@ export default new Router({
             {
               path:'password',
               name:'password',
+              meta:{
+                login:['week']
+              },
               component:password
             },
             {
               path:'information',
               name:'information',
+              meta:{
+                login:['week']
+              },
               component:information
             },
             {
               path:'administrator',
               name:'administrator',
+              meta:{
+                login:['week'],
+                administor:['big_administor','administor']
+              },
+              beforeEnter:(to,from,next)=>{
+                var userStatus = window.localStorage.getItem('userStatus');
+                if(to.meta.administor.includes(userStatus)){
+                  next();
+                }else{
+                  next('/week');
+                }
+              },
               component:administrator
             },
             {
               path:'mail',
               name:'mail',
+              meta:{
+                login:['week'],
+                administor:['none','administor']
+              },
+              beforeEnter:(to,from,next)=>{
+                var userStatus = window.localStorage.getItem('userStatus');
+                if(to.meta.administor.includes(userStatus)){
+                  next();
+                }else{
+                  next('/week');
+                }
+              },
               component:mail
             }
           ]
@@ -143,31 +219,49 @@ export default new Router({
           path: 'workmate',
           name: 'workmate',
           component: workmate,
+          meta:{
+            login:['week']
+          },
           redirect:'workmate/pm',
           children:[
             {
               path:'pm',
               name:'pm',
+              meta:{
+                login:['week']
+              },
               component:aboutWork
             },
             {
               path:'ios',
               name:'ios',
+              meta:{
+                login:['week']
+              },
               component:aboutWork
             },
             {
               path:'frontEnd',
               name:'frontEnd',
+              meta:{
+                login:['week']
+              },
               component:aboutWork
             },
             {
               path:'backEnd',
               name:'backEnd',
+              meta:{
+                login:['week']
+              },
               component:aboutWork
             },
             {
               path:'Android',
               name:'Android',
+              meta:{
+                login:['week']
+              },
               component:aboutWork
             }
           ]

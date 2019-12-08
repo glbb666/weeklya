@@ -29,20 +29,12 @@ new Vue({
   template: '<App/>'
 })
 router.beforeEach((to,from,next)=>{
-  console.log(to);
-  var isLogin = !!window.localStorage.getItem('userId');
-  if(isLogin){
-    if(to.matched[0].name==='week'){
-      next();
-    }else{
-      next('/week'); 
-    }
+  var isLogin = window.localStorage.getItem('login');
+  if(isLogin==='true'){
+    to.meta.login[0]==='week'?next():next('/week');
   }else{
-    if(to.matched[0].name==='home'){
-      next();
-    }else{
-      next('/home'); 
-    }
+    to.meta.login[0]==='home'?next():next('/home')
+    window.localStorage.clear();
   }
 })
 
