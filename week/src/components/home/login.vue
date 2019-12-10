@@ -7,8 +7,7 @@
           <img src="../../../static/1/false.png" alt="" class="false" @click="del('user',$event)">
         </label>
         <label>
-          <input type="password" v-model="password" maxlength="18" id="password" placeholder="PassWord" 
-          >
+          <input type="text" v-model="password" maxlength="18" id="password" placeholder="PassWord" autocomplete='new-password' @keydown="noFill($event)">
           <img src="../../../static/1/false.png" alt="" class="false" @click="del('password',$event)">
         </label>
         <div class="buttonRange">
@@ -45,11 +44,11 @@
        </div>
        <div id="form" v-else>
         <label>
-          <input type="password" v-model="password" placeholder="PassWord">
+          <input type="text" v-model="password" placeholder="PassWord" @keydown="noFill($event)">
           <img src="../../../static/1/false.png" alt="" class="false" @click="del('password',$event)">
         </label>
         <label>
-          <input type="password" v-model="cpassword" placeholder="Confirm your PassWord">
+          <input type="text" v-model="cpassword" placeholder="Confirm your PassWord" @keydown="noFill($event)">
           <img src="../../../static/1/false.png" alt="" class="false" @click="del('cpassword',$event)">
         </label>
         <div class="buttonRange">
@@ -215,6 +214,9 @@ export default {
       this.init();
       this.show = mode;
     },
+    noFill(event){
+      event.target.type = 'password'
+    }
   }
 }
 </script>

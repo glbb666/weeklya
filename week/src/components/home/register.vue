@@ -7,7 +7,7 @@
                class="false" @click="del('user',$event)">
         </label>
         <label>
-          <input type="password" v-model="password" maxlength="18" minlength="4"  placeholder="PassWord"> 
+          <input type="text" v-model="password" maxlength="18" minlength="4"  placeholder="PassWord" @keydown="noFill($event)"> 
           <img src="../../../static/1/false.png" alt="" class="false" @click="del('password',$event)">
         </label>
         <label>
@@ -115,6 +115,9 @@ export default {
         this.num--;
         this.minute(this.num);
       },1000)
+    },
+    noFill(event){
+      event.target.type = 'password'
     }
   }
 }

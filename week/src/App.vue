@@ -34,10 +34,13 @@ export default {
   }
   /*IE*/
   input::-ms-clear, input::-ms-reveal{display: none;}
+  input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px white inset;
+}
   input{
     outline: none;
     border: none;
-    background: none;
+    background: #fff;
   }
   textarea{
     outline: none;
